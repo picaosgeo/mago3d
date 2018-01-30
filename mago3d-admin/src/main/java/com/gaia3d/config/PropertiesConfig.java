@@ -13,6 +13,7 @@ import lombok.Data;
 public class PropertiesConfig {
 
 	private String osType;
+	private boolean callRemoteEnable;
 	private String serverIp;
 	private String serverInfo;
 	private String restAuthKey;
@@ -20,9 +21,9 @@ public class PropertiesConfig {
 	private String licenseFile;
 	private String licenseFileChecker;
 	
-	private String excelUserUploadDir;
-	private String excelDataUploadDir;
-	private String excelSampleUploadDir;
+	private String userUploadDir;
+	private String dataUploadDir;
+	private String sampleUploadDir;
 	
-	private String issueDataUploadDir;
+	private String issueUploadDir;
 }

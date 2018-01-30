@@ -26,7 +26,7 @@
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
 						<div class="input-header row">
-							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+							<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						</div>
 						<form:form id="issue" action="/issue/insert-issue.do" modelAttribute="issue" method="post" enctype="multipart/form-data" onsubmit="return check();">			
 						<table class="input-table scope-row">
@@ -34,13 +34,13 @@
 							<col class="col-input" />
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="data_group_id">데이터 그룹</form:label>
+									<form:label path="project_id">프로젝트명</form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
-									<form:select path="data_group_id" cssClass="select">
-<c:forEach var="dataGroup" items="${dataGroupList}">
-										<option value="${dataGroup.data_group_id}">${dataGroup.data_group_name}</option>
+									<form:select path="project_id" cssClass="select">
+<c:forEach var="project" items="${projectList}">
+										<option value="${project.project_id}">${project.project_name}</option>
 </c:forEach>
 									</form:select>
 								</td>
@@ -72,7 +72,7 @@
 							</tr>
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="title">제목</form:label>
+									<form:label path="title"><spring:message code='title'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
@@ -94,13 +94,13 @@
 								</td>
 							</tr>
 							<tr>
-								<th class="col-label" scope="row"><form:label path="due_date">마감일</form:label></th>
+								<th class="col-label" scope="row"><form:label path="due_date"><spring:message code='deadline'/></form:label></th>
 								<td class="col-input radio-set">
 								<form:hidden path="start_date" />
-									<input type="text" id="start_day" name="start_day" class="s date" placeholder="날짜" />
-									<input type="text" id="start_hour" name="start_hour" class="s" placeholder="시간" maxlength="2" />
+									<input type="text" id="start_day" name="start_day" class="s date" placeholder="<spring:message code='date'/>" />
+									<input type="text" id="start_hour" name="start_hour" class="s" placeholder="<spring:message code='time'/>" maxlength="2" />
 									<span class="delimeter">:</span>
-									<input type="text" id="start_minute" name="start_minute" class="s" placeholder="분" maxlength="2" />
+									<input type="text" id="start_minute" name="start_minute" class="s" placeholder="<spring:message code='minute'/>" maxlength="2" />
 								</td>
 							</tr>
 							<tr>
@@ -108,8 +108,9 @@
 									<form:label path="assignee">Assignee</form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
+								<spring:message code='assignee' var='assignee'/>
 								<td class="col-input">
-									<form:input path="assignee" cssClass="l" placeholder="대리자" />
+									<form:input path="assignee" cssClass="l" placeholder="${assignee}" />
 									<form:errors path="assignee" cssClass="error" />
 								</td>
 							</tr>
@@ -118,14 +119,15 @@
 									<form:label path="reporter">reporter</form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
+								<spring:message code='reporter' var='reporter'/>
 								<td class="col-input">
-									<form:input path="reporter" cssClass="l" placeholder="보고 해야 하는 사람" />
+									<form:input path="reporter" cssClass="l" placeholder="${reporter}" />
 									<form:errors path="reporter" cssClass="error" />
 								</td>
 							</tr>
 							<tr>
 								<th class="col-label" scope="row">
-									<form:label path="contents">내용</form:label>
+									<form:label path="contents"><spring:message code='contant'/></form:label>
 									<span class="icon-glyph glyph-emark-dot color-warning"></span>
 								</th>
 								<td class="col-input">
@@ -135,7 +137,7 @@
 							</tr>
 							<tr>
 								<th class="col-label" scope="row">
-									첨부 파일
+									<spring:message code='attachments'/>
 								</th>
 								<td class="col-input">
 									<input type="file" id="file_name" name="file_name" class="col-data" />
@@ -145,8 +147,8 @@
 						</table>
 						<div class="button-group">
 							<div id="insertIssueLink" class="center-buttons">
-								<input type="submit" value="저장"/>
-								<a href="/issue/list-issue.do" class="button">목록</a>
+								<input type="submit" value="<spring:message code='save'/>"/>
+								<a href="/issue/list-issue.do" class="button"><spring:message code='list'/></a>
 							</div>
 						</div>
 						</form:form>

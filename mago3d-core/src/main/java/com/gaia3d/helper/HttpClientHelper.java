@@ -114,13 +114,14 @@ public class HttpClientHelper {
 								+ ":" + externalService.getUrl_port() + "/" + externalService.getUrl_path();
 		    log.info("@@@@@@@@@@@@ url = {}", requestUrl);
 			HttpPost httpPost = new HttpPost(requestUrl);
+			httpPost.addHeader("content-type", "application/json;charset=UTF-8");
 			List <NameValuePair> nameValuePair = new ArrayList <NameValuePair>();
 			nameValuePair.add(new BasicNameValuePair("auth_data", authData));
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair, "utf-8"));
 			response = httpclient.execute(httpPost);
 			httpStatus = HttpStatus.valueOf(response.getStatusLine().getStatusCode());
 			log.info("@@@@@@@@@@@@ response httpStatus = {}", httpStatus);
-		    if (httpStatus == HttpStatus.OK) {
+		    if (httpStatus == HttpStatus.OK || httpStatus == HttpStatus.UNAUTHORIZED) {
 				result = getResult(response);
 			    log.info("@@@@@@@@@@@@ result = {}", result);
 			}

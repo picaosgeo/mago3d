@@ -30,7 +30,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li><a href="/homepage/about.do">mago3D</a></li>
+				<li class="mm" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="/homepage/about.do" style="color: white">About</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('Coming soon.'); return false">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -39,11 +44,16 @@
 					</ul>
 				</li>
 				<li class="on">Download<span></span></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
 				<li><a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO"><a href="#" onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageKO"><a href="/homepage/download.do" onclick="changeLanguage('ko');">KO</a></li>
 				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
@@ -91,19 +101,7 @@
 			 For developers of Free Open Source Software ("FOSS") applications under the GPL or AGPL that want to combine and distribute those FOSS 
 			 applications with mago3D F4D Converter software, Gaia3D’s open source software licensed under the AGPL is the best option.
 			</p>
-			<b>2. mago3D.js: Apache License</b><br>
-			<h4>Documentation</h4>
-			<table>
-				<tr>
-					<th>JS Document</th>
-					<th>Convert Document</th>
-				</tr>
-				<tr>
-					<td><a href="/homepage/api.do" target="_blank">mago3D.js-1.0.0 js Document</a></td>
-					<td><a href="/homepage/spec.do">F4D Converter-1.0.0 Document</a></td>
-				</tr>
-			</table>
-
+			<b>2. mago3D.js: Apache 2.0 License</b><br>
 			<h4>mago3D.js</h4>
 			<table>
 				<tr>
@@ -144,6 +142,26 @@
 					<td>2017-08-17</td>
 					<td><a href="https://github.com/Gaia3D/F4DConverter/blob/master/README.md" target="_blank">ReadMe</a>
 					</td>
+				</tr>
+			</table>
+			
+			<h4>Documentation</h4>
+			<table>
+				<tr>
+					<th>Version</th>
+					<th>Download</th>
+					<th>Date</th>
+				</tr>
+				<tr>
+					<td>0.0.1</td>
+					<td>
+						<ul>
+							<li>tutorials : <a href="/data/download/tutorials_en.pdf" download>tutorials</a></li>
+							<li>API : <a href="/homepage/api.do" target="_blank">mago3D.js API</a></li>
+							<li>Spec : <a href="/homepage/spec.do">F4D Converter Spec</a></li>
+						</ul>
+					</td>
+					<td>2017-10-30</td>
 				</tr>
 			</table>
 		</div>

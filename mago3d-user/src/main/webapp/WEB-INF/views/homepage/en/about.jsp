@@ -30,7 +30,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li class="on">mago3D<span></span></li>
+				<li class="mm on" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="/homepage/about.do" style="color: white">About</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('Coming soon.'); return false">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -39,11 +44,16 @@
 					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
 				<li><a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO"><a href="" onclick ="changeLanguage('ko');">KO</a></li>
+				<li id="languageKO" class=""><a href="/homepage/about.do" onclick ="changeLanguage('ko');">KO</a></li>
 				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
@@ -61,9 +71,9 @@
 					About<span></span>
 				</h3>
 				<p>
-mago3D could seamlessly integrate AEC(Architecture, Engineering, Construction) and 3D GIS in web browser using Cesium or Web World Wind.
-Although there has been numerous attempts to integrate AEC and 3D GIS on a single geospatial platform, the outcome of these attempts are not so satisfactory till to date. 
-Difference of data model, massive number of data to be rendered, big volume of file size are among those major technical barriers that hindered seamless integration of indoor and outdoor space.
+					mago3D could seamlessly integrate AEC(Architecture, Engineering, Construction) and 3D GIS in web browser using Cesium or Web World Wind.
+					Although there has been numerous attempts to integrate AEC and 3D GIS on a single geospatial platform, the outcome of these attempts are not so satisfactory till to date. 
+					Difference of data model, massive number of data to be rendered, big volume of file size are among those major technical barriers that hindered seamless integration of indoor and outdoor space.
 				</p>
 				<h4>Features of mago3D</h4>
 				<ul>
@@ -76,40 +86,40 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-							<a href="#">
+							<a href="/homepage/demo.do">
 								<span class="image left">
 									<img src="/images/${lang}/homepage/gangbuk.png" 
 									alt="3DS format has been uploaded to mago3D.">
 								</span>
-								<div class="description">
-									<h2>3DS</h2>
-								</div>
+								<span class="description">
+									<b>3DS</b>
+								</span>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight two">
-							<a href="#">
+							<a href="/homepage/demo.do">
 								<span class="image fit">
 									<img src="/images/${lang}/homepage/Collada_model.png" 
 									alt="COLLADA format is the screen which is uploaded to mago3D.">
 								</span>
-								<div class="description">
-									<h2>COLLADA</h2>
-								</div>
+								<span class="description">
+									<b>COLLADA</b>
+								</span>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight three">
-							<a href="#">
+							<a href="/homepage/demo.do">
 								<span class="image left">
 									<img src="/images/${lang}/homepage/IFC_model.png" 
 									alt="The IFC (BIM) format has been uploaded to mago3D.">
 								</span>
-								<div class="description ">
-									<h2>IFC(BIM)</h2>
-								</div>
+								<span class="description ">
+									<b>IFC(BIM)</b>
+								</span>
 							</a>
 						</div>
 					</div>
@@ -130,20 +140,19 @@ Difference of data model, massive number of data to be rendered, big volume of f
 
 					<tr>
 						<td><img src="/images/${lang}/homepage/obj.png" alt="OBJ format image"/></td>
-						<td>OBJ(Wavefront file format specification)<br/>- a geometry definition file format adopted by other 3D graphics application vendors.</td>
+						<td>Wavefront File Format Specification (OBJ) A three-dimensional file format that contains three-dimensional coordinates (polygonal lines and points), texture mapping, and other object information</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/3DS.png" alt="3DS format image"/></td>
-						<td>3DS(3D-Studio File Format)<br/>- an import/export format used by the Autodesk 3ds Max 3D modeling, animation and rendering software.</td>
+						<td>3D Studio File Format (3DS)) File formats used in 3D Studio in AutoDesk</td>
 					</tr>
 					<tr>
 						<td width="64px"><img src="/images/${lang}/homepage/dae.png" alt="COLLADA format image"></td>
-						<td>COLLADA(COLLAborative Design Activity)<br/>- an interchange file format for exchanging digital assets among various graphics software applications.</td>
+						<td>COLLADA (COLLAborative Design Activity) - Open standard format based on XML Schema for exchanging 3D data</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/JT.png" alt="Jt format image"/></td> 
-						<td>JT(Jupiter Tesselation)<br/>- an ISO-standardized 3D data format and is in industry used for product visualization, collaboration, CAD data exchange, and in some also for long-term data retention.
-						- If you want to use it, please contact the company.</td>
+						<td>JT (Jupiter Tessellation) Lightweight 3D model format developed by Siemens PLM Software - Please contact us if you need JT format support</td>
 					</tr>
 				</table>
 				<h4>Rendering Algoritm</h4>
@@ -165,7 +174,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								style="background-image:url(/images/${lang}/homepage/model_reference.png)">
 								<div>
 									<h3>Model/Reference</h3>
-									<P>Multi-instance- lightweight logic</P>
+									<P>Multi-instance lightweight technique</P>
 								</div>
 							</div>
 						</a>
@@ -187,7 +196,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 								style="background-image:url(/images/${lang}/homepage/octree.png)">
 								<div>
 									<h3>3D Space Octree</h3>
-									<P>flexible octree depth</P>
+									<P>Flexible octree depth</P>
 								</div>
 							</div>
 						</a>
@@ -231,7 +240,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						<a href="#">
 							<div class="aglo-thumbnail" alt="Bounding box images" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
 								<div>
-									<h3>bounding box</h3>
+									<h3>Bounding box</h3>
 									<P>Bounding box calculation</P>
 								</div>
 							</div>
@@ -248,7 +257,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				</h3>
 				<h4>Architecture</h4>
 				<p>
-				mago3D based on spring framework (springboot). We use PostGis for processing spatial information, and use open source javascript library for cesium, worldwind for 3D rendering part.
+				mago3D is a spring framework (spring boot) based 3D platform. We use PostGis for processing spatial information, and use open source javascript library for cesium, worldwind for 3D rendering part.
 				One of big hurdle to integrate AEC and 3D GIS simultaneously is handling and visualisation of massive 3D data. 
 				To overcome this hurdle, new format called F4D has been devised adopting block reference concept. 
 				Also a format converter that converts popular 3D format to F4D has been developed. 
@@ -257,8 +266,10 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				mago3D can now visualise massive 3D data including indoor objects and AEC data at least 100k objects, in a single scene seamlessly with traditional outdoor 3D GIS objects.
 				</p>
 				<div class="architecture">
-					<img src="/images/${lang}/homepage/arc.png" alt="Mago3D Architecture" style="width: 590px; margin-top: 60px;">
-					<img src="/images/${lang}/homepage/sw.png" alt="Mago3D software configuration diagram" style="width: 590px;" >
+					<img src="/images/${lang}/homepage/arc.png"
+						style="width: 590px; margin-top: 60px;" alt="mago3D 아키텍쳐"> <img
+						src="/images/${lang}/homepage/sw.png" style="width: 590px;"
+						alt="mago3D 소프트웨어 구성도">
 				</div>
 				<a href="#" class="goTop">goTop</a>
 			</div>
@@ -274,7 +285,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					provides the following features.</p>
 				<div class="wrap">
 					<div class="colspan-2 column">
-						<img src="/images/${lang}/homepage/dashboard.png" alt="Dashboard on admin page">
+						<img src="/images/${lang}/homepage/dashboard.png" alt="Dashboard on admin page"style="width: 800px; height: 500px;">
 					</div>
 					<div class="colspan-1 column">
 						<h2>Admin page</h2>
@@ -298,11 +309,11 @@ Difference of data model, massive number of data to be rendered, big volume of f
 					</div>
 					<div class="colspan-2 column text-left">
 						<img src="/images/${lang}/homepage/issue.png" 
-						alt="This is an image of the page that manages the issue on the manager page.">
+						alt="This is an image of the page that manages the issue on the manager page." style="width: 800px;">
 					</div>
 					<div class="colspan-2 column clear">
 						<img src="/images/${lang}/homepage/data.png" 
-						alt="This is an image of the page that manages the data on the admin page.">
+						alt="This is an image of the page that manages the data on the admin page."style="width: 800px;">
 					</div>
 					<div class="colspan-1 column">
 						<h2>Data management</h2>
@@ -323,8 +334,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 						<td>Role based access-control of user groups</td>
 					</tr>
 					<tr>
-						<td>PogstGis with 3D object information, support caching.<br />REST
-							API that provides API for 3D data sending and receiving.
+						<td>3D object information PogstGIS interlock, RestAPI, caching function
 						</td>
 						<td>Converting to F4D format</td>
 					</tr>
@@ -347,7 +357,7 @@ Difference of data model, massive number of data to be rendered, big volume of f
 				</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>Ministry of Land, Transport and Maritime Affairs "Development of open source processing technology for application of spatial information SW (Project number: 16NSIP-B080778-04)".</li>
+					<li>This project is part of the Ministry of Land, Transport and Maritime Affairs, "Development of Open Source Processing Technology for Application of Spatial Information SW (Project Number: 17NSIP-B080778-04)".</li>
 					<li>The 3D data of Seoul is being used for research purpose under the permission of Korea Spatial Informaiton Industry Promotion Institute.</li>
 					<li>The indoor data of Seoul is being used for research purposes under the permission of Seoul Metropolitan Government.</li>
 					<li>Other datas will be provided with the permission of each copyright holder.</li>

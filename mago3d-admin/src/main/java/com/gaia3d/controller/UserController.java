@@ -280,7 +280,7 @@ public class UserController {
 	 * @param userInfo
 	 * @return
 	 */
-	@GetMapping(value = "ajax-insert-user-info.do", produces = "application/json; charset=utf8")
+	@PostMapping(value = "ajax-insert-user-info.do")
 	@ResponseBody
 	public Map<String, Object> ajaxInsertUserInfo(HttpServletRequest request, UserInfo userInfo) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
@@ -887,7 +887,7 @@ public class UserController {
 		String result = "success";
 		try {
 			MultipartFile multipartFile = request.getFile("file_name");
-			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.EXCEL_USER_UPLOAD, propertiesConfig.getExcelUserUploadDir());
+			FileInfo fileInfo = FileUtil.upload(multipartFile, FileUtil.USER_FILE_UPLOAD, propertiesConfig.getUserUploadDir());
 			if(fileInfo.getError_code() != null && !"".equals(fileInfo.getError_code())) {
 				jSONObject.put("result", fileInfo.getError_code());
 				return jSONObject;
@@ -1053,12 +1053,12 @@ public class UserController {
 	@ResponseBody
 	public void downloadExcelUserSample(HttpServletRequest request, HttpServletResponse response, Model model) {
 		
-		File rootDirectory = new File(propertiesConfig.getExcelSampleUploadDir());
+		File rootDirectory = new File(propertiesConfig.getSampleUploadDir());
 		if(!rootDirectory.exists()) {
 			rootDirectory.mkdir();
 		}
 				
-		File file = new File(propertiesConfig.getExcelSampleUploadDir() + "sample.xlsx");
+		File file = new File(propertiesConfig.getSampleUploadDir() + "sample.xlsx");
 		if(file.exists()) {
 			String mimetype = "application/x-msdownload";
 			response.setContentType(mimetype);

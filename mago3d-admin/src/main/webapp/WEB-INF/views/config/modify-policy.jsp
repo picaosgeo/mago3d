@@ -12,11 +12,13 @@
 	<link rel="stylesheet" href="/images/${lang}/icon/glyph/glyphicon.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/normalize/normalize.min.css" />
 	<link rel="stylesheet" href="/externlib/${lang}/jquery-ui/jquery-ui.css" />
+	<link rel="stylesheet" href="/externlib/${lang}/color-picker/palette-color-picker.css" />
 	<link rel="stylesheet" href="/css/${lang}/style.css" />
 	
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jquery-ui/jquery-ui.js"></script>
 	<script type="text/javascript" src="/externlib/${lang}/jqplot/jquery.jqplot.min.js"></script>
+	<script type="text/javascript" src="/externlib/${lang}/color-picker/palette-color-picker.js"></script>
 	
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
@@ -32,20 +34,20 @@
 				<div class="page-area">
 					<%@ include file="/WEB-INF/views/layouts/page_header.jsp" %>
 					<div class="page-content">
-						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span>체크표시는 필수입력 항목입니다.</div>
+						<div class="content-desc u-pull-right"><span class="icon-glyph glyph-emark-dot color-warning"></span><spring:message code='check'/></div>
 						<div class="tabs">
 							<ul>
-								<li><a href="#user_tab">사용자</a></li>
-								<li><a href="#password_tab">패스워드</a></li>
-								<li><a href="#geo_tab">공간 정보</a></li>
+								<li><a href="#user_tab"><spring:message code='user.group.user'/></a></li>
+								<li><a href="#password_tab"><spring:message code='password'/></a></li>
+								<li><a href="#geo_tab"><spring:message code='spatial.information'/></a></li>
 								<li><a href="#geoserver_tab">GeoServer</a></li>
 								<li><a href="#geocallback_tab">CallBack</a></li>
-								<li><a href="#security_tab">보안</a></li>
-								<li><a href="#content_tab">컨텐트</a></li>
-								<li><a href="#os_tab">OS 설정</a></li>
-								<li><a href="#backoffice_tab">Back Office 정보</a></li>
-								<li><a href="#site_tab">사이트 정보</a></li>
-								<li><a href="#solution_tab">제품 정보</a></li>
+								<li><a href="#security_tab"><spring:message code='security'/></a></li>
+								<li><a href="#content_tab"><spring:message code='content'/></a></li>
+								<li><a href="#os_tab"><spring:message code='os.setting'/></a></li>
+								<li><a href="#backoffice_tab"><spring:message code='back.office.information'/></a></li>
+								<li><a href="#site_tab"><spring:message code='site.information'/></a></li>
+								<li><a href="#solution_tab"><spring:message code='product.information'/></a></li>
 							</ul>
 							
 							<%@ include file="/WEB-INF/views/config/modify-policy-user.jsp" %>
@@ -69,7 +71,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
-		initJqueryCalendar();
+		initGeo();
 		
 		$("#user_delete_type").val("${policyUser.user_delete_type}");
 		
@@ -128,13 +130,12 @@
 		
 		if(updateOsFlag) {
 			updateOsFlag = false;
-			var info = $("#policyOs").serialize();
+			var info = $("#policyOs").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-os.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -208,7 +209,6 @@
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -312,13 +312,12 @@
 			} */
 			
 			updatePasswordFlag = false;
-			var info = $("#policyPassword").serialize();
+			var info = $("#policyPassword").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-password.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -345,13 +344,24 @@
 		if(updatePolicyGeoFlag) {
 			// validation 나중에
 			updatePolicyGeoFlag = false;
-			var info = $("#policyGeo").serialize();
+			var info = {};
+			info["policy_id"] = $("#policy_id").val();
+			$.each( $("#policyGeo").serializeArray(), function(i, obj) { 
+				if(obj.name === "geo_ambient_reflection_coef") {
+					info[obj.name] = $("#geo_ambient_reflection_coef").val();
+				} else if(obj.name === "geo_diffuse_reflection_coef") {
+					info[obj.name] = $("#geo_diffuse_reflection_coef").val();
+				} else if(obj.name === "geo_specular_reflection_coef") {
+					info[obj.name] = $("#geo_specular_reflection_coef").val();
+				} else {
+					info[obj.name] = obj.value;
+				}
+			});
 			$.ajax({
 				url: "/config/ajax-update-policy-geo.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -372,19 +382,167 @@
 		}
 	}
 	
+	// geo 정보 설정
+	function initGeo() {
+		var ambient = $( "#geo_ambient_reflection_coef_view" );
+		$( "#geo_ambient_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '${policy.geo_ambient_reflection_coef}', // default value of slider
+			create: function() {
+				ambient.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				ambient.text( ui.value);
+				$("#geo_ambient_reflection_coef" ).val(ui.value);
+			}
+		});
+		var diffuse = $( "#geo_diffuse_reflection_coef_view" );
+		$( "#geo_diffuse_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '${policy.geo_diffuse_reflection_coef}', // default value of slider
+			create: function() {
+				diffuse.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				diffuse.text( ui.value);
+				$("#geo_diffuse_reflection_coef" ).val(ui.value);
+			}
+		});
+		var specular = $( "#geo_specular_reflection_coef_view" );
+		$( "#geo_specular_reflection_coef" ).slider({
+			range: "max",
+			min: 0, // min value
+			max: 1, // max value
+			step: 0.01,
+			value: '${policy.geo_specular_reflection_coef}', // default value of slider
+			create: function() {
+				specular.text( $( this ).slider( "value" ) );
+			},
+			slide: function( event, ui ) {
+				specular.text( ui.value);
+				$("#geo_specular_reflection_coef" ).val(ui.value);
+			}
+		});
+		
+		$('[name="geo_ambient_color"]').paletteColorPicker({
+			clear_btn: 'last',
+			//position: 'downside',
+			close_all_but_this: true // Default is false
+		});
+		$('[name="geo_specular_color"]').paletteColorPicker({
+			clear_btn: 'last',
+			//position: 'downside',
+			close_all_but_this: true // Default is false
+		});
+	}
+	
+	var dataDialog = $( ".dataDialog" ).dialog({
+		autoOpen: false,
+		height: 600,
+		width: 1200,
+		modal: true,
+		overflow : "auto",
+		resizable: false
+	});
+	
+	// 시작 프로젝트 찾기
+	$( "#projectFind" ).on( "click", function() {
+		dataDialog.dialog( "open" );
+		drawProjectList();
+	});
+	
+	function drawProjectList() {
+		$.ajax({
+			url: "/data/ajax-list-project.do",
+			type: "POST",
+			//data: info,
+			cache: false,
+			dataType: "json",
+			success: function(msg){
+				if(msg.result == "success") {
+					var content = "";
+					var projectList = msg.projectList;
+					if(projectList == null || projectList.length == 0) {
+						content = content
+							+ 	"<tr>"
+							+ 	"	<td colspan=\"11\" class=\"col-none\">프로젝트가 존재하지 않습니다.</td>"
+							+ 	"</tr>";
+					} else {
+						projectListCount = projectList.length;
+						for(i=0; i<projectListCount; i++ ) {
+							var project = projectList[i];
+							content = content 
+								+ 	"<tr>"
+								+ 	"	<td class=\"col-checkbox\"><input type=\"checkbox\" id=\"project_id_" + project.project_id 
+								+ 											"\" name=\"project_id\" value=\"" + project.project_id + "," + project.project_name + "\" /></td>"
+								+ 	"	<td class=\"col-name\">" + project.project_key + " </td>"
+								+ 	"	<td class=\"col-name\">" + project.project_name + " </td>"
+								+ 	"	<td class=\"col-number\">" + project.view_order + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.default_yn + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.use_yn + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.latitude + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.longitude + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.height + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.duration + "</td>"
+								+ 	"	<td class=\"col-toggle\">" + project.insert_date +"</td>"
+								+ 	"	</tr>";
+						}
+					}
+					
+					$("#projectList").empty();
+					$("#projectList").html(content);
+				} else {
+					alert(JS_MESSAGE[msg.result]);
+				}
+			},
+			error:function(request, status, error) {
+				//alert(JS_MESSAGE["ajax.error.message"]);
+				alert(" code : " + request.status + "\n" + ", message : " + request.responseText + "\n" + ", error : " + error);
+    		}
+		});
+	}
+	
+	// 전체 선택 
+	$("#chk_all").click(function() {
+		$(":checkbox[name=project_id]").prop("checked", this.checked);
+	});
+	
+	$( "#projectSelect" ).on( "click", function() {
+		var checkedValue = "";
+		var checkedName = "";
+		$("input:checkbox[name=project_id]:checked").each(function(index){
+			var tempValue = $(this).val().split(",");
+			checkedValue += tempValue[0] + ",";
+			checkedName += tempValue[1] + ",";
+		});
+		if(checkedValue.indexOf(",") > 0) {
+			checkedValue =checkedValue.substring(0, checkedValue.lastIndexOf(","));
+			checkedName =checkedName.substring(0, checkedName.lastIndexOf(","));
+		}
+		
+		$("#geo_data_default_projects").val(checkedValue);
+		$("#geo_data_default_projects_view").val(checkedName);
+		dataDialog.dialog( "close" );
+	});
+	
 	// GeoServer
 	var updatePolicyGeoServerFlag = true;
 	function updatePolicyGeoServer() {
 		if(updatePolicyGeoServerFlag) {
 			// validation 나중에
 			updatePolicyGeoServerFlag = false;
-			var info = $("#policyGeoServer").serialize();
+			var info = $("#policyGeoServer").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-geoserver.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -411,13 +569,12 @@
 		if(updatePolicyGeoCallBackFlag) {
 			// validation 나중에
 			updatePolicyGeoCallBackFlag = false;
-			var info = $("#policyGeoCallBack").serialize();
+			var info = $("#policyGeoCallBack").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-geocallback.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -454,13 +611,12 @@
 				}
 			}
 			updateSecurityFlag = false;
-			var info = $("#policySecurity").serialize();
+			var info = $("#policySecurity").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-security.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -534,13 +690,12 @@
 			}
 			
 			updateContentFlag = false;
-			var info = $("#policyContent").serialize();
+			var info = $("#policyContent").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-content.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -566,13 +721,12 @@
 	function updatePolicyBackoffice() {
 		if(updateBackofficeFlag) {
 			updateBackofficeFlag = false;
-			var info = $("#policyBackoffice").serialize();
+			var info = $("#policyBackoffice").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-backoffice.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -620,13 +774,12 @@
 			}
 			
 			updateSiteFlag = false;
-			var info = $("#policySite").serialize();
+			var info = $("#policySite").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-site.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -673,13 +826,12 @@
 			}
 			
 			updateSolutionFlag = false;
-			var info = $("#policySolution").serialize();
+			var info = $("#policySolution").serialize() + "&policy_id=" + $("#policy_id").val();
 			$.ajax({
 				url: "/config/ajax-update-policy-solution.do",
 				type: "POST",
 				data: info,
 				cache: false,
-				async:false,
 				dataType: "json",
 				success: function(msg){
 					if(msg.result == "success") {
@@ -699,15 +851,6 @@
 			return;
 		}
 	}
-	
-	/* function checkChangLogo() {
-		if($("#uploadfile_top").val() != null && $("#uploadfile_top").val() != "") {
-			$("#uploadfile_top_value").val("logo");
-		}
-		if($("#uploadfile_bottom").val() != null && $("#uploadfile_bottom").val() != "") {
-			$("#uploadfile_bottom_value").val("logo");
-		}
-	} */
 </script>
 </body>
 </html>

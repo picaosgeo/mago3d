@@ -30,7 +30,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li class="on">mago3D<span></span></li>
+				<li class="mm on" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="#" style="color: white">About</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('준비 중 입니다.'); return false">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -39,12 +44,18 @@
 					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
-				<li><a href="/homepage/faq.do">FAQ</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+<!-- 						<li><a href="/homepage/tutorials.do" style="color: white">Tutorials</a></li> -->
+					</ul>
+				</li>
+				<li> <a href="/homepage/faq.do">FAQ</a></li>
 			</ul>
 			<ul class="language">
 				<li id="languageKO" class="on">KO</li>
-				<li id="languageEN"><a href="#" onclick="changeLanguage('en');">EN</a></li>
+				<li id="languageEN" class=""><a href="/homepage/about.do" onclick="changeLanguage('en');">EN</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -69,8 +80,7 @@
 				<h4>mago3D의 특징</h4>
 				<ul>
 					<li>BIM/AEC와 3D GIS의 통합</li>
-					<li>실내외 공간의 끊김 없는 통합(Seamless integration of indoor & outdoor
-						space)</li>
+					<li>실내외 공간의 끊김 없는 통합(Seamless integration of indoor | outdoor	space)</li>
 					<li>웹브라우저 상에서 구동되며, 별도의 플러그인이나 엑티브엑스 설치가 필요 없음</li>
 					<li>오픈소스(Cesium, World Wind)를 기반으로 개발된 오픈소스로서 개방성과 확장성이 뛰어남</li>
 					<li>초대용량 3차원 파일의 효율적 관리 및 초고속 렌더링</li>
@@ -78,37 +88,40 @@
 				<div class="row_demo">
 					<div class="wrapper_demo">
 						<div class="highlight">
-							<a href="#"> <span class="image left"> <img
-									src="/images/${lang}/homepage/gangbuk.png"
-									alt="3DS포맷이 mago3D에 올라간 화면입니다.">
-							</span>
-								<div class="description">
-									<h2>3DS</h2>
-								</div>
+								<a href="/homepag/demo.do"> 
+								<span class="image left"> <img
+										src="/images/${lang}/homepage/gangbuk.png"
+										alt="3DS포맷이 mago3D에 올라간 화면입니다.">
+								</span>
+								<span class="description">
+									<b>3DS</b>
+								</span>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight two">
-							<a href="#"> <span class="image fit"> <img
+							<a href="/homepage/demo.do">  
+							<span class="image fit"> <img
 									src="/images/${lang}/homepage/Collada_model.png"
 									alt="COLLADA 포맷이 mago3D에 올라간 화면 입니다.">
 							</span>
-								<div class="description">
-									<h2>COLLADA</h2>
-								</div>
+								<span class="description">
+									<b>COLLADA</b>
+								</span>
 							</a>
 						</div>
 					</div>
 					<div class="wrapper_demo">
 						<div class="highlight three">
-							<a href="#"> <span class="image left"> <img
+							<a href="/homepage/demo.do"> 
+							 <span class="image left"> <img
 									src="/images/${lang}/homepage/IFC_model.png"
 									alt="IFC(BIM)포맷이 mago3D에 올라간 화면입니다.">
 							</span>
-								<div class="description ">
-									<h2>IFC(BIM)</h2>
-								</div>
+								<span class="description ">
+									<b>IFC(BIM)</b>
+								</span>
 							</a>
 						</div>
 					</div>
@@ -131,37 +144,32 @@
 					<tr>
 						<td><img src="/images/${lang}/homepage/obj.png"
 							alt="obj 포맷 이미지" /></td>
-						<td>OBJ(Wavefront file format specification) 3 차원 좌표 (다각형 선과
-							점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 삼차원 물체에 사용되는 파일 포맷</td>
+						<td>OBJ(Wavefront File Format Specification) 3차원 좌표 (다각형 선과 점), 텍스쳐 매핑 및 기타 오브젝트 정보를 포함하는 3차원 파일 포맷</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/3DS.png"
 							alt="3ds 포맷 이미지" /></td>
-						<td>3DS(3D-Studio File Format)) AutoDesk의 3D-Studio에서 사용되는 파일
-							포맷입니다.</td>
+						<td>3DS(3D Studio File Format)) AutoDesk의 3D Studio에서 사용되는 파일 포맷</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/dae.png"
 							alt="dae 포맷 이미지"></td>
-						<td>COLLADA(COLLAborative Design Activity) - 3D assets 을 교환하기
-							위한 open standard XML schema 파일 포맷</td>
+						<td>COLLADA(COLLAborative Design Activity) - 3D 자료를 교환하기 위한 XML 스키마 기반의 개방형 표준 포맷</td>
 					</tr>
 					<tr>
 						<td><img src="/images/${lang}/homepage/JT.png"
 							alt="jt 포맷 이미지" /></td>
-						<td>JT(Jupiter Tesselation) Siemens PLM Software 에서 개발된 경량화
-							3D 모델 포맷. - JT포맷은 회사 연락 필요</td>
+						<td>JT(Jupiter Tessellation) Siemens PLM Software 에서 개발된 경량화 3D 모델 포맷 - JT포맷 지원이 필요한 경우 별도 연락 요망</td>
 					</tr>
 				</table>
 				<h4>Rendering Algoritm</h4>
 				<div class="wrapper-algo">
 					<div class="algo-row">
 						<a href="#">
-							<div class="aglo-thumbnail" alt="삼각형 꼭지점 순서 보정 이미지"
-								style="background-image:url(/images/${lang}/homepage/triangle.png)">
+							<div class="aglo-thumbnail" alt="삼각형 꼭지점 순서 보정 이미지" style="background-image:url(/images/${lang}/homepage/triangle.png)">
 								<div>
 									<h3>삼각형 꼭지점 순서 보정</h3>
-									<P>WebGL이 지원하는 성능 향상 기법</P>
+									<p>WebGL이 지원하는 성능 향상 기법</p>
 								</div>
 							</div>
 						</a>
@@ -172,7 +180,7 @@
 								style="background-image:url(/images/${lang}/homepage/model_reference.png)">
 								<div>
 									<h3>Model/Reference</h3>
-									<P>Multi-instance- 경량화 logic</P>
+									<P>Multi-instance 경량화 기법</P>
 								</div>
 							</div>
 						</a>
@@ -194,7 +202,7 @@
 								style="background-image:url(/images/${lang}/homepage/octree.png)">
 								<div>
 									<h3>3D 공간 Octree</h3>
-									<P>flexible octree depth 적용</P>
+									<P>Flexible octree depth 적용</P>
 								</div>
 							</div>
 						</a>
@@ -207,7 +215,7 @@
 								style="background-image:url(/images/${lang}/homepage/lego.png)">
 								<div>
 									<h3>Lego Strucure</h3>
-									<P>rougher LOD를 위한 데이터 생성</P>
+									<P>Rougher LOD를 위한 데이터 생성</P>
 								</div>
 							</div>
 						</a>
@@ -229,18 +237,17 @@
 								style="background-image:url(/images/${lang}/homepage/loading.png)">
 								<div>
 									<h3>원시 데이터 로딩</h3>
-									<P>loading time out 적용</P>
+									<P>Loading time out 적용</P>
 								</div>
 							</div>
 						</a>
 					</div>
 					<div class="algo-row">
 						<a href="#">
-							<div class="aglo-thumbnail" alt="Bounding box이미지"
-								style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
+							<div class="aglo-thumbnail" alt="Bounding box이미지" style="background-image:url(/images/${lang}/homepage/boundingbox.png)">
 								<div>
-									<h3>bounding box</h3>
-									<P>bounding box 계산</P>
+									<h3>Bounding box</h3>
+									<P>Bounding box 계산</P>
 								</div>
 							</div>
 						</a>
@@ -255,11 +262,12 @@
 					NOW<span></span>
 				</h3>
 				<h4>Architecture</h4>
-				<p>mago3D는 spring framework(spring boot) 기반의 3d 플랫폼입니다. 공간 정보 DB
+				<p>mago3D는 spring framework(spring boot) 기반의 3D 플랫폼입니다. 공간 정보 DB
 					관련 처리를 위해 PostGis를 사용하고 있으며, 3D 렌더링 부분은 cesium, world wind 등을 오픈 소스
 					javascript library를 사용하고 있습니다. 3D 데이터를 웹에서 Rendering 하기 위해서 자체 개발한
 					F4D 포맷 및 Converter를 사용하고 있으며 가시화 및 렌더링 처리를 담당하는 mago3DJS(javascript
-					library)로 이루어져 있습니다.</p>
+					library)로 이루어져 있습니다.
+				</p>
 				<div class="architecture">
 					<img src="/images/${lang}/homepage/arc.png"
 						style="width: 590px; margin-top: 60px;" alt="mago3D 아키텍쳐"> <img
@@ -275,12 +283,12 @@
 				<h3>
 					Will be<span></span>
 				</h3>
-				<h4>3d 통합 관제 &amp;이슈 관리 시스템</h4>
+				<h4>컨텐츠관리 플랫폼</h4>
 				<p>관리자, 일반 사용자 사이트를 제공하며 아래와 같은 기능을 제공 합니다.</p>
 				<div class="wrap">
 					<div class="colspan-2 column">
 						<img src="/images/${lang}/homepage/dashboard.png"
-							alt="관리자 페이지에 dashboard">
+							alt="관리자 페이지에 dashboard" style="width: 800px; height: 500px;">
 					</div>
 					<div class="colspan-1 column">
 						<h2>관리자 페이지</h2>
@@ -299,11 +307,11 @@
 					</div>
 					<div class="colspan-2 column text-left">
 						<img src="/images/${lang}/homepage/issue.png"
-							alt="관리자 페이지에  이슈 관리를 해주는 페이지의 이미지입니다.">
+							alt="관리자 페이지에  이슈 관리를 해주는 페이지의 이미지입니다." style="width: 800px;">
 					</div>
 					<div class="colspan-2 column clear">
 						<img src="/images/${lang}/homepage/data.png"
-							alt="관리자 페이지에 데이터 관리를 해주는 페이지의 이미지입니다. ">
+							alt="관리자 페이지에 데이터 관리를 해주는 페이지의 이미지입니다. " style="width: 800px; ">
 					</div>
 					<div class="colspan-1 column">
 						<h2>데이터 관리</h2>
@@ -321,7 +329,7 @@
 						<td>사용자 그룹의 역할 기반 접근-제어 기능 제공</td>
 					</tr>
 					<tr>
-						<td>3D object 정보 PogstGis 연동, RestAPI, 캐싱 기능 제공</td>
+						<td>3D Object 정보 PogstGIS 연동, RestAPI, 캐싱 기능 제공</td>
 						<td>F4D 변환 배치 기능 제공</td>
 					</tr>
 					<tr>
@@ -343,8 +351,7 @@
 					있습니다.</p>
 				<h4>Acknowledgement</h4>
 				<ul>
-					<li>국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:16NSIP-B080778-04)'의
-						일환입니다.</li>
+					<li>본 프로젝트는 국토교통부 '공간정보 SW활용을 위한 오픈소스 가공기술개발(과제번호:17NSIP-B080778-04)'의 일환입니다.</li>
 					<li>서울시 3차원 데이터는 한국공간정보산업진흥원의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>서울시 실내 데이터는 서울시의 허가를 받아 연구목적으로 사용 중입니다.</li>
 					<li>기타 자료는 각 저작권자의 허락을 받아 서비스합니다.</li>

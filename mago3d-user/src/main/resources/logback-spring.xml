@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-	<!-- <include resource="org/springframework/boot/logging/logback/base.xml"/> -->
+	<!-- <include resource="org/springframework/boot/logging/logback/base.xml" /> -->
 	
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
@@ -28,18 +28,21 @@
 	</appender>
 	 -->
 
-	<logger name="org.apache.commons" level="debug" additivity="false" />
-<!-- 	<logger name="org.mybatis.spring.boot" level="debug" additivity="false" /> -->
-	<!-- <logger name="org.apache.tomcat.embed" level="debug" additivity="false" />
-	<logger name="org.apache.catalina" level="debug" additivity="false" /> -->
-	<logger name="org.springframework" level="debug" additivity="false" />
-<!-- 	<logger name="org.springframework.boot" level="debug" additivity="false" /> -->
-	<logger name="org.springframework.web" level="debug" additivity="false" />
-	<!-- <logger name="org.apache.commons.dbcp2" level="debug" additivity="false" /> -->
+	<logger name="org.apache.tomcat" level="debug" additivity="false" />
+	<logger name="org.apache.commons" level="INFO" additivity="false" />
+<!-- tomcat 시작시 오류 날때는 이 로그 레벨을 적용하면 상세히 나옴	
+		<logger name="org.springframework.web" level="debug" additivity="false" />  -->
+	<logger name="org.springframework" level="info" additivity="false" />
 	<logger name="java.sql.Connection" level="debug" additivity="false" />
 	<logger name="java.sql.PreparedStatement" level="debug" additivity="false" />
 	<logger name="java.sql.ResultSet" level="debug" additivity="false" />
-
+	
+	<logger name="com.zaxxer.hikari.pool.HikariPool" level="info" additivity="false" />
+	
+	<!-- <logger name="springfox.documentation.spring.web" level="info" additivity="false" />
+	<logger name="springfox.documentation.swagger" level="info" additivity="false" />
+	<logger name="springfox.documentation.schema" level="info" additivity="false" /> -->
+	
 	<root level="debug">
 		<appender-ref ref="STDOUT" />
 	</root>

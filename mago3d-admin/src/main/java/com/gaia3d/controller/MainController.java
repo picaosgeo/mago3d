@@ -8,7 +8,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +34,7 @@ import com.gaia3d.service.UserService;
 import com.gaia3d.service.WidgetService;
 import com.gaia3d.util.DateUtil;
 import com.gaia3d.util.FormatUtil;
+import com.zaxxer.hikari.HikariDataSource;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +55,7 @@ public class MainController {
 	private PropertiesConfig propertiesConfig;
 	
 	@Autowired
-	private DataSource dataSource;
+	private HikariDataSource dataSource;
 	
 	@Autowired
 	private APIService aPIService;
@@ -79,8 +79,26 @@ public class MainController {
 	 */
 	@GetMapping(value = "index.do")
 	public String index(HttpServletRequest request, Model model) {
+//		if(!ConfigCache.isCompanyConfigValidation()) {
+//			log.error("@@@@@@@@@@@@@@@@@ 설정 파일을 잘못 로딩 하였습니다. Properties, Quartz 파일등을 확인해 주십시오.");
+//			return "/error/config-error";
+//		}
 		
 		Policy policy = CacheManager.getPolicy();
+		boolean isActive = true;
+//		if("UNIX".equals(OS_TYPE)) {
+//			SystemConfig systemConfig = loadBalancingService.getSystemConfig();
+//			String hostname = ConfigCache.getHostname();
+//			if(hostname == null || "".equals(hostname)) {
+//				hostname = WebUtil.getHostName();
+//			}
+//			if(systemConfig == null 
+//					|| !SystemConfig.ACTIVE.equals(systemConfig.getLoad_balancing_status()) 
+//					|| !hostname.equals(systemConfig.getHostname())) {
+//				log.error("@@@@@@@@@ hostname = {}, load_balancing_status = {}", hostname, systemConfig);
+//				isActive = false;
+//			}
+//		}
 		
 		Widget widget = new Widget();
 		widget.setLimit(policy.getContent_main_widget_count());
@@ -130,6 +148,7 @@ public class MainController {
 		model.addAttribute(widget);
 		model.addAttribute(widgetList);
 		
+		model.addAttribute("isActive", isActive);
 		model.addAttribute("issueDraw", issueDraw);
 		model.addAttribute("userDraw", userDraw);
 		model.addAttribute("scheduleLogListDraw", scheduleLogListDraw);
@@ -200,12 +219,19 @@ public class MainController {
 	 */
 	private void dbcpWidget(Model model) {
 		model.addAttribute("userSessionCount", SessionUserHelper.loginUsersMap.size());
-		model.addAttribute("initialSize", dataSource.getInitialSize());
-//		model.addAttribute("maxTotal", dataSource.getMaxTotal());
-		model.addAttribute("maxIdle", dataSource.getMaxIdle());
-		model.addAttribute("minIdle", dataSource.getMinIdle());
-		model.addAttribute("numActive", dataSource.getNumActive());
-		model.addAttribute("numIdle", dataSource.getNumIdle());
+		
+		model.addAttribute("initialSize", dataSource.getMaximumPoolSize());
+//	model.addAttribute("maxIdle", dataSource.getMaxIdle());
+		model.addAttribute("minIdle", dataSource.getMinimumIdle());
+//	model.addAttribute("numActive", dataSource.getNumActive());
+//	model.addAttribute("numIdle", dataSource.getNumIdle());
+		
+//		model.addAttribute("initialSize", dataSource.getInitialSize());
+////		model.addAttribute("maxTotal", dataSource.getMaxTotal());
+//		model.addAttribute("maxIdle", dataSource.getMaxIdle());
+//		model.addAttribute("minIdle", dataSource.getMinIdle());
+//		model.addAttribute("numActive", dataSource.getNumActive());
+//		model.addAttribute("numIdle", dataSource.getNumIdle());
 		
 		// 사용자 dbcp 정보
 		Map<String, Integer> userDbcp = getUserDbcp();
@@ -353,19 +379,24 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-dbcp-widget.do", produces = "application/json; charset=utf8")
+	@GetMapping(value = "ajax-dbcp-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxDbcpWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
 		String result = "success";
 		try {
 			jSONObject.put("userSessionCount", SessionUserHelper.loginUsersMap.size());
-			jSONObject.put("initialSize", dataSource.getInitialSize());
-//			jSONObject.put("maxTotal", dataSource.getMaxTotal());
-			jSONObject.put("maxIdle", dataSource.getMaxIdle());
-			jSONObject.put("minIdle", dataSource.getMinIdle());
-			jSONObject.put("numActive", dataSource.getNumActive());
-			jSONObject.put("numIdle", dataSource.getNumIdle());
+			
+			jSONObject.put("initialSize", dataSource.getMaximumPoolSize());
+			jSONObject.put("minIdle", dataSource.getMinimumIdle());
+			jSONObject.put("numIdle", dataSource.getMaximumPoolSize());
+			
+//			jSONObject.put("initialSize", dataSource.getInitialSize());
+////			jSONObject.put("maxTotal", dataSource.getMaxTotal());
+//			jSONObject.put("maxIdle", dataSource.getMaxIdle());
+//			jSONObject.put("minIdle", dataSource.getMinIdle());
+//			jSONObject.put("numActive", dataSource.getNumActive());
+//			jSONObject.put("numIdle", dataSource.getNumIdle());
 			
 			// 사용자 dbcp 정보
 			Map<String, Integer> userDbcp = getUserDbcp();
@@ -391,7 +422,7 @@ public class MainController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping(value = "ajax-access-log-widget.do", produces = "application/json; charset=utf8")
+	@GetMapping(value = "ajax-access-log-widget.do")
 	@ResponseBody
 	public Map<String, Object> ajaxAccessLogWidget(HttpServletRequest request) {
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
@@ -412,7 +443,7 @@ public class MainController {
 			accessLog.setLimit(WIDGET_LIST_VIEW_COUNT);
 			List<AccessLog> accessLogList = logService.getListAccessLog(accessLog);
 			
-//			jSONObject.put("accessLogList", JSONArray.fromObject(accessLogList));
+			jSONObject.put("accessLogList", accessLogList);
 		} catch(Exception e) {
 			e.printStackTrace();
 			result = "db.exception";

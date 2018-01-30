@@ -14,7 +14,7 @@
 	<link rel="stylesheet" href="/css/${lang}/homepage-style.css" />
 	<link rel="stylesheet" href="/css/${lang}/font/font.css" />
 	<script type="text/javascript" src="/externlib/${lang}/jquery/jquery.js"></script>
-	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script>
+<%-- 	<script type="text/javascript" src="/js/${lang}/homepage-scrolling.js"></script> --%>
 	<script type="text/javascript" src="/js/${lang}/common.js"></script>
 	<script type="text/javascript" src="/js/${lang}/message.js"></script>
 	<script type="text/javascript" src="/js/analytics.js"></script>
@@ -34,7 +34,12 @@
 				<a href="/homepage/index.do">mago3D</a>
 			</h1>
 			<ul class="menu">
-				<li><a href="/homepage/about.do">mago3D</a></li>
+				<li class="mm" onclick='selectMenu();'>mago3D<span></span>
+					<ul>
+						<li><a href="/homepage/about.do" style="color: white">About</a></li>
+						<li><a href="/homepage/news.do" style="color: white" onclick="alert('Coming soon.'); return false">News</a></li>
+					</ul>
+				</li>
 				<li class="mm" onclick='selectMenu();'>Demo<span></span>
 					<ul>
 						<li><a href="/homepage/demo.do" style="color: white">Cesium</a></li>
@@ -43,11 +48,16 @@
 					</ul>
 				</li>
 				<li><a href="/homepage/download.do">Download</a></li>
-				<li><a href="/homepage/docs.do">Documentation</a></li>
+				<li class="mm" onclick='selectMenu();'>Documentation<span></span>
+					<ul>
+						<li><a href="/homepage/api.do" style="color: white" target="_blank">API</a></li>
+						<li><a href="/homepage/spec.do" style="color: white">F4D Spec</a></li>
+					</ul>
+				</li>
 				<li class="on">FAQ<span></span></li>
 			</ul>
 			<ul class="language">
-				<li id="languageKO"><a href="#" onclick="changeLanguage('ko');">KO</a></li>
+				<li id="languageKO"><a href="/homepage/faq.do" onclick="changeLanguage('ko');">KO</a></li>
 				<li id="languageEN" class="on">EN</li>
 			</ul>
 		</div>
@@ -70,7 +80,7 @@
 				<div>
 					<div class="sub_title"><span id="mago3D">What is mago3D?</span></div>
 					<p>	 
-						MAGO3D is a next-generation 3D platform that integrates and visualizes AEC (Architecture, Engineering, Construction) and traditional 3D spatial information (3D GIS).
+						mago3D is a next-generation 3D platform that integrates and visualizes AEC (Architecture, Engineering, Construction) areas and traditional 3D spatial information (3D GIS).
 					</p>
 				</div>
 				<div>
@@ -87,27 +97,11 @@
 				</div>
 				<div>
 					<div class="sub_title"><span id="License">Mago3D.js, F4D Converter How do I use each license?</span></div>
-					<p>
-						<i>mago3D F4D Converter Commercial License for ISVs and
-						VARs</i><br>Gaia3D provides its mago3D F4D Converter under a dual
-						license model designed to meet the development and distribution
-						needs of both commercial distributors (such as ISVs and VARs)
-						and open source projects.<br> <br> <i>For ISVs,
-							VARs and Other Distributors of Commercial Applications:</i><br>
-						ISVs (Independent Software
-						Vendors), VARs (Value Added Resellers) and other distributors that
-						combine and distribute commercially licensed software with mago3D
-						F4D Converter software and do not wish to distribute the source code
-						for the commercially licensed software under version 3 of the GNU
-						AFFERO GENERAL PUBLIC LICENSE (the "AGPL"
-						https://www.gnu.org/licenses/agpl-3.0.en.html ) must enter into a
-						commercial license agreement with Gaia3D.<br>
-						<br> <i>For Open Source Projects and Other Developers of
-							Open Source Applications:</i><br> For developers of Free Open
-						Source Software ("FOSS") applications under the GPL or AGPL that
-						want to combine and distribute those FOSS applications with mago3D
-						F4D Converter software, Gaia3D’s open source software licensed under
-						the AGPL is the best option.					
+					<p>	
+						mago3D.js follows Apache2.0 and F4D Converter follows Dual License based on AGPL3.0. 
+						Organizations or individuals who use the F4D Converter but do not want to release the source code must obtain a commercial license from Gaia3D(www.gaia3d.com). 
+						Except for commercial licenses, all are subject to the AGPL3.0 and are subject to source code disclosure. 
+						For more information, please contact <a href="mailto:info@gaia3d.com">info@gaia3d.com</a>
 					</p>
 				</div>
 				<div>

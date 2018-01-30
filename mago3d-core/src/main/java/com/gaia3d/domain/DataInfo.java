@@ -1,5 +1,6 @@
 package com.gaia3d.domain;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import lombok.Getter;
@@ -22,16 +23,8 @@ public class DataInfo {
 	public static final String STATUS_USE = "0";
 	// Data 상태가 중지(관리자)
 	public static final String STATUS_FORBID = "1";
-	// Data 상태가 잠금(비밀번호 실패횟수 초과)
-	public static final String STATUS_FAIL_LOGIN_COUNT_OVER = "2";
-	// Data 상태가 휴면(로그인 기간)
-	public static final String STATUS_SLEEP = "3";
-	// Data 상태가 만료(사용기간 종료)
-	public static final String STATUS_TERM_END = "4";
 	// Data 상태가 삭제(화면 비표시)
 	public static final String STATUS_LOGICAL_DELETE = "5";
-	// Data 상태가 임시 비밀번호(비밀번호 찾기, 관리자 설정에 의한 임시 비밀번호 발급 시)
-	public static final String STATUS_TEMP_PASSWORD = "6";
 	
 	// data_group 에 등록되지 않은 Data
 	private String[] data_all_id;
@@ -62,37 +55,65 @@ public class DataInfo {
 	private String order_value;
 	private Long list_counter = 10l;
 	
+	// 사용자명
+	private String user_id;
+	private String user_name;
+	
 	/****** validator ********/
 	private String method_mode;
 
 	// 고유번호
 	private Long data_id;
 	// Data Group 고유번호
-	private Long data_group_id;
+	private Long project_id;
 	// Data Group 이름
-	private String data_group_name;
+	private String project_name;
 	// data 고유 식별번호
 	private String data_key;
+	// data 고유 식별번호
+	private String old_data_key;
+	// 부모 data 고유 식별번호
+	private String parent_data_key;
 	// data 이름
 	private String data_name;
+	// 부모 고유번호
+	private Long parent;
+	// 부모 이름(화면 표시용)
+	private String parent_name;
+	// 부모 깊이
+	private Integer parent_depth;
+	// 깊이
+	private Integer depth;
+	// 나열 순서
+	private Integer view_order;
+	// 자식 존재 유무, Y : 존재, N : 존재안함(기본)
+	private String child_yn;
 	// 위도, 경도 정보 geometry 타입
 	private String location;
 	// 위도
-	private String latitude;
+	private BigDecimal latitude;
 	// 경도
-	private String longitude;
+	private BigDecimal longitude;
 	// 높이
-	private String height;
+	private BigDecimal height;
 	// heading
-	private String heading;
+	private BigDecimal heading;
 	// pitch
-	private String pitch;
+	private BigDecimal pitch;
 	// roll
-	private String roll;
+	private BigDecimal roll;
+	// 속성
+	private String attributes;
 	// data 상태. 0:사용중, 1:사용중지(관리자), 2:기타
 	private String status;
+	// 사용유무, Y : 사용, N : 사용안함
+	private String use_yn;
+	// 공개 유무. 기본값 비공개 N
+	private String public_yn;
 	// data 등록 방법. 기본 : SELF
 	private String data_insert_type;
+	// 설명
+	private String description;
 	// 수정일 
 	private String update_date;
 	// 등록일
@@ -126,6 +147,13 @@ public class DataInfo {
 		CommonCode commonCode = (CommonCode)commonCodeMap.get(this.data_insert_type);
 		if(commonCode == null) return "";
 		else return commonCode.getCode_name();
+	}
+	
+	public String getViewAttributes() {
+		if(this.attributes == null || "".equals( attributes) || attributes.length() < 20) {
+			return attributes;
+		}
+		return attributes.substring(0, 20) + "...";
 	}
 	
 	public String getViewInsertDate() {

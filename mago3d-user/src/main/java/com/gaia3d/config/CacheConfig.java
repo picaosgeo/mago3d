@@ -12,19 +12,20 @@ import org.springframework.stereotype.Component;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.CacheName;
+import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.CacheType;
 import com.gaia3d.domain.CommonCode;
-import com.gaia3d.domain.DataGroup;
 import com.gaia3d.domain.DataInfo;
 import com.gaia3d.domain.Menu;
 import com.gaia3d.domain.Policy;
+import com.gaia3d.domain.Project;
 import com.gaia3d.domain.UserGroup;
 import com.gaia3d.domain.UserGroupMenu;
 import com.gaia3d.service.CommonCodeService;
-import com.gaia3d.service.DataGroupService;
 import com.gaia3d.service.DataService;
 import com.gaia3d.service.MenuService;
 import com.gaia3d.service.PolicyService;
+import com.gaia3d.service.ProjectService;
 import com.gaia3d.service.UserGroupService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class CacheConfig {
 	@Autowired
 	private DataService dataService;
 	@Autowired
-	private DataGroupService dataGroupService;
+	private ProjectService projectService;
 //	@Autowired
 //	private LicenseService licenseService;
 	@Autowired
@@ -52,69 +53,63 @@ public class CacheConfig {
 //	@Autowired
 //	private ServerService serverService;
 	
-	@Autowired
-	private PropertiesConfig propertiesConfig;
-	
 	public static final String LOCALHOST = "localhost";
 
 	@PostConstruct
 	public void init() {
-		log.info("**************** User 캐시 초기화 시작 *****************");
 		log.info("*************************************************");
+		log.info("************* User Cache Init Start *************");
+		log.info("*************************************************");
+		
+		CacheParams cacheParams = new CacheParams();
+		cacheParams.setCacheType(CacheType.SELF);
 
 		// 라이선스 유호성 체크
-		license(CacheType.SELF);
+		license(cacheParams);
 		// 운영 정책 캐시 갱신
-		policy(CacheType.SELF);
+		policy(cacheParams);
 		// 메뉴, 사용자 그룹 메뉴 갱신
-		menu(CacheType.SELF);
+		menu(cacheParams);
 		// 사용자 그룹 캐시, 확장용
 		// loadUserGroup();
 		// 서버 그룹 캐시 갱신, 확장용
 		// loadServerGroup();
 		// 공통 코드 캐시 갱신
 		
-		// 데이터를 그룹별로 로딩
-		data(CacheType.SELF);
+		// 프로젝트 갱신
+		project(cacheParams);
+		// 데이터를 프로젝트별로 로딩
+		data(cacheParams);
 		
-		commonCode(CacheType.SELF);
+		commonCode(cacheParams);
 
-		log.info("**************** User 캐시 초기화 종료 *****************");
+		log.info("*************************************************");
+		log.info("************* User Cache Init End ***************");
+		log.info("*************************************************");
 	}
 
-	public void loadCache(CacheName cacheName, CacheType cacheType) {
-		if(cacheName == CacheName.LICENSE) license(cacheType);
-		else if(cacheName == CacheName.POLICY) policy(cacheType);
-		else if(cacheName == CacheName.MENU) menu(cacheType);
-		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheType);
-		else if(cacheName == CacheName.DATA_GROUP) data(cacheType);
+	public void loadCache(CacheParams cacheParams) {
+		CacheName cacheName = cacheParams.getCacheName();
+		log.info(" *************** loadCache cacheName = {}", cacheName.name());
+		
+		if(cacheName == CacheName.LICENSE) license(cacheParams);
+		else if(cacheName == CacheName.POLICY) policy(cacheParams);
+		else if(cacheName == CacheName.MENU) menu(cacheParams);
+		else if(cacheName == CacheName.COMMON_CODE) commonCode(cacheParams);
+		else if(cacheName == CacheName.PROJECT) project(cacheParams);
+		else if(cacheName == CacheName.DATA_INFO) data(cacheParams);
 	}
 	
-	private void license(CacheType cacheType) {
-		// 사용자 도메인 cache를 갱신
-		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
-			
-		}
-		// 이중화 도메인 사용자, 관리자 cache를 갱신
-		if(cacheType == CacheType.BROADCAST) {
-			
-		}
+	private void license(CacheParams cacheParams) {
+		//CacheType cacheType = cacheParams.getCacheType();
 	}
 
-	private void policy(CacheType cacheType) {
+	private void policy(CacheParams cacheParams) {
 		Policy policy = policyService.getPolicy();
 		CacheManager.setPolicy(policy);
-		// 사용자 도메인 cache를 갱신
-		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
-			
-		}
-		// 이중화 도메인 사용자, 관리자 cache를 갱신
-		if(cacheType == CacheType.BROADCAST) {
-			
-		}
 	}
 
-	private void menu(CacheType cacheType) {
+	private void menu(CacheParams cacheParams) {
 		Map<Long, Menu> menuMap = new HashMap<Long, Menu>();
 		List<Menu> menuList = menuService.getListMenu(null);
 		for(Menu menu : menuList) {
@@ -130,51 +125,63 @@ public class CacheConfig {
 		
 		CacheManager.setMenuMap(menuMap);
 		CacheManager.setUserGroupMenuMap(userGroupMenuMap);
-		
-		// 사용자 도메인 cache를 갱신
-		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
-			
-		}
-		// 이중화 도메인 사용자, 관리자 cache를 갱신
-		if(cacheType == CacheType.BROADCAST) {
-			
-		}
 	}
 	
 	/**
 	 * @param cacheType
 	 */
-	private void data(CacheType cacheType) {
-		Map<String, Map<String, DataInfo>> dataGroupMap = new HashMap<>();
-		List<DataInfo> allDataInfoList = new ArrayList<>();
+	private void project(CacheParams cacheParams) {
+		List<Project> projectList = projectService.getListProject(new Project());
+		Map<Long, Project> projectMap = new HashMap<>();
+		for(Project project : projectList) {
+			projectMap.put(project.getProject_id(), project);
+		}
 		
-		// 1 Depth group 정보를 전부 가져옴
-		List<DataGroup> dataGroupList = dataGroupService.getListDataGroupByDepth(1);
-		// 1 그룹별 하위 object 정보들을 전부 가져옴
-		for(DataGroup dataGroup : dataGroupList) {
-			List<DataGroup> childGroupList = dataGroupService.getListDataGroupByAncestor(dataGroup.getData_group_id());
-//			List<DataInfo> allChildDataInfoList = new ArrayList<>();
-			for(DataGroup childDataGroup : childGroupList) {
+		CacheManager.setProjectList(projectList);
+		CacheManager.setProjectMap(projectMap);
+	}
+	
+	/**
+	 * @param cacheType
+	 */
+	private void data(CacheParams cacheParams) {
+		Long projectId = cacheParams.getProject_id();
+		
+		Map<Long, List<DataInfo>> projectDataMap = null;
+		Map<Long, String> projectDataJsonMap = null;
+		if(projectId == null) {
+			// 최초 로딩시
+			projectDataMap = new HashMap<>();
+			projectDataJsonMap = new HashMap<>();
+			
+			List<Project> projectList = projectService.getListProject(new Project());
+			for(Project project : projectList) {
 				DataInfo dataInfo = new DataInfo();
-				dataInfo.setData_group_id(childDataGroup.getData_group_id());
-//				allChildDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
-				allDataInfoList.addAll(dataService.getListDataByDataGroupId(dataInfo));
+				dataInfo.setProject_id(project.getProject_id());
+				List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
+				
+				projectDataMap.put(project.getProject_id(), dataInfoList);
+				projectDataJsonMap.put(project.getProject_id(), getProjectDataJson(project, dataInfoList));
 			}
-//			dataGroupMap.put(dataGroup.getData_group_key(), allChildDataInfoList);
+		} else {
+			// 관리자 페이지에서 data 정보가 갱신되었을때
+			Project project = projectService.getProject(projectId);
+			DataInfo dataInfo = new DataInfo();
+			dataInfo.setProject_id(projectId);
+			List<DataInfo> dataInfoList = dataService.getListDataByProjectId(dataInfo);
+			
+			projectDataMap = CacheManager.getProjectDataMap();
+			projectDataJsonMap = CacheManager.getProjectDataJsonMap();
+			
+			projectDataMap.put(projectId, dataInfoList);
+			projectDataJsonMap.put(projectId, getProjectDataJson(project, dataInfoList));
 		}
 		
-		Map<String, DataInfo> allDataInfoMap = new HashMap<>();
-		for(DataInfo dataInfo : allDataInfoList) {
-			allDataInfoMap.put(dataInfo.getData_key(), dataInfo);
-		}
-		
-		dataGroupMap.put("alldata", allDataInfoMap);
-		
-		CacheManager.setProjectDataGroupList(dataGroupList);
-		CacheManager.setDataGroupMap(dataGroupMap);
+		CacheManager.setProjectDataMap(projectDataMap);
+		CacheManager.setProjectDataJsonMap(projectDataJsonMap);
 	}
 
-	private void commonCode(CacheType cacheType) {
+	private void commonCode(CacheParams cacheParams) {
 		List<CommonCode> commonCodeList = commonCodeService.getListCommonCode();
 		log.info(" commonCodeList size = {}", commonCodeList.size());
 		Map<String, Object> commonCodeMap = new HashMap<>();
@@ -217,14 +224,87 @@ public class CacheConfig {
 		commonCodeMap.put(CommonCode.ISSUE_STATUS, issueStatusList);
 		commonCodeMap.put(CommonCode.DATA_REGISTER_TYPE, dataRegisterTypeList);
 		CacheManager.setCommonCodeMap(commonCodeMap);
+	}
+	
+	private String getProjectDataJson(Project project, List<DataInfo> dataInfoList) {
 		
-		// 사용자 도메인 cache를 갱신
-		if(cacheType == CacheType.USER || cacheType == CacheType.BROADCAST) {
+		if(dataInfoList == null || dataInfoList.isEmpty()) return null;
+		
+		StringBuilder builder = new StringBuilder(256);
+		
+		int dataInfoCount = dataInfoList.size();
+		int preDepth = 0;
+		int brackets = 0;
+		for(int i = 0; i < dataInfoCount; i++) {
+			DataInfo dataInfo = dataInfoList.get(i);
 			
-		}
-		// 이중화 도메인 사용자, 관리자 cache를 갱신
-		if(cacheType == CacheType.BROADCAST) {
+			// 자식들 정보
+			if(preDepth < dataInfo.getDepth()) {
+				// 시작
+				builder.append("{");
+				// location 정보 및 attributes
+				builder = getLocationAndAttributes(builder, dataInfo);
+				// 자식 노드
+				builder.append("\"children\"").append(":").append("[");
+				brackets++;
+			} else if(preDepth == dataInfo.getDepth()) {
+				// 형제 노드, 닫는 처리
+				builder.append("]");
+				builder.append("}");
+				
+				builder.append(",");
+				builder.append("{");
+				// location 정보 및 attributes
+				builder = getLocationAndAttributes(builder, dataInfo);
+				// 자식 노드
+				builder.append("\"children\"").append(":").append("[");
+			} else {
+				// 종료, 닫는처리
+				int closeCount = preDepth - dataInfo.getDepth();
+				for(int j=0; j<=closeCount; j++) {
+					builder.append("]");
+					builder.append("}");
+					brackets--;
+				}
+				
+				builder.append(",");
+				builder.append("{");
+				// location 정보 및 attributes
+				builder = getLocationAndAttributes(builder, dataInfo);
+				// 자식 노드
+				builder.append("\"children\"").append(":").append("[");
+			}
+				
+			if(dataInfoCount == (i+1)) {
+				// 맨 마지막의 경우 괄호를 닫음
+				for(int k=0; k<brackets; k++) {
+					builder.append("]");
+					builder.append("}");
+				}
+			}
 			
+			preDepth = dataInfo.getDepth();
 		}
+		
+		log.info(" ************** {} json file **********", project.getProject_name());
+		log.info(" ========= {} ", builder.toString());
+		return builder.toString();
+	}
+	
+	private StringBuilder getLocationAndAttributes(StringBuilder builder, DataInfo dataInfo) {
+		builder.append("\"data_key\"").append(":").append("\"").append(dataInfo.getData_key()).append("\"").append(",");
+		builder.append("\"data_name\"").append(":").append("\"").append(dataInfo.getData_name()).append("\"").append(",");
+		builder.append("\"parent\"").append(":").append(dataInfo.getParent()).append(",");
+		builder.append("\"depth\"").append(":").append(dataInfo.getDepth()).append(",");
+		builder.append("\"view_order\"").append(":").append(dataInfo.getView_order()).append(",");
+		if(dataInfo.getLatitude() != null) builder.append("\"latitude\"").append(":").append(dataInfo.getLatitude()).append(",");
+		if(dataInfo.getLongitude() != null) builder.append("\"longitude\"").append(":").append(dataInfo.getLongitude()).append(",");
+		if(dataInfo.getHeight() != null) builder.append("\"height\"").append(":").append(dataInfo.getHeight()).append(",");
+		if(dataInfo.getHeading() != null) builder.append("\"heading\"").append(":").append(dataInfo.getHeading()).append(",");
+		if(dataInfo.getPitch() != null) builder.append("\"pitch\"").append(":").append(dataInfo.getPitch()).append(",");
+		if(dataInfo.getRoll() != null) builder.append("\"roll\"").append(":").append(dataInfo.getRoll()).append(",");
+		builder.append("\"attributes\"").append(":").append(dataInfo.getAttributes()).append(",");
+		
+		return builder;
 	}
 }

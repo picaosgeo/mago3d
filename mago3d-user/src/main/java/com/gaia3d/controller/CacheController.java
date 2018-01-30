@@ -6,17 +6,21 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaia3d.config.CacheConfig;
 import com.gaia3d.config.PropertiesConfig;
 import com.gaia3d.domain.CacheName;
-import com.gaia3d.domain.CacheType;
+import com.gaia3d.domain.CacheParams;
 import com.gaia3d.domain.Result;
+import com.gaia3d.security.Crypt;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,33 +44,49 @@ public class CacheController {
 	 * @param request
 	 * @param policy
 	 * @return
+	 * @throws JsonProcessingException 
 	 */
 	@RequestMapping(value = "call-cache.do")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> callCache(HttpServletRequest request) {
+	public ResponseEntity<String> callCache(HttpServletRequest request) throws JsonProcessingException {
 		
+		log.info("@@@@@@@@@@@@@@@ mago3d-user callCache Start @@@@@@@@@@@@@@@@");
+		
+		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> jSONObject = new HashMap<String, Object>();
-		
 		String result = Result.FAIL.toString();
 		String result_message = "";
 		HttpStatus httpStatus = null;
+		HttpHeaders responseHeaders = new HttpHeaders(); 
+		responseHeaders.add("Content-Type", "application/json;charset=UTF-8");
 		try {
 			
 			String authData = request.getParameter("auth_data");
-//			authData = Crypt.decrypt(authData);
 			log.info("@@@@@@@@@ auth_data = {}", authData);
-			String[] values = authData.split("&");
-			String[] keyInfo = values[0].split("=");
-			String[] cacheName = values[1].split("=");
-			log.info("@@@@@@@@@ REST_AUTH_KEY = {}, cache_name = {}", keyInfo[1], cacheName[1]);
-//			if(!propertiesConfig.getRestAuthKey().equals(Crypt.encrypt(keyInfo[1]))) {
-//				httpStatus = HttpStatus.BAD_REQUEST;
-//				jSONObject.put("success_yn", success_yn);
-//				jSONObject.put("result_message", "REST API KEY가 유효하지 않습니다.");
-//				return new ResponseEntity<String>(gson.toJson(jSONObject), httpStatus);
-//			}
+			authData = Crypt.decrypt(authData);
+			log.info("@@@@@@@@@ auth_data = {}", authData);
+			String[] keyValues = authData.split("&");
 			
-			cacheConfig.loadCache( CacheName.valueOf(cacheName[1]), CacheType.SELF);
+			CacheParams cacheParams = new CacheParams();
+			for(String tempValue : keyValues) {
+				String[] values = tempValue.split("=");
+				if(values[0].equals("api-key")) {
+					if(!propertiesConfig.getRestAuthKey().equals(Crypt.encrypt(values[1]))) {
+						httpStatus = HttpStatus.UNAUTHORIZED;
+						jSONObject.put("result", result);
+						jSONObject.put("result_message", "REST API KEY가 유효하지 않습니다.");
+						log.info(" *************** RestAuthKey Differerent. key = {}", Crypt.encrypt(values[1]));
+						
+						return new ResponseEntity<String>(mapper.writeValueAsString(jSONObject), responseHeaders, httpStatus);
+					}
+				} else if(values[0].equals("cache_name")) {
+					cacheParams.setCacheName(CacheName.valueOf(values[1]));
+				} else if(values[0].equals("project_id")) {
+					if(values[1] != null && !"".equals(values[1])) cacheParams.setProject_id(Long.valueOf(values[1]));
+				}
+			}
+			
+			cacheConfig.loadCache(cacheParams);
 			
 			result = Result.SUCCESS.toString();
 			httpStatus = HttpStatus.OK;
@@ -80,6 +100,8 @@ public class CacheController {
 		jSONObject.put("result", result);
 		jSONObject.put("result_message", result_message);
 		
-		return new ResponseEntity<Map<String, Object>>(jSONObject, httpStatus);
+		log.info("@@@@@@@@@@@@@@@ mago3d-user callCache end @@@@@@@@@@@@@@@@");
+		
+		return new ResponseEntity<String>(mapper.writeValueAsString(jSONObject), responseHeaders, httpStatus);
 	}
 }

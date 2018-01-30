@@ -1,9 +1,13 @@
 package com.gaia3d.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +20,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.LocaleResolver;
 
 import com.gaia3d.domain.CacheManager;
 import com.gaia3d.domain.Policy;
 import com.gaia3d.domain.SessionKey;
+import com.gaia3d.domain.UserGroupRole;
 import com.gaia3d.domain.UserInfo;
 import com.gaia3d.domain.UserSession;
+import com.gaia3d.helper.GroupRoleHelper;
 import com.gaia3d.helper.SessionUserHelper;
 import com.gaia3d.listener.Gaia3dHttpSessionBindingListener;
 import com.gaia3d.service.LoginService;
+import com.gaia3d.service.RoleService;
 import com.gaia3d.service.UserService;
 import com.gaia3d.util.WebUtil;
 import com.gaia3d.validator.LoginValidator;
@@ -41,10 +51,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/login/")
 public class LoginController {
 	
+	@Autowired
+	private LocaleResolver localeResolver;
 	@Resource(name="loginValidator")
 	private LoginValidator loginValidator;
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private RoleService roleService;
 	@Autowired
 	private UserService userService;
 	
@@ -56,7 +70,6 @@ public class LoginController {
 	 */
 	@GetMapping("/login.do")
 	public String login(HttpServletRequest request, Model model) {
-		
 		Policy policy = CacheManager.getPolicy();
 		log.info("@@ policy = {}", policy);
 		
@@ -235,15 +248,15 @@ public class LoginController {
 			return "usersession.lastlogin.invalid";
 		}
 		
-//		// 초기 세팅시만 이 값을 N으로 세팅해서 사용자 Role 체크 하지 않음
-//		if(!UserSession.N.equals(userSession.getUser_role_check_yn())) {
-//			// 사용자 그룹 ROLE 확인
-//			UserGroupRole userGroupRole = new UserGroupRole();
-//			userGroupRole.setUser_id(userSession.getUser_id());
-//			if(!GroupRoleHelper.isUserGroupRoleValid(roleService.getListUserGroupRoleByUserId(userGroupRole), UserGroupRole.USER_ADMIN_LOGIN)) {
-//				return "usersession.role.invalid";
-//			}
-//		}
+		// 초기 세팅시만 이 값을 N으로 세팅해서 사용자 Role 체크 하지 않음
+		if(!UserSession.N.equals(userSession.getUser_role_check_yn())) {
+			// 사용자 그룹 ROLE 확인
+			UserGroupRole userGroupRole = new UserGroupRole();
+			userGroupRole.setUser_id(userSession.getUser_id());
+			if(!GroupRoleHelper.isUserGroupRoleValid(roleService.getListUserGroupRoleByUserId(userGroupRole), UserGroupRole.USER_ADMIN_LOGIN)) {
+				return "usersession.role.invalid";
+			}
+		}
 		
 //		// 사용자 IP 체크
 //		if(Policy.Y.equals(policy.getSecurity_user_ip_check_yn())) {
@@ -268,6 +281,37 @@ public class LoginController {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * 언어 설정
+	 * @param model
+	 * @return
+	 */
+	@GetMapping(value = "ajax-change-language.do")
+	@ResponseBody
+	public Map<String, Object> ajaxChangeLanguage(HttpServletRequest request, HttpServletResponse response, @RequestParam("lang") String lang, Model model) {
+		Map<String, Object> jSONObject = new HashMap<String, Object>();
+		String result = "success";
+		try {
+			log.info("@@ lang = {}", lang);
+			if(Locale.KOREA.getLanguage().equals(lang) 
+					|| Locale.ENGLISH.getLanguage().equals(lang)
+					|| Locale.JAPAN.getLanguage().equals(lang)) {
+				request.getSession().setAttribute(SessionKey.LANG.name(), lang);
+				Locale locale = new Locale(lang);
+//				LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+//				localeResolver.setLocale(request, response, locale);
+				localeResolver.setLocale(request, response, locale);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			result = "db.exception";
+		}
+	
+		jSONObject.put("result", result);
+		
+		return jSONObject;
 	}
 	
 	/**
