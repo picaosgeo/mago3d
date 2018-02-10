@@ -35,6 +35,7 @@
 							<div id="data_info_tab">
 								<form:form id="dataInfo" modelAttribute="dataInfo" method="post" onsubmit="return false;">
 								<form:hidden path="data_id"/>
+								<form:hidden path="depth"/>
 								<form:hidden path="old_data_key"/>
 								<table class="input-table scope-row">
 									<col class="col-label" />
@@ -45,7 +46,7 @@
 											<span class="icon-glyph glyph-emark-dot color-warning"></span>
 										</th>
 										<td class="col-input">
-											<select id="project_id" name="project_id" class="select" >
+											<select id="project_id" name="project_id">
 	<c:forEach var="project" items="${projectList }">
 												<option value="${project.project_id }">${project.project_name }</option>
 	</c:forEach>									
@@ -220,7 +221,7 @@
 	$(document).ready(function() {
 		$( ".tabs" ).tabs();
 		$(".select").selectmenu();
-		$("#project_id").val(${project.project_id});
+		$("#project_id").val("${dataInfo.project_id}");
 	});
 	
 	var dataDialog = $( ".dataDialog" ).dialog({
