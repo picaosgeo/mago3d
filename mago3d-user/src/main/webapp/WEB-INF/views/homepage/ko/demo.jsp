@@ -203,7 +203,7 @@
 				<li>
 					<label for="propertyRenderingWord">속성</label>
 					<input type="text" id="propertyRenderingWord" name="propertyRenderingWord" size="23" placeholder="isMain=true" />
-					<button type="button" id="changePropertyRendering" class="btn">변경</button> 
+					<button type="button" id="changePropertyRendering" class="btn"><spring:message code='demo.change'/></button> 
 				</li>
 			</ul>
 		</div>

@@ -3,8 +3,10 @@ package com.gaia3d.persistence;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoAttribute;
 
 /**
  * Data
@@ -64,6 +66,13 @@ public interface DataMapper {
 	DataInfo getData(Long data_id);
 	
 	/**
+	 * Project Data 정보 취득
+	 * @param project_id
+	 * @return
+	 */
+	DataInfo getDataByProjectId(Long project_id);
+	
+	/**
 	 * 표시 순서
 	 * @param dvataInfo
 	 * @return
@@ -83,6 +92,13 @@ public interface DataMapper {
 	 * @return
 	 */
 	int insertData(DataInfo dataInfo);
+	
+	/**
+	 * Data 속성 등록
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	int insertDataAttribute(DataInfoAttribute dataInfoAttribute);
 	
 	/**
 	 * Data 수정

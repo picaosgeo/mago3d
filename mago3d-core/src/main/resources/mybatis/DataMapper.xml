@@ -125,6 +125,16 @@
 			AND A.project_id = B.project_id
 	</select>
 	
+	<!-- Project Data 정보 -->
+	<select id="getDataByProjectId" parameterType="long" resultType="dataInfo">
+		/* getDataByProjectId */
+		SELECT *
+		FROM data_info
+		WHERE project_id = #{project_id}
+			AND parent = 0
+			AND depth = 1
+	</select>
+	
 	<!-- Data 아이디 중복 체크 -->
 	<select id="getDuplicationKeyCount" parameterType="dataInfo" resultType="int">
 		/* getDuplicationKeyCount */
@@ -171,6 +181,19 @@
 			<if test="attributes != null and attributes != ''">
 			, TO_JSON(#{attributes}::json)
 			</if>
+		)
+	</insert>
+	
+	<!-- Data Attribute 등록 -->
+	<insert id="insertDataAttribute" parameterType="dataInfoAttribute">
+		/* insertDataAttribute */
+		<selectKey keyProperty="data_attribute_id" resultType="long" order="BEFORE">
+    		SELECT NEXTVAL('data_info_attribute_seq')
+  		</selectKey>
+		INSERT INTO data_info_attribute(
+			data_attribute_id, data_id, attributes
+		) values(
+			#{data_attribute_id}, #{data_id}, TO_JSON(#{attributes}::json)
 		)
 	</insert>
 	

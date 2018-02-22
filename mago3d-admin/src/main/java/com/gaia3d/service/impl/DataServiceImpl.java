@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoAttribute;
 import com.gaia3d.persistence.DataMapper;
 import com.gaia3d.service.DataService;
 
@@ -93,6 +94,16 @@ public class DataServiceImpl implements DataService {
 	}
 	
 	/**
+	 * Project Data 정보 취득
+	 * @param project_id
+	 * @return
+	 */
+	@Transactional(readOnly=true)
+	public DataInfo getDataByProjectId(Long project_id) {
+		return dataMapper.getDataByProjectId(project_id);
+	}
+	
+	/**
 	 * 표시 순서
 	 * @param dvataInfo
 	 * @return
@@ -120,6 +131,16 @@ public class DataServiceImpl implements DataService {
 	@Transactional
 	public int insertData(DataInfo dataInfo) {
 		return dataMapper.insertData(dataInfo);
+	}
+	
+	/**
+	 * Data 속성 등록
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	@Transactional
+	public int insertDataAttribute(DataInfoAttribute dataInfoAttribute) {
+		return dataMapper.insertDataAttribute(dataInfoAttribute);
 	}
 	
 	/**

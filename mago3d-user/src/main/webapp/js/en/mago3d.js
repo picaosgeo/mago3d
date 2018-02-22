@@ -453,7 +453,7 @@ function searchDataAPI(managerFactoryInstance, projectId, dataKey)
 }
 
 /**
- * 환경 설정 data map에 key 값의 존재 유무를 판별
+ * 환경 설정 data Object에 key 값의 존재 유무를 판별
  * @param {string} key 검색 키
  * @param 
  */
@@ -655,6 +655,1614 @@ LodAPI.changeLod = function(api, magoManager)
 	if (api.getLod3DistInMeters() !== null && api.getLod3DistInMeters() !== "") { magoManager.magoPolicy.setLod3DistInMeters(api.getLod3DistInMeters()); }
 	if (api.getLod4DistInMeters() !== null && api.getLod4DistInMeters() !== "") { magoManager.magoPolicy.setLod4DistInMeters(api.getLod4DistInMeters()); }
 	if (api.getLod5DistInMeters() !== null && api.getLod5DistInMeters() !== "") { magoManager.magoPolicy.setLod5DistInMeters(api.getLod5DistInMeters()); }
+};
+'use strict';
+
+/**
+ * mago3djs API
+ * 
+ * @alias API
+ * @class API
+ * 
+ * @param {any} apiName api이름
+ */
+function API(apiName)
+{
+	if (!(this instanceof API)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// api 이름
+	this.apiName = apiName;
+	
+	// project id
+	this.projectId = null;
+	this.projectDataFolder = null;
+	// objectIds
+	this.objectIds = null;
+	// data_key
+	this.dataKey = null;
+	// issueId
+	this.issueId = null;
+	// issueType
+	this.issueType = null;
+	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
+	this.drawType = 0;
+
+	// 위도
+	this.latitude = 0;
+	// 경도
+	this.longitude = 0;
+	// 높이
+	this.elevation = 0;
+	// heading
+	this.heading = 0;
+	// pitch
+	this.pitch = 0;
+	// roll
+	this.roll = 0;
+	// duration
+	this.duration = 0;
+
+	// 속성
+	this.property = null;
+	// 색깔
+	this.color = 0;
+	// structs = MSP, outfitting = MOP
+	this.blockType = null;
+	// outfitting 표시/비표시
+	this.showOutFitting = false;
+	// label 표시/비표시
+	this.showLabelInfo = true;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// frustum culling 가시 거리(M단위)
+	this.frustumFarDistance = 0;
+	// move mode 
+	this.objectMoveMode = CODE.moveMode.NONE;
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.nearGeoIssueListEnable = false;
+	// occlusion culling
+	this.occlusionCullingEnable = false;
+	//
+	this.insertIssueState = 0;
+	
+	// LOD1
+	this.lod0DistInMeters = null;
+	this.lod1DistInMeters = null;
+	this.lod2DistInMeters = null;
+	this.lod3DistInMeters = null;
+	this.lod4DistInMeters = null;
+	this.lod5DistInMeters = null;
+	
+	// Lighting
+	this.ambientReflectionCoef = null;
+	this.diffuseReflectionCoef = null;
+	this.specularReflectionCoef = null;
+	this.ambientColor = null;
+	this.specularColor = null;
+	
+	this.ssaoRadius = null;
+	//
+	this.FPVMode = false;
+};
+
+API.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+API.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+API.prototype.getAPIName = function() 
+{
+	return this.apiName;
+};
+
+API.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+API.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+API.prototype.getProjectDataFolder = function() 
+{
+	return this.projectDataFolder;
+};
+API.prototype.setProjectDataFolder = function(projectDataFolder) 
+{
+	this.projectDataFolder = projectDataFolder;
+};
+
+API.prototype.getObjectIds = function() 
+{
+	return this.objectIds;
+};
+API.prototype.setObjectIds = function(objectIds) 
+{
+	this.objectIds = objectIds;
+};
+
+API.prototype.getIssueId = function() 
+{
+	return this.issueId;
+};
+API.prototype.setIssueId = function(issueId) 
+{
+	this.issueId = issueId;
+};
+API.prototype.getIssueType = function() 
+{
+	return this.issueType;
+};
+API.prototype.setIssueType = function(issueType) 
+{
+	this.issueId = issueType;
+};
+
+API.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+API.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+API.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+API.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+API.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+API.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+API.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+API.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+API.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+API.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+API.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+API.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+API.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+API.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+API.prototype.getProperty = function() 
+{
+	return this.property;
+};
+API.prototype.setProperty = function(property) 
+{
+	this.property = property;
+};
+
+API.prototype.getColor = function() 
+{
+	return this.color;
+};
+API.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+API.prototype.getBlockType = function() 
+{
+	return this.blockType;
+};
+API.prototype.setBlockType = function(blockType) 
+{
+	this.blockType = blockType;
+};
+
+API.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+API.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+
+
+API.prototype.getShowLabelInfo = function() 
+{
+	return this.showLabelInfo;
+};
+API.prototype.setShowLabelInfo = function(showLabelInfo) 
+{
+	this.showLabelInfo = showLabelInfo;
+};
+API.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+API.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+API.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+API.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+API.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+API.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+API.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+
+API.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+API.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+API.prototype.getOcclusionCullingEnable = function() 
+{
+	return this.occlusionCullingEnable;
+};
+API.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
+{
+	this.occlusionCullingEnable = occlusionCullingEnable;
+};
+API.prototype.getNearGeoIssueListEnable = function() 
+{
+	return this.nearGeoIssueListEnable;
+};
+API.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
+{
+	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
+};
+
+API.prototype.getInsertIssueState = function() 
+{
+	return this.insertIssueState;
+};
+API.prototype.setInsertIssueState = function(insertIssueState) 
+{
+	this.insertIssueState = insertIssueState;
+};
+
+API.prototype.getDrawType = function() 
+{
+	return this.drawType;
+};
+API.prototype.setDrawType = function(drawType) 
+{
+	this.drawType = drawType;
+};
+
+API.prototype.getLod0DistInMeters = function() 
+{
+	return this.lod0DistInMeters;
+};
+API.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
+{
+	this.lod0DistInMeters = lod0DistInMeters;
+};
+API.prototype.getLod1DistInMeters = function() 
+{
+	return this.lod1DistInMeters;
+};
+API.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
+{
+	this.lod1DistInMeters = lod1DistInMeters;
+};
+API.prototype.getLod2DistInMeters = function() 
+{
+	return this.lod2DistInMeters;
+};
+API.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
+{
+	this.lod2DistInMeters = lod2DistInMeters;
+};
+API.prototype.getLod3DistInMeters = function() 
+{
+	return this.lod3DistInMeters;
+};
+API.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
+{
+	this.lod3DistInMeters = lod3DistInMeters;
+};
+API.prototype.getLod4DistInMeters = function() 
+{
+	return this.lod4DistInMeters;
+};
+API.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
+{
+	this.lod4DistInMeters = lod4DistInMeters;
+};
+API.prototype.getLod5DistInMeters = function() 
+{
+	return this.lod5DistInMeters;
+};
+API.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
+{
+	this.lod5DistInMeters = lod5DistInMeters;
+};
+
+API.prototype.getAmbientReflectionCoef = function() 
+{
+	return this.ambientReflectionCoef;
+};
+API.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
+{
+	this.ambientReflectionCoef = ambientReflectionCoef;
+};
+API.prototype.getDiffuseReflectionCoef = function() 
+{
+	return this.diffuseReflectionCoef;
+};
+API.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
+{
+	this.diffuseReflectionCoef = diffuseReflectionCoef;
+};
+API.prototype.getSpecularReflectionCoef = function() 
+{
+	return this.specularReflectionCoef;
+};
+API.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
+{
+	this.specularReflectionCoef = specularReflectionCoef;
+};
+API.prototype.getAmbientColor = function() 
+{
+	return this.ambientColor;
+};
+API.prototype.setAmbientColor = function(ambientColor) 
+{
+	this.ambientColor = ambientColor;
+};
+API.prototype.getSpecularColor = function() 
+{
+	return this.specularColor;
+};
+API.prototype.setSpecularColor = function(specularColor) 
+{
+	this.specularColor = specularColor;
+};
+API.prototype.getSsaoRadius = function() 
+{
+	return this.ssaoRadius;
+};
+API.prototype.setSsaoRadius = function(ssaoRadius) 
+{
+	this.ssaoRadius = ssaoRadius;
+};
+API.prototype.getFPVMode = function()
+{
+	return this.FPVMode;
+};
+API.prototype.setFPVMode = function(value)
+{
+	this.FPVMode = value;
+};
+
+API.prototype.getDuration = function()
+{
+	return this.duration;
+};
+API.prototype.setDuration = function(duration)
+{
+	this.duration = duration;
+};
+'use strict';
+
+/**
+ * api 처리 결과를 담당하는 callback function
+ * @param functionName policy json의 geo_callback_apiresult 속성값
+ * @param apiName 호출한 api 이름
+ * @param result 결과값
+ */
+function apiResultCallback(functionName, apiName, result) 
+{
+	window[functionName](apiName, result);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ * @param heading
+ * @param pitch
+ * @param roll
+ * @param
+ */
+function selectedObjectCallback(functionName, data_key, objectId, latitude, longitude, elevation, heading, pitch, roll) 
+{
+	window[functionName](data_key, objectId, latitude, longitude, elevation, heading, pitch, roll);
+}
+
+/**
+ * 선택한 object 정보를 화면에 표시
+ * @param functionName
+ * @param data_key
+ * @param objectId
+ * @param latitude
+ * @param longitude
+ * @param elevation
+ */
+function insertIssueCallback(functionName, data_key, objectId, latitude, longitude, elevation) 
+{
+	window[functionName](data_key, objectId, latitude, longitude, elevation);
+}
+
+/**
+ * mouse click 위치 정보를 화면에 표시
+ * @param functionName
+ * @param position
+ */
+function clickPositionCallback(functionName, position) 
+{
+	window[functionName](position);
+}
+
+'use strict';
+
+/**
+ * 사용자가 변경한 moving, color, rotation 등 이력 정보를 위한 domain
+ * @class Policy
+ */
+var ChangeHistory = function() 
+{
+	if (!(this instanceof ChangeHistory)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	this.moveHistory = false;
+	this.colorHistory = false;
+	this.rotationHistory = false;
+	
+	// move mode. ALL : 0 , OBJECT : 1, NONE : 2
+	this.objectMoveMode = null;
+	
+	// project id
+	this.projectId = null;
+	// project data folder
+	this.projectDataFolder = null;
+	// data_key
+	this.dataKey = null;	
+	// objectId
+	this.objectId = null;
+	// objectIndexOrder
+	this.objectIndexOrder = 0;
+	
+	// referenceObject aditional movement.
+	this.refObjectAditionalMove;
+	this.refObjectAditionalMoveRelToBuilding;
+	
+	// 위도
+	this.latitude = 0.0;
+	// 경도
+	this.longitude = 0.0;
+	// 높이
+	this.elevation = 0.0;
+	// heading
+	this.heading = 0.0;
+	// pitch
+	this.pitch = 0.0;
+	// roll
+	this.roll = 0.0;
+	// duration
+	this.duration = 0;
+	// 색깔
+	this.color = 0;
+	// color rgb
+	this.rgbColor = [];
+	// 속성
+	this.property = null;
+	this.propertyKey = null;
+	this.propertyValue = null;
+};
+
+ChangeHistory.prototype.getReferenceObjectAditionalMovement = function() 
+{
+	if (this.refObjectAditionalMove === undefined)
+	{ this.refObjectAditionalMove = new Point3D(); }
+	
+	return this.refObjectAditionalMove;
+};
+
+ChangeHistory.prototype.getReferenceObjectAditionalMovementRelToBuilding = function() 
+{
+	if (this.refObjectAditionalMoveRelToBuilding === undefined)
+	{ this.refObjectAditionalMoveRelToBuilding = new Point3D(); }
+	
+	return this.refObjectAditionalMoveRelToBuilding;
+};
+
+ChangeHistory.prototype.getProjectId = function() 
+{
+	return this.projectId;
+};
+ChangeHistory.prototype.setProjectId = function(projectId) 
+{
+	this.projectId = projectId;
+};
+
+ChangeHistory.prototype.getProjectDataFolder = function() 
+{
+	return this.projectDataFolder;
+};
+ChangeHistory.prototype.setProjectDataFolder = function(projectDataFolder) 
+{
+	this.projectDataFolder = projectDataFolder;
+};
+
+ChangeHistory.prototype.getDataKey = function() 
+{
+	return this.dataKey;
+};
+ChangeHistory.prototype.setDataKey = function(dataKey) 
+{
+	this.dataKey = dataKey;
+};
+
+ChangeHistory.prototype.getObjectId = function() 
+{
+	return this.objectId;
+};
+ChangeHistory.prototype.setObjectId = function(objectId) 
+{
+	this.objectId = objectId;
+};
+
+ChangeHistory.prototype.getObjectIndexOrder = function() 
+{
+	return this.objectIndexOrder;
+};
+ChangeHistory.prototype.setObjectIndexOrder = function(objectIndexOrder) 
+{
+	this.objectIndexOrder = objectIndexOrder;
+};
+
+ChangeHistory.prototype.getLatitude = function() 
+{
+	return this.latitude;
+};
+ChangeHistory.prototype.setLatitude = function(latitude) 
+{
+	this.latitude = latitude;
+};
+
+ChangeHistory.prototype.getLongitude = function() 
+{
+	return this.longitude;
+};
+ChangeHistory.prototype.setLongitude = function(longitude) 
+{
+	this.longitude = longitude;
+};
+
+ChangeHistory.prototype.getElevation = function() 
+{
+	return this.elevation;
+};
+ChangeHistory.prototype.setElevation = function(elevation) 
+{
+	this.elevation = elevation;
+};
+
+ChangeHistory.prototype.getHeading = function() 
+{
+	return this.heading;
+};
+ChangeHistory.prototype.setHeading = function(heading) 
+{
+	this.heading = heading;
+};
+
+ChangeHistory.prototype.getPitch = function() 
+{
+	return this.pitch;
+};
+ChangeHistory.prototype.setPitch = function(pitch) 
+{
+	this.pitch = pitch;
+};
+
+ChangeHistory.prototype.getRoll = function() 
+{
+	return this.roll;
+};
+ChangeHistory.prototype.setRoll = function(roll) 
+{
+	this.roll = roll;
+};
+
+ChangeHistory.prototype.getColor = function() 
+{
+	return this.color;
+};
+ChangeHistory.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+ChangeHistory.prototype.getRgbColor = function() 
+{
+	return this.rgbColor;
+};
+ChangeHistory.prototype.setRgbColor = function(rgbColor) 
+{
+	this.rgbColor = rgbColor;
+};
+
+ChangeHistory.prototype.getProperty = function() 
+{
+	return this.property;
+};
+ChangeHistory.prototype.setProperty = function(property) 
+{
+	this.property = property;
+};
+ChangeHistory.prototype.getPropertyKey = function() 
+{
+	return this.propertyKey;
+};
+ChangeHistory.prototype.setPropertyKey = function(propertyKey) 
+{
+	this.propertyKey = propertyKey;
+};
+ChangeHistory.prototype.getPropertyValue = function() 
+{
+	return this.propertyValue;
+};
+ChangeHistory.prototype.setPropertyValue = function(propertyValue) 
+{
+	this.propertyValue = propertyValue;
+};
+
+ChangeHistory.prototype.getDuration = function()
+{
+	return this.duration;
+};
+ChangeHistory.prototype.setDuration = function(duration)
+{
+	this.duration = duration;
+};
+
+ChangeHistory.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+ChangeHistory.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+"use strict";
+
+var CODE = {};
+
+// magoManager가 다 로딩 되지 않은 상태에서 화면으로 부터 호출 되는 것을 막기 위해
+CODE.magoManagerState = {
+	"INIT"   	: 0,
+	"STARTED"	: 1,
+	"READY"   : 2
+};
+
+//0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
+CODE.fileLoadState = {
+	"READY"            : 0,
+	"LOADING_STARTED"  : 1,
+	"LOADING_FINISHED" : 2,
+	"PARSE_STARTED"    : 3,
+	"PARSE_FINISHED"   : 4
+};
+
+CODE.moveMode = {
+	"ALL"    : "0",
+	"OBJECT" : "1",
+	"NONE"   : "2"
+};
+
+CODE.PROJECT_ID_PREFIX = "projectId_";
+CODE.PROJECT_DATA_FOLDER_PREFIX = "projectDataFolder_";
+
+'use strict';
+
+/**
+ * 상수 설정
+ * @class Constant
+ */
+var Constant = {};
+
+Constant.CESIUM = "cesium";
+Constant.WORLDWIND = "worldwind";
+Constant.OBJECT_INDEX_FILE = "/objectIndexFile.ihe";
+Constant.CACHE_VERSION = "?cache_version=";
+Constant.SIMPLE_BUILDING_TEXTURE3x3_BMP = "/SimpleBuildingTexture3x3.bmp";
+Constant.RESULT_XDO2F4D = "/Result_xdo2f4d/Images/";
+Constant.RESULT_XDO2F4D_TERRAINTILES = "/Result_xdo2f4d/F4D_TerrainTiles/";
+Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT = "/Result_xdo2f4d/f4dTerranTileFile.txt";
+
+Constant.INTERSECTION_OUTSIDE = 0;
+Constant.INTERSECTION_INTERSECT= 1;
+Constant.INTERSECTION_INSIDE = 2;
+
+'use strict';
+
+/**
+ * mago3D 전체 환경 설정을 관리
+ * @class MagoConfig
+ */
+var MagoConfig = {};
+
+MagoConfig.getPolicy = function() 
+{
+	return this.serverPolicy;
+};
+
+MagoConfig.getData = function(key) 
+{
+	return this.dataObject[key];
+};
+
+MagoConfig.isDataExist = function(key) 
+{
+	return this.dataObject.hasOwnProperty(key)
+};
+
+MagoConfig.deleteData = function(key) 
+{
+	return delete this.dataObject[key];
+};
+
+/**
+ * data 를 map에 저장
+ * @param key map에 저장될 key
+ * @param value map에 저장될 value
+ */
+MagoConfig.setData = function(key, value) 
+{
+	if (!this.isDataExist(key)) 
+	{
+		this.dataObject[key] = value;
+	}
+};
+
+/**
+ * F4D Converter 실행 결과물이 저장된 project data folder 명을 획득
+ * @param projectDataFolder data folder
+ */
+MagoConfig.getProjectDataFolder = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return this.dataObject[key];
+};
+
+/**
+ * project map에 data folder명의 존재 유무를 검사
+ * @param projectDataFolder
+ */
+MagoConfig.isProjectDataFolderExist = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return this.dataObject.hasOwnProperty(key);
+};
+
+/**
+ * project data folder명을 map에서 삭제
+ * @param projectDataFolder
+ */
+MagoConfig.deleteProjectDataFolder = function(projectDataFolder) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	return delete this.dataObject[key];
+};
+
+/**
+ * project data folder명을 Object에서 삭제
+ * @param projectDataFolder Object에 저장될 key
+ * @param value Object에 저장될 value
+ */
+MagoConfig.setProjectDataFolder = function(projectDataFolder, value) 
+{
+	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
+	if (!this.isProjectDataFolderExist(key))
+	{
+		this.dataObject[key] = value;
+	}
+};
+
+/**
+ * 환경설정 초기화
+ * @param serverPolicy mago3d policy(json)
+ * @param projectIdArray data 정보를 map 저장할 key name
+ * @param projectDataArray data 정보(json)
+ */
+MagoConfig.init = function(serverPolicy, projectIdArray, projectDataArray) 
+{
+	this.dataObject = {};
+	
+	this.selectHistoryObject = {};
+	this.movingHistoryObject = {};
+	this.colorHistoryObject = {};
+	this.locationAndRotationHistoryObject = {};
+	
+	this.serverPolicy = serverPolicy;
+	if (projectIdArray !== null && projectIdArray.length > 0) 
+	{
+		for (var i=0; i<projectIdArray.length; i++) 
+		{
+			if (!this.isDataExist(CODE.PROJECT_ID_PREFIX + projectIdArray[i])) 
+			{
+				this.setData(CODE.PROJECT_ID_PREFIX + projectIdArray[i], projectDataArray[i]);
+				this.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataArray[i].data_key, projectDataArray[i].data_key);
+			}
+		}
+	}
+};
+
+/**
+ * 모든 데이터를 삭제함
+ */
+MagoConfig.clearAllData = function() 
+{
+	this.dataObject = {};
+};
+
+/**
+ * 모든 선택 히스토리 삭제
+ */
+MagoConfig.clearSelectHistory = function() 
+{
+	this.selectHistoryObject = {};
+};
+
+/**
+ * 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getAllSelectHistory = function()
+{
+	return this.selectHistoryObject;
+};
+
+/**
+ * project 별 해당 키에 해당하는 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getSelectHistoryObjects = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * object 선택 내용 이력을 취득
+ */
+MagoConfig.getSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * object 선택 내용을 저장
+ */
+MagoConfig.saveSelectHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject.get(projectId);
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.selectHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+	
+	// objectIndexOrder 를 저장
+	dataKeyObject[objectIndexOrder] = changeHistory;
+};
+
+/**
+ * object 선택 내용을 삭제
+ */
+MagoConfig.deleteSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.selectHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * 모든 이동 히스토리 삭제
+ */
+MagoConfig.clearMovingHistory = function() 
+{
+	this.movingHistoryObject = {};
+};
+
+/**
+ * 모든 object 선택 내용 이력을 취득
+ */
+MagoConfig.getAllMovingHistory = function()
+{
+	return this.movingHistoryObject;
+};
+
+/**
+ * project별 입력키 값과 일치하는 object 이동 내용 이력을 취득
+ */
+MagoConfig.getMovingHistoryObjects = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * object 이동 내용 이력을 취득
+ */
+MagoConfig.getMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * object 이동 내용을 저장
+ */
+MagoConfig.saveMovingHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.movingHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+	
+	// objectIndexOrder 를 저장
+	dataKeyObject[objectIndexOrder] = changeHistory;
+};
+
+/**
+ * object 이동 내용을 삭제
+ */
+MagoConfig.deleteMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.movingHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectIndexOrder];
+};
+
+/**
+ * 모든 색깔 변경 이력을 획득
+ */
+MagoConfig.getAllColorHistory = function() 
+{
+	return this.colorHistoryObject;
+};
+
+/**
+ * 모든 색깔변경 히스토리 삭제
+ */
+MagoConfig.clearColorHistory = function() 
+{
+	this.colorHistoryObject = {};
+};
+
+/**
+ * project별 키에 해당하는 모든 색깔 변경 이력을 획득
+ */
+MagoConfig.getColorHistorys = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * 색깝 변경 이력을 획득
+ */
+MagoConfig.getColorHistory = function(projectId, dataKey, objectId)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectId 를 저장
+	return dataKeyObject[objectId];
+};
+
+/**
+ * 색깝 변경 내용을 저장
+ */
+MagoConfig.saveColorHistory = function(projectId, dataKey, objectId, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.colorHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+		projectIdObject[dataKey] = dataKeyObject;
+	}
+
+	if (objectId === null || objectId === "") 
+	{
+		dataKeyObject[dataKey] = changeHistory;
+	}
+	else 
+	{
+		dataKeyObject[objectId] = changeHistory;
+	}
+};
+
+/**
+ * 색깔 변경 이력을 삭제
+ */
+MagoConfig.deleteColorHistory = function(projectId, dataKey, objectId)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.colorHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined) { return undefined; }
+	// objectIndexOrder 를 저장
+	return delete dataKeyObject[objectId];
+};
+
+/**
+ * 모든 색깔변경 히스토리 삭제
+ */
+MagoConfig.clearColorHistory = function() 
+{
+	this.colorHistoryObject = {};
+};
+
+/**
+ * 모든 location and rotation 변경 이력을 획득
+ */
+MagoConfig.getAllLocationAndRotationHistory = function() 
+{
+	return this.locationAndRotationHistoryObject;
+};
+
+/**
+ * 프로젝트별 해당 키 값을 갖는 모든 location and rotation 이력을 획득
+ */
+MagoConfig.getLocationAndRotationHistorys = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	return dataKeyObject;
+};
+
+/**
+ * location and rotation 이력을 획득
+ */
+MagoConfig.getLocationAndRotationHistory = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	
+	return dataKeyObject;
+};
+
+/**
+ * location and rotation 내용을 저장
+ */
+MagoConfig.saveLocationAndRotationHistory = function(projectId, dataKey, changeHistory) 
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined)
+	{
+		projectIdObject = {};
+		this.locationAndRotationHistoryObject[projectId] = projectIdObject;
+	}
+	
+	// dataKey 별 Object을 검사
+	var dataKeyObject = projectIdObject[dataKey];
+	if (dataKeyObject === undefined)
+	{
+		dataKeyObject = {};
+	}
+
+	dataKeyObject[dataKey] = changeHistory;
+};
+
+/**
+ * location and rotation 이력을 삭제
+ */
+MagoConfig.deleteLocationAndRotationHistory = function(projectId, dataKey)
+{
+	// projectId 별 Object을 검사
+	var projectIdObject = this.locationAndRotationHistoryObject[projectId];
+	if (projectIdObject === undefined) { return undefined; }
+	// dataKey 별 Object을 검사
+	var dataKeyObject = delete projectIdObject[dataKey];
+};
+
+/**
+ * 모든 location and rotation 히스토리 삭제
+ */
+MagoConfig.clearLocationAndRotationHistory = function() 
+{
+	this.locationAndRotationHistoryObject = {};
+};
+	
+/**
+ * TODO 이건 나중에 활요. 사용하지 않음
+ * check 되지 않은 데이터들을 삭제함
+ * @param keyObject 비교할 맵
+ */
+/*MagoConfig.clearUnSelectedData = function(keyObject)
+{
+	for (var key of this.dataObject.keys())
+	{
+		if (!keyObject.hasxxxxx(key))
+		{
+			// data folder path가 존재하면....
+			if (key.indexOf(CODE.PROJECT_DATA_FOLDER_PREFIX) >= 0) 
+			{
+				// 지우는 처리가 있어야 함
+			}
+			this.dataObject.delete(key);
+		}
+	}
+};*/
+
+'use strict';
+
+/**
+ * Policy
+ * @class Policy
+ */
+var Policy = function() 
+{
+	if (!(this instanceof Policy)) 
+	{
+		throw new Error(Messages.CONSTRUCT_ERROR);
+	}
+
+	// mago3d 활성화/비활성화 여부
+	this.magoEnable = true;
+
+	// outfitting 표시 여부
+	this.showOutFitting = false;
+	// label 표시/비표시
+	this.showLabelInfo = false;
+	// boundingBox 표시/비표시
+	this.showBoundingBox = false;
+	// 그림자 표시/비표시
+	this.showShadow = false;
+	// squared far frustum 거리
+	this.frustumFarSquaredDistance = 5000000;
+	// far frustum
+	this.frustumFarDistance = 2300;
+
+	// highlighting
+	this.highLightedBuildings = [];
+	// color
+	this.colorBuildings = [];
+	// color
+	this.color = [];
+	// show/hide
+	this.hideBuildings = [];
+	// move mode
+	this.objectMoveMode = CODE.moveMode.NONE;
+	// 이슈 등록 표시
+	this.issueInsertEnable = false;
+	// object 정보 표시
+	this.objectInfoViewEnable = false;
+	// 이슈 목록 표시
+	this.nearGeoIssueListEnable = false;
+	// occlusion culling
+	this.occlusionCullingEnable = false;
+	
+	// 이미지 경로
+	this.imagePath = "";
+	
+	// provisional.***
+	this.colorChangedObjectId;
+	
+	// LOD1
+	this.lod0DistInMeters = 15;
+	this.lod1DistInMeters = 50;
+	this.lod2DistInMeters = 90;
+	this.lod3DistInMeters = 200;
+	this.lod4DistInMeters = 1000;
+	this.lod5DistInMeters = 50000;
+	
+	// Lighting
+	this.ambientReflectionCoef = 0.45; // 0.2.
+	this.diffuseReflectionCoef = 0.75; // 1.0
+	this.specularReflectionCoef = 0.6; // 0.7
+	this.ambientColor = null;
+	this.specularColor = new Float32Array([0.6, 0.6, 0.6]);
+	
+	this.ssaoRadius = 0.15;
+};
+
+Policy.prototype.getMagoEnable = function() 
+{
+	return this.magoEnable;
+};
+Policy.prototype.setMagoEnable = function(magoEnable) 
+{
+	this.magoEnable = magoEnable;
+};
+
+Policy.prototype.getShowOutFitting = function() 
+{
+	return this.showOutFitting;
+};
+Policy.prototype.setShowOutFitting = function(showOutFitting) 
+{
+	this.showOutFitting = showOutFitting;
+};
+Policy.prototype.getShowLabelInfo = function() 
+{
+	return this.showLabelInfo;
+};
+Policy.prototype.setShowLabelInfo = function(showLabelInfo) 
+{
+	this.showLabelInfo = showLabelInfo;
+};
+Policy.prototype.getShowBoundingBox = function() 
+{
+	return this.showBoundingBox;
+};
+Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
+{
+	this.showBoundingBox = showBoundingBox;
+};
+
+Policy.prototype.getShowShadow = function() 
+{
+	return this.showShadow;
+};
+Policy.prototype.setShowShadow = function(showShadow) 
+{
+	this.showShadow = showShadow;
+};
+
+Policy.prototype.getFrustumFarSquaredDistance = function() 
+{
+	return this.frustumFarSquaredDistance;
+};
+Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
+{
+	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
+};
+
+Policy.prototype.getFrustumFarDistance = function() 
+{
+	return this.frustumFarDistance;
+};
+Policy.prototype.setFrustumFarDistance = function(frustumFarDistance) 
+{
+	this.frustumFarDistance = frustumFarDistance;
+};
+
+Policy.prototype.getHighLightedBuildings = function() 
+{
+	return this.highLightedBuildings;
+};
+Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
+{
+	this.highLightedBuildings = highLightedBuildings;
+};
+
+Policy.prototype.getColorBuildings = function() 
+{
+	return this.colorBuildings;
+};
+Policy.prototype.setColorBuildings = function(colorBuildings) 
+{
+	this.colorBuildings = colorBuildings;
+};
+
+Policy.prototype.getColor = function() 
+{
+	return this.color;
+};
+Policy.prototype.setColor = function(color) 
+{
+	this.color = color;
+};
+
+Policy.prototype.getHideBuildings = function() 
+{
+	return this.hideBuildings;
+};
+Policy.prototype.setHideBuildings = function(hideBuildings) 
+{
+	this.hideBuildings = hideBuildings;
+};
+
+Policy.prototype.getObjectMoveMode = function() 
+{
+	return this.objectMoveMode;
+};
+Policy.prototype.setObjectMoveMode = function(objectMoveMode) 
+{
+	this.objectMoveMode = objectMoveMode;
+};
+
+Policy.prototype.getIssueInsertEnable = function() 
+{
+	return this.issueInsertEnable;
+};
+Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
+{
+	this.issueInsertEnable = issueInsertEnable;
+};
+Policy.prototype.getObjectInfoViewEnable = function() 
+{
+	return this.objectInfoViewEnable;
+};
+Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
+{
+	this.objectInfoViewEnable = objectInfoViewEnable;
+};
+Policy.prototype.getOcclusionCullingEnable = function() 
+{
+	return this.occlusionCullingEnable;
+};
+Policy.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
+{
+	this.occlusionCullingEnable = occlusionCullingEnable;
+};
+Policy.prototype.getNearGeoIssueListEnable = function() 
+{
+	return this.nearGeoIssueListEnable;
+};
+Policy.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
+{
+	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
+};
+
+Policy.prototype.getImagePath = function() 
+{
+	return this.imagePath;
+};
+Policy.prototype.setImagePath = function(imagePath) 
+{
+	this.imagePath = imagePath;
+};
+
+Policy.prototype.getLod0DistInMeters = function() 
+{
+	return this.lod0DistInMeters;
+};
+Policy.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
+{
+	this.lod0DistInMeters = lod0DistInMeters;
+};
+Policy.prototype.getLod1DistInMeters = function() 
+{
+	return this.lod1DistInMeters;
+};
+Policy.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
+{
+	this.lod1DistInMeters = lod1DistInMeters;
+};
+Policy.prototype.getLod2DistInMeters = function() 
+{
+	return this.lod2DistInMeters;
+};
+Policy.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
+{
+	this.lod2DistInMeters = lod2DistInMeters;
+};
+Policy.prototype.getLod3DistInMeters = function() 
+{
+	return this.lod3DistInMeters;
+};
+Policy.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
+{
+	this.lod3DistInMeters = lod3DistInMeters;
+};
+Policy.prototype.getLod4DistInMeters = function() 
+{
+	return this.lod4DistInMeters;
+};
+Policy.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
+{
+	this.lod4DistInMeters = lod4DistInMeters;
+};
+Policy.prototype.getLod5DistInMeters = function() 
+{
+	return this.lod5DistInMeters;
+};
+Policy.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
+{
+	this.lod5DistInMeters = lod5DistInMeters;
+};
+Policy.prototype.getAmbientReflectionCoef = function() 
+{
+	return this.ambientReflectionCoef;
+};
+Policy.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
+{
+	this.ambientReflectionCoef = ambientReflectionCoef;
+};
+Policy.prototype.getDiffuseReflectionCoef = function() 
+{
+	return this.diffuseReflectionCoef;
+};
+Policy.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
+{
+	this.diffuseReflectionCoef = diffuseReflectionCoef;
+};
+Policy.prototype.getSpecularReflectionCoef = function() 
+{
+	return this.specularReflectionCoef;
+};
+Policy.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
+{
+	this.specularReflectionCoef = specularReflectionCoef;
+};
+Policy.prototype.getAmbientColor = function() 
+{
+	return this.ambientColor;
+};
+Policy.prototype.setAmbientColor = function(ambientColor) 
+{
+	this.ambientColor = ambientColor;
+};
+Policy.prototype.getSpecularColor = function() 
+{
+	return this.specularColor;
+};
+Policy.prototype.setSpecularColor = function(specularColor) 
+{
+	this.specularColor = specularColor;
+};
+Policy.prototype.getSsaoRadius = function() 
+{
+	return this.ssaoRadius;
+};
+Policy.prototype.setSsaoRadius = function(ssaoRadius) 
+{
+	this.ssaoRadius = ssaoRadius;
 };
 'use strict';
 
@@ -4864,8 +6472,11 @@ MagoManager.prototype.startRender = function(scene, isLastFrustum, frustumIdx, n
 			// inverse "for" because delete 1rst farest.***
 			node = this.visibleObjControlerNodes.currentVisibles3[i];
 			neoBuilding = node.data.neoBuilding;
-				
-			if (!this.processQueue.nodesToDeleteLessThanLod3Map.has(node))
+			if(neoBuilding === undefined)
+				continue;
+			
+			var key = neoBuilding.buildingId;
+			if(!this.processQueue.nodesToDeleteLessThanLod3Map.hasOwnProperty(key))
 			{
 				this.processQueue.putNodeToDeleteLessThanLod3(node, 0);
 				nodesPutted++;
@@ -5020,8 +6631,11 @@ MagoManager.prototype.prepareVisibleLowLodNodes = function(lowLodNodesArray)
 			continue;
 		}
 		
-		if (neoBuilding.lodMeshesArray === undefined)
-		{ neoBuilding.lodMeshesArray = []; }
+		//if (neoBuilding.lodMeshesArray === undefined)
+		//{ neoBuilding.lodMeshesArray = []; } // old.***
+	
+		if (neoBuilding.lodMeshesMap === undefined)
+		{ neoBuilding.lodMeshesMap = {}; } 
 		
 		projectFolderName = neoBuilding.projectFolderName;
 		buildingFolderName = neoBuilding.buildingFileName;
@@ -5031,42 +6645,43 @@ MagoManager.prototype.prepareVisibleLowLodNodes = function(lowLodNodesArray)
 		//neoBuilding.distToCam = neoBuilding.octree.getMinDistToCamera(cameraPosition);
 		var textureFileName;
 		var lodString;
-		var lodIdx;
+		var lodIdx; // old.***
 		
 		if (neoBuilding.distToCam < this.magoPolicy.getLod3DistInMeters())
 		{
-			textureFileName = "mosaicTextureLod3.png";
-			lodString = "lod3";
 			lodIdx = 0;
 			neoBuilding.currentLod = 3;
 		}
 		else if (neoBuilding.distToCam < this.magoPolicy.getLod4DistInMeters())
 		{
-			textureFileName = "mosaicTextureLod4.png";
-			lodString = "lod4";
 			lodIdx = 1;
 			neoBuilding.currentLod = 4;
 		}
 		else if (neoBuilding.distToCam < this.magoPolicy.getLod5DistInMeters())
 		{
-			textureFileName = "mosaicTextureLod5.png";
-			lodString = "lod5";
 			lodIdx = 2;
 			neoBuilding.currentLod = 5;
 		}
 		else { continue; }
 		
-		if (neoBuilding.buildingId === "historypark_del")
-		{ var hola = 0; }
-
+		// must check if the desirable lodMesh is available.***
+		var lodBuildingData = neoBuilding.getLodBuildingData(neoBuilding.currentLod);
+		if(lodBuildingData === undefined)
+			continue;
 		
-		lowLodMesh = neoBuilding.lodMeshesArray[lodIdx];
+		textureFileName = lodBuildingData.textureFileName;
+		lodString = lodBuildingData.geometryFileName;
+		
+		///lowLodMesh = neoBuilding.lodMeshesMap.get(lodString);
+		lowLodMesh = neoBuilding.lodMeshesMap[lodString];
 		if (lowLodMesh === undefined)
 		{
 			lowLodMesh = new Lego();
 			lowLodMesh.fileLoadState = CODE.fileLoadState.READY;
 			lowLodMesh.textureName = textureFileName;
-			neoBuilding.lodMeshesArray[lodIdx] = lowLodMesh;
+			lowLodMesh.legoKey = neoBuilding.buildingId + "_" + lodString;
+			//neoBuilding.lodMeshesArray[lodIdx] = lowLodMesh;// old.***
+			neoBuilding.lodMeshesMap[lodString] = lowLodMesh;
 		}
 		
 		if (lowLodMesh.fileLoadState === CODE.fileLoadState.READY) 
@@ -5091,7 +6706,6 @@ MagoManager.prototype.prepareVisibleLowLodNodes = function(lowLodNodesArray)
 				this.readerWriter.readLegoSimpleBuildingTexture(gl, filePath_inServer, lowLodMesh.texture, this);
 			}
 		}
-
 	}
 	
 };
@@ -5176,21 +6790,29 @@ MagoManager.prototype.drawBuildingNames = function(visibleObjControlerNodes)
 	var screenCoord;
 	
 	// 1rst, collect rootNodes.
-	var rootNodesMap = new Map();
+	var rootNodesMap = {};
 	var currentVisiblesArray = visibleObjControlerNodes.currentVisibles2.concat(visibleObjControlerNodes.currentVisibles3);
 	var nodesCount = currentVisiblesArray.length;
 	for (var i=0; i<nodesCount; i++)
 	{
 		node = currentVisiblesArray[i];
 		nodeRoot = node.getRoot();
-		rootNodesMap.set(nodeRoot, nodeRoot);
+		if(node.data === undefined || node.data.neoBuilding === undefined)
+			continue;
+		
+		var key = node.data.neoBuilding.buildingId;
+		///rootNodesMap.set(nodeRoot, nodeRoot);
+		rootNodesMap[key] = nodeRoot;
 	}
 	
-	var rootNodesArray = Array.from(rootNodesMap.keys());
-	var nodesCount = rootNodesArray.length;
-	for (var i=0; i<nodesCount; i++)
+	//var rootNodesArray = Object.values(rootNodesMap);
+	//var rootNodesKeysArray = Object.keys(rootNodesMap);
+	//var nodesCount = rootNodesKeysArray.length;
+	//for (var i=0; i<nodesCount; i++)
+	for(var key in rootNodesMap)
 	{
-		nodeRoot = rootNodesArray[i];
+		//nodeRoot = rootNodesArray[i];
+		nodeRoot = rootNodesMap[key];
 		geoLocDataManager = nodeRoot.data.geoLocDataManager;
 		geoLoc = geoLocDataManager.getCurrentGeoLocationData();
 		//neoBuilding = node.data.neoBuilding;
@@ -5207,7 +6829,7 @@ MagoManager.prototype.drawBuildingNames = function(visibleObjControlerNodes)
 		}
 	}
 	
-	rootNodesMap.clear();
+	rootNodesMap = {};
 
 	ctx.restore();
 };
@@ -6244,7 +7866,7 @@ MagoManager.prototype.getRenderablesDetailedNeoBuildingAsimetricVersion = functi
 		if (!find) 
 		{
 			// if the building is far to camera, then delete it.
-			if (neoBuilding.distToCam > 150)
+			if (neoBuilding.distToCam > 60)
 			{ this.processQueue.putNodeToDelete(node, 0); }
 			return false;
 		}
@@ -6358,7 +7980,7 @@ MagoManager.prototype.manageQueue = function()
 	// first, delete buildings.
 	var gl = this.sceneState.gl;
 	var maxDeleteNodesCount = 8;
-	var nodesToDeleteCount = this.processQueue.nodesToDeleteMap.size;
+	var nodesToDeleteCount = Object.keys(this.processQueue.nodesToDeleteMap).length;
 	if (nodesToDeleteCount < maxDeleteNodesCount)
 	{ maxDeleteNodesCount = nodesToDeleteCount; }
 	
@@ -6376,10 +7998,14 @@ MagoManager.prototype.manageQueue = function()
 	//	{ break; }
 	//}
 	
-	var nodesToDeleteArray = Array.from(this.processQueue.nodesToDeleteMap.keys());
-	for (var i=0; i<maxDeleteNodesCount; i++)
+	///var nodesToDeleteArray = Array.from(this.processQueue.nodesToDeleteMap.keys());
+	//var nodesToDeleteArray = Object.values(this.processQueue.nodesToDeleteMap);
+
+	//for (var i=0; i<maxDeleteNodesCount; i++)
+	for(var key in this.processQueue.nodesToDeleteMap)
 	{
-		node = nodesToDeleteArray[i];
+		//node = nodesToDeleteArray[i];
+		node = this.processQueue.nodesToDeleteMap[key];
 		
 		if (node == undefined)
 		{ continue; }
@@ -6392,16 +8018,19 @@ MagoManager.prototype.manageQueue = function()
 	
 		this.deleteNeoBuilding(gl, neoBuilding);
 	}
-	nodesToDeleteArray = [];
-	nodesToDeleteArray = undefined;
+	//nodesToDeleteArray = [];
+	//nodesToDeleteArray = undefined;
 	
 	// now delete modelReferences of lod2Octrees.
 	var modelRefsDeletedCount = 0;
-	var nodesToDeleteArray = this.processQueue.nodesToDeleteModelReferencesMap.size;
-	var nodesToDeleteModelReferencesArray = Array.from(this.processQueue.nodesToDeleteModelReferencesMap.keys());
-	for (var i=0; i<nodesToDeleteArray; i++)
+	//var nodesToDeletesCount = Object.keys(this.processQueue.nodesToDeleteModelReferencesMap).length;
+	//var nodesToDeleteModelReferencesArray = Object.values(this.processQueue.nodesToDeleteModelReferencesMap);
+
+	//for (var i=0; i<nodesToDeletesCount; i++)
+	for(var key in this.processQueue.nodesToDeleteModelReferencesMap)
 	{
-		node = nodesToDeleteModelReferencesArray[i];
+		//node = nodesToDeleteModelReferencesArray[i];
+		node = this.processQueue.nodesToDeleteModelReferencesMap[key];
 		
 		if (node.data === undefined)
 		{ continue; }
@@ -6441,9 +8070,6 @@ MagoManager.prototype.manageQueue = function()
 			neoBuilding = node.data.neoBuilding;
 			if (neoBuilding === undefined)
 			{ continue; }
-		
-			if(neoBuilding.buildingId == "2119_E43GC_E43PP_A410P")
-				var hola = 0;
 			
 			if (neoBuilding.octree !== undefined)
 			{ 
@@ -6499,7 +8125,7 @@ MagoManager.prototype.manageQueue = function()
 	// parse octrees lod1 references.
 	octreesParsedCount = 0;
 	maxParsesCount = 1;
-	if (this.parseQueue.octreesLod0ReferencesToParseMap.size > 0)
+	if (Object.keys(this.parseQueue.octreesLod0ReferencesToParseMap).length > 0)
 	{
 		// 1rst parse the currently closest lowestOctrees to camera.
 		var octreesLod0Count = this.visibleObjControlerOctrees.currentVisibles1.length;
@@ -6513,11 +8139,11 @@ MagoManager.prototype.manageQueue = function()
 			else 
 			{
 				// test else.
-				if (lowestOctree.neoReferencesMotherAndIndices)
-				{
-					if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)
-					{ var hola = 0; }
-				}
+				//if (lowestOctree.neoReferencesMotherAndIndices)
+				//{
+					//if (lowestOctree.neoReferencesMotherAndIndices.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)
+					//{ var hola = 0; }
+				//}
 			}
 			if (octreesParsedCount > maxParsesCount)
 			{ break; }
@@ -6525,10 +8151,12 @@ MagoManager.prototype.manageQueue = function()
 		
 		if (octreesParsedCount === 0)
 		{
-			var octreesArray = Array.from(this.parseQueue.octreesLod0ReferencesToParseMap.keys());
-			for (var i=0; i<octreesArray.length; i++)
+			///var octreesArray = Array.from(this.parseQueue.octreesLod0ReferencesToParseMap.keys());
+			///for (var i=0; i<octreesArray.length; i++)
+			for(var key in this.parseQueue.octreesLod0ReferencesToParseMap)
 			{
-				lowestOctree = octreesArray[i];
+				var lowestOctree = this.parseQueue.octreesLod0ReferencesToParseMap[key];
+				//lowestOctree = octreesArray[i];
 				this.parseQueue.parseOctreesLod0References(gl, lowestOctree, this);
 				octreesParsedCount++;
 				if (octreesParsedCount > maxParsesCount)
@@ -6546,7 +8174,7 @@ MagoManager.prototype.manageQueue = function()
 	// parse octrees lod0 models.
 	octreesParsedCount = 0;
 	maxParsesCount = 1;
-	if (this.parseQueue.octreesLod0ModelsToParseMap.size > 0)
+	if (Object.keys(this.parseQueue.octreesLod0ModelsToParseMap).length > 0)
 	{
 		// 1rst parse the currently closest lowestOctrees to camera.
 		var octreesLod0Count = this.visibleObjControlerOctrees.currentVisibles0.length;
@@ -6554,8 +8182,9 @@ MagoManager.prototype.manageQueue = function()
 		{
 			lowestOctree = this.visibleObjControlerOctrees.currentVisibles0[i];
 			
-			if (this.parseQueue.octreesLod0ModelsToParseMap.delete(lowestOctree))
+			if (this.parseQueue.octreesLod0ModelsToParseMap.hasOwnProperty(lowestOctree.octreeKey))
 			{
+				delete this.parseQueue.octreesLod0ModelsToParseMap[lowestOctree.octreeKey];
 				if (lowestOctree.neoReferencesMotherAndIndices === undefined)
 				{ continue; }
 				
@@ -6588,11 +8217,11 @@ MagoManager.prototype.manageQueue = function()
 			else 
 			{
 				// test else.
-				if (lowestOctree.neoReferencesMotherAndIndices && lowestOctree.neoReferencesMotherAndIndices.blocksList)
-				{
-					if (lowestOctree.neoReferencesMotherAndIndices.blocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)
-					{ var hola = 0; }
-				}
+				//if (lowestOctree.neoReferencesMotherAndIndices && lowestOctree.neoReferencesMotherAndIndices.blocksList)
+				//{
+				//	if (lowestOctree.neoReferencesMotherAndIndices.blocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)
+				//	{ var hola = 0; }
+				//}
 			}
 			if (octreesParsedCount > maxParsesCount)
 			{ break; }
@@ -6600,11 +8229,12 @@ MagoManager.prototype.manageQueue = function()
 		
 		if (octreesParsedCount === 0)
 		{
-			var octreesArray = Array.from(this.parseQueue.octreesLod0ModelsToParseMap.keys());
-			for (var i=0; i<octreesArray.length; i++)
+			//var octreesArray = Array.from(this.parseQueue.octreesLod0ModelsToParseMap.keys());
+			//for (var i=0; i<octreesArray.length; i++)
+			for(var key in this.parseQueue.octreesLod0ModelsToParseMap)
 			{
-				lowestOctree = octreesArray[i];
-				this.parseQueue.octreesLod0ModelsToParseMap.delete(lowestOctree);
+				var lowestOctree = this.parseQueue.octreesLod0ModelsToParseMap[key];
+				delete this.parseQueue.octreesLod0ModelsToParseMap[key];
 				if (lowestOctree.neoReferencesMotherAndIndices === undefined)
 				{ continue; }
 				
@@ -6648,7 +8278,7 @@ MagoManager.prototype.manageQueue = function()
 	// parse octrees lod1 models.
 	octreesParsedCount = 0;
 	maxParsesCount = 1;
-	if (this.parseQueue.octreesLod0ModelsToParseMap.size > 0)
+	if (Object.keys(this.parseQueue.octreesLod0ModelsToParseMap).length > 0)
 	{
 		// 1rst parse the currently closest lowestOctrees to camera.
 		var octreesLod0Count = this.visibleObjControlerOctrees.currentVisibles1.length;
@@ -6656,8 +8286,9 @@ MagoManager.prototype.manageQueue = function()
 		{
 			lowestOctree = this.visibleObjControlerOctrees.currentVisibles1[i];
 
-			if (this.parseQueue.octreesLod0ModelsToParseMap.delete(lowestOctree))
+			if (this.parseQueue.octreesLod0ModelsToParseMap.hasOwnProperty(lowestOctree.octreeKey))
 			{
+				delete this.parseQueue.octreesLod0ModelsToParseMap[lowestOctree.octreeKey];
 				if (lowestOctree.neoReferencesMotherAndIndices === undefined)
 				{ continue; }
 				
@@ -6690,11 +8321,11 @@ MagoManager.prototype.manageQueue = function()
 			else 
 			{
 				// test else.
-				if (lowestOctree.neoReferencesMotherAndIndices && lowestOctree.neoReferencesMotherAndIndices.blocksList)
-				{
-					if (lowestOctree.neoReferencesMotherAndIndices.blocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)
-					{ var hola = 0; }
-				}
+				//if (lowestOctree.neoReferencesMotherAndIndices && lowestOctree.neoReferencesMotherAndIndices.blocksList)
+				//{
+				//	if (lowestOctree.neoReferencesMotherAndIndices.blocksList.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)
+				//	{ var hola = 0; }
+				//}
 			}
 			if (octreesParsedCount > maxParsesCount)
 			{ break; }
@@ -6702,11 +8333,12 @@ MagoManager.prototype.manageQueue = function()
 		
 		if (octreesParsedCount === 0)
 		{
-			var octreesArray = Array.from(this.parseQueue.octreesLod0ModelsToParseMap.keys());
-			for (var i=0; i<octreesArray.length; i++)
+			//var octreesArray = Array.from(this.parseQueue.octreesLod0ModelsToParseMap.keys());
+			//for (var i=0; i<octreesArray.length; i++)
+			for(var key in this.parseQueue.octreesLod0ModelsToParseMap)
 			{
-				lowestOctree = octreesArray[i];
-				this.parseQueue.octreesLod0ModelsToParseMap.delete(lowestOctree);
+				var lowestOctree = this.parseQueue.octreesLod0ModelsToParseMap[key];
+				delete this.parseQueue.octreesLod0ModelsToParseMap[key];
 				if (lowestOctree.neoReferencesMotherAndIndices === undefined)
 				{ continue; }
 				
@@ -6751,14 +8383,15 @@ MagoManager.prototype.manageQueue = function()
 	// parse octrees lod2 (lego).
 	octreesParsedCount = 0;
 	maxParsesCount = 1;
-	if (this.parseQueue.octreesLod2LegosToParseMap.size > 0)
+	if (Object.keys(this.parseQueue.octreesLod2LegosToParseMap).length > 0)
 	{
 		var octreesLod0Count = this.visibleObjControlerOctrees.currentVisibles2.length;
 		for (var i=0; i<octreesLod0Count; i++)
 		{
 			lowestOctree = this.visibleObjControlerOctrees.currentVisibles2[i];
-			if (this.parseQueue.octreesLod2LegosToParseMap.delete(lowestOctree))
+			if (this.parseQueue.octreesLod2LegosToParseMap.hasOwnProperty(lowestOctree.octreeKey))
 			{
+				delete this.parseQueue.octreesLod2LegosToParseMap[lowestOctree.octreeKey];
 				//this.parseQueue.eraseOctreeLod2LegosToParse(lowestOctree);
 				if (lowestOctree.lego === undefined)
 				{ continue; }
@@ -6774,12 +8407,14 @@ MagoManager.prototype.manageQueue = function()
 		
 		if (octreesParsedCount === 0)
 		{
-			var octreesArray = Array.from(this.parseQueue.octreesLod2LegosToParseMap.keys());
-			for (var i=0; i<octreesArray.length; i++)
+			//var octreesArray = Array.from(this.parseQueue.octreesLod2LegosToParseMap.keys());
+			//for (var i=0; i<octreesArray.length; i++)
+			for(var key in this.parseQueue.octreesLod2LegosToParseMap)
 			{
-				lowestOctree = octreesArray[i];
-				if (this.parseQueue.octreesLod2LegosToParseMap.delete(lowestOctree))
+				var lowestOctree = this.parseQueue.octreesLod2LegosToParseMap[key];
+				if (this.parseQueue.octreesLod2LegosToParseMap.hasOwnProperty(key))
 				{
+					delete this.parseQueue.octreesLod2LegosToParseMap[key];
 					//this.parseQueue.eraseOctreeLod2LegosToParse(lowestOctree);
 					if (lowestOctree.lego === undefined)
 					{ continue; }
@@ -6805,7 +8440,7 @@ MagoManager.prototype.manageQueue = function()
 	// skin-lego.********************************************************************************
 	octreesParsedCount = 0;
 	maxParsesCount = 1;
-	if (this.parseQueue.skinLegosToParseMap.size > 0)
+	if (Object.keys(this.parseQueue.skinLegosToParseMap).length > 0)
 	{
 		var node;
 		var skinLego;
@@ -6816,7 +8451,7 @@ MagoManager.prototype.manageQueue = function()
 			node = this.visibleObjControlerNodes.currentVisibles3[i];
 			neoBuilding = node.data.neoBuilding;
 			
-			if (neoBuilding === undefined || neoBuilding.lodMeshesArray === undefined)
+			if (neoBuilding === undefined || neoBuilding.lodMeshesMap === undefined)
 			{ continue; }
 		
 		    // check the current lod of the building.***
@@ -6824,14 +8459,24 @@ MagoManager.prototype.manageQueue = function()
 			var lodIdx = currentBuildingLod - 3;
 			
 			if (lodIdx < 0)
-			{ continue; }
+			{ continue; }// old.***
+		
+			var lodString;
+			if(currentBuildingLod === 3)
+				lodString = "lod3";
+			else if(currentBuildingLod === 4)
+				lodString = "lod4";
+			else if(currentBuildingLod === 5)
+				lodString = "lod5";
 			
-			skinLego = neoBuilding.lodMeshesArray[lodIdx];
+			///skinLego = neoBuilding.lodMeshesMap.get(lodString);
+			skinLego = neoBuilding.lodMeshesMap[lodString];
 			if (skinLego === undefined)
 			{ continue; }
 			
-			if (this.parseQueue.skinLegosToParseMap.delete(skinLego))
+			if (this.parseQueue.skinLegosToParseMap.hasOwnProperty(skinLego.legoKey))
 			{
+				delete this.parseQueue.skinLegosToParseMap[skinLego.legoKey];
 				skinLego.parseArrayBuffer(gl, skinLego.dataArrayBuffer, this);
 				skinLego.dataArrayBuffer = undefined;
 				
@@ -6843,10 +8488,11 @@ MagoManager.prototype.manageQueue = function()
 		
 		if (octreesParsedCount === 0)
 		{
-			var nodessArray = Array.from(this.parseQueue.skinLegosToParseMap.keys());
-			for (var i=0; i<nodessArray.length; i++)
+			//var nodessArray = Array.from(this.parseQueue.skinLegosToParseMap.keys());
+			//for (var i=0; i<nodessArray.length; i++)
+			for(var key in this.parseQueue.skinLegosToParseMap)
 			{
-				node = nodessArray[i];
+				var node = this.parseQueue.skinLegosToParseMap[key];
 				
 				if (node.data === undefined)
 				{ continue; }
@@ -6866,8 +8512,9 @@ MagoManager.prototype.manageQueue = function()
 				skinLego = neoBuilding.lodMeshesArray[lodIdx];
 				if (skinLego === undefined)
 				{ continue; }
-				if (this.parseQueue.skinLegosToParseMap.delete(skinLego))
+				if (this.parseQueue.skinLegosToParseMap.hasOwnProperty(skinLego.legoKey))
 				{
+					delete this.parseQueue.skinLegosToParseMap[skinLego.legoKey];
 					skinLego.parseArrayBuffer(gl, skinLego.dataArrayBuffer, this);
 					skinLego.dataArrayBuffer = undefined;
 					
@@ -7018,10 +8665,8 @@ MagoManager.prototype.prepareVisibleOctreesSortedByDistanceLOD2 = function(gl, s
 		{
 			lowestOctree.lego = new Lego();
 			lowestOctree.lego.fileLoadState = CODE.fileLoadState.READY;
+			lowestOctree.lego.legoKey = lowestOctree.octreeKey + "_lego";
 		}
-
-		if (lowestOctree.lego === undefined && lowestOctree.lego.dataArrayBuffer === undefined) 
-		{ continue; }
 	
 		neoBuilding = lowestOctree.neoBuildingOwner;
 		if (neoBuilding === undefined)
@@ -7121,8 +8766,10 @@ MagoManager.prototype.checkChangesHistoryMovements = function(nodesArray)
 		if (moveHistoryMap)
 		{
 			neoBuilding = node.data.neoBuilding;
-			for (var changeHistory of moveHistoryMap.values()) 
+			///for (var changeHistory of moveHistoryMap.values()) 
+			for(var key in moveHistoryMap)
 			{
+				var changeHistory = moveHistoryMap[key];
 				objectIndexOrder = changeHistory.getObjectIndexOrder();
 				refObject = neoBuilding.getReferenceObject(objectIndexOrder);
 				if (refObject === undefined)
@@ -7237,8 +8884,10 @@ MagoManager.prototype.checkChangesHistoryColors = function(nodesArray)
 		if (colorChangedHistoryMap)
 		{
 			neoBuilding = node.data.neoBuilding;
-			for (var changeHistory of colorChangedHistoryMap.values()) 
+			//for (var changeHistory of colorChangedHistoryMap.values()) 
+			for(var key in colorChangedHistoryMap)
 			{
+				var changeHistory = colorChangedHistoryMap[key];
 				if (changeHistory.objectId === null || changeHistory.objectId === undefined || changeHistory.objectId === "" )
 				{
 					if (changeHistory.property === null || changeHistory.property === undefined || changeHistory.property === "" )
@@ -7299,16 +8948,22 @@ MagoManager.prototype.checkChangesHistoryColors = function(nodesArray)
 	var allColorHistoryMap = MagoConfig.getAllColorHistory();
 	if (allColorHistoryMap)
 	{
-		for (var colorChangedHistoryMap of allColorHistoryMap.values()) 
-		{
+		for(var key in allColorHistoryMap) {
+			var colorChangedHistoryMap = allColorHistoryMap[key];
+		//for (var colorChangedHistoryMap of allColorHistoryMap.values()) 
+		//{
 			// now check nodes that is no physical.
-			for (var changeHistoryMap of colorChangedHistoryMap.values()) 
-			{
-				for (var changeHistory of changeHistoryMap.values()) 
-				{
+			for(var key2 in colorChangedHistoryMap) {
+				var changeHistoryMap = colorChangedHistoryMap[key2];
+			//for (var changeHistoryMap of colorChangedHistoryMap.values()) 
+			//{
+				for(var key3 in changeHistoryMap) {
+					var changeHistory = changeHistoryMap[key3];
+				//for (var changeHistory of changeHistoryMap.values()) 
+				//{
 					var projectId = changeHistory.projectId;
 					var nodesMap = this.hierarchyManager.getNodesMap(projectId);
-					var aNode = nodesMap.get(changeHistory.dataKey);
+					var aNode = nodesMap[changeHistory.dataKey];
 					if (aNode && aNode.data.attributes.isPhysical !== undefined && aNode.data.attributes.isPhysical === false)
 					{
 						// must check if there are filters.
@@ -7767,6 +9422,8 @@ MagoManager.prototype.renderGeometry = function(gl, cameraPosition, shader, rend
 					gl.uniform4fv(currentShader.color4Aux_loc, [0.0, 1.0, 0.0, 1.0]);
 					gl.uniform2fv(currentShader.screenSize_loc, [this.sceneState.drawingBufferWidth, this.sceneState.drawingBufferHeight]);
 					gl.uniformMatrix4fv(currentShader.ProjectionMatrix_loc, false, this.sceneState.projectionMatrix._floatArrays);
+					
+					gl.uniform3fv(currentShader.aditionalMov_loc, [0.0, 0.0, 0.0]); //.***
 					
 					gl.enable(gl.STENCIL_TEST);
 					gl.disable(gl.POLYGON_OFFSET_FILL);
@@ -9072,8 +10729,8 @@ MagoManager.prototype.doFrustumCullingSmartTiles = function(frustumVolume, camer
 	this.visibleObjControlerNodes.currentVisibles2.length = 0;
 	this.visibleObjControlerNodes.currentVisibles3.length = 0;
 	
-	if (this.fullyIntersectedLowestTilesArray.length > 0)
-	{ var hola= 0 ; }
+	//if (this.fullyIntersectedLowestTilesArray.length > 0)
+	//{ var hola= 0 ; }
 	var bDoFrustumCullingToBuildings = false;
 	this.tilesFrustumCullingFinished(this.fullyIntersectedLowestTilesArray, cameraPosition, frustumVolume, bDoFrustumCullingToBuildings);
 	bDoFrustumCullingToBuildings = true;
@@ -9151,7 +10808,6 @@ MagoManager.prototype.testAproxDist3D = function()
 	var ratio = aproxDistCalculationTimeAmount/distCalculationTimeAmount *100;
 	var error = (aproxDist - realDist)/realDist * 100;
 	
-	var hola = 0;
 };
 
 /**
@@ -9286,8 +10942,8 @@ MagoManager.prototype.createBuildingsByBuildingSeedsOnLowestTile = function(lowe
 		neoBuilding.metaData.heading = buildingSeed.rotationsDegree.z;
 		neoBuilding.metaData.pitch = buildingSeed.rotationsDegree.x;
 		neoBuilding.metaData.roll = buildingSeed.rotationsDegree.y;
-		if (node.data.projectFolderName === undefined)
-		{ var hola = 0; }
+		//if (node.data.projectFolderName === undefined)
+		//{ var hola = 0; }
 		neoBuilding.projectFolderName = node.data.projectFolderName;
 	}
 };
@@ -9308,6 +10964,7 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 	var lod1_minDist = 1;
 	var lod2_minDist = this.magoPolicy.getLod2DistInMeters();
 	var lod5_minDist = this.magoPolicy.getLod5DistInMeters();
+	var lod3_minDist;
 
 	var maxNumberOfCalculatingPositions = 100;
 	var currentCalculatingPositionsCount = 0;
@@ -9350,10 +11007,6 @@ MagoManager.prototype.tilesFrustumCullingFinished = function(intersectedLowestTi
 				geoLoc = geoLocDataManager.getCurrentGeoLocationData();
 					
 				neoBuilding = node.data.neoBuilding;
-				
-				if (neoBuilding.buildingId === "Gaikan")
-					{ var hola = 0; }
-
 				if (geoLoc === undefined || geoLoc.pivotPoint === undefined)
 				{ 
 					if (neoBuilding.metaData.geographicCoord === undefined)
@@ -9537,6 +11190,10 @@ MagoManager.prototype.flyToBuilding = function(apiName, projectId, dataKey)
 	
 	var nodeRoot = node.getRoot();
 	var geoLocDataManager = nodeRoot.data.geoLocDataManager;
+	
+	if(geoLocDataManager === undefined)
+	{ return; }
+
 	var geoLoc = geoLocDataManager.getCurrentGeoLocationData();
 	var realBuildingPos = node.getBBoxCenterPositionWorldCoord(geoLoc);
 
@@ -10063,7 +11720,7 @@ MagoManager.prototype.changeLocationAndRotation = function(projectId, dataKey, l
 	var nodesMap = this.hierarchyManager.getNodesMap(projectId);
 	if (nodesMap)
 	{
-		var node = nodesMap.get(dataKey);
+		var node = nodesMap[dataKey];
 		if (node === undefined)
 		{ return; }
 		this.changeLocationAndRotationNode(node, latitude, longitude, elevation, heading, pitch, roll);
@@ -10165,56 +11822,20 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 	var pitch = undefined;
 	var roll = undefined;
 	
-	if (jasonObject.attributes !== undefined)
+	if (jasonObject !== undefined)
 	{
 		attributes = jasonObject.attributes;
-	}
-	if (jasonObject.children !== undefined)
-	{
 		children = jasonObject.children;
-	}
-	if (jasonObject.data_group_id !== undefined)
-	{
 		data_group_id = jasonObject.data_group_id;
-	}
-	if (jasonObject.data_group_name !== undefined)
-	{
 		data_group_name = jasonObject.data_group_name;
-	}
-	if (jasonObject.data_id !== undefined)
-	{
 		data_id = jasonObject.data_id;
-	}
-	if (jasonObject.data_key !== undefined)
-	{
 		data_key = jasonObject.data_key;
-	}
-	if (jasonObject.data_name !== undefined)
-	{
 		data_name = jasonObject.data_name;
-	}
-	if (jasonObject.heading !== undefined)
-	{
 		heading = jasonObject.heading;
-	}
-	if (jasonObject.height !== undefined)
-	{
 		height = jasonObject.height;
-	}
-	if (jasonObject.latitude !== undefined)
-	{
 		latitude = jasonObject.latitude;
-	}
-	if (jasonObject.longitude !== undefined)
-	{
 		longitude = jasonObject.longitude;
-	}
-	if (jasonObject.pitch !== undefined)
-	{
 		pitch = jasonObject.pitch;
-	}
-	if (jasonObject.roll !== undefined)
-	{
 		roll = jasonObject.roll;
 	}
 	
@@ -10236,10 +11857,13 @@ MagoManager.prototype.makeNode = function(jasonObject, resultPhysicalNodesArray,
 		node.data.data_name = data_name;
 		node.data.attributes = attributes;
 		
+		if (buildingId === "Tile_173078_LD_010_017_L22")
+		{ var hola = 0; }
+		
 		if (attributes.isPhysical)
 		{
 			// find the buildingSeed.
-			buildingSeed = buildingSeedMap.get(buildingId);
+			buildingSeed = buildingSeedMap[buildingId];
 			if (buildingSeed)
 			{
 				node.data.buildingSeed = buildingSeed;
@@ -10423,14 +12047,14 @@ MagoManager.prototype.makeSmartTile = function(buildingSeedList, projectId)
 	// now, read all hierarchyJason and make the hierarchy tree.
 	var physicalNodesArray = []; // put here the nodes that has geometry data.
 	// make a buildingSeedMap.
-	var buildingSeedMap = new Map();
+	var buildingSeedMap = {};
 	var buildingSeedsCount = buildingSeedList.buildingSeedArray.length;
 	for (var i=0; i<buildingSeedsCount; i++)
 	{
 		buildingSeed = buildingSeedList.buildingSeedArray[i];
 		buildingId = buildingSeed.buildingId;
 		
-		buildingSeedMap.set(buildingId, buildingSeed);
+		buildingSeedMap[buildingId] = buildingSeed;
 	}
 	var projectFolderName = realTimeLocBlocksList.data_key;
 	this.makeNode(realTimeLocBlocksList, physicalNodesArray, buildingSeedMap, projectFolderName, projectId);
@@ -10658,8 +12282,7 @@ MagoManager.prototype.callAPI = function(api)
 		this.propertyFilterSC.projectId = projectId;
 		this.propertyFilterSC.propertyKey = propertyKey;
 		this.propertyFilterSC.propertyValue = propertyValue;
-			
-		var hola = 0;
+
 	}	
 	else if (apiName === "drawAppendData")
 	{
@@ -13201,6 +14824,8 @@ SmartTile.prototype.makeTreeByDepth = function(targetDepth, magoManager)
 		}
 		
 	}
+	//else
+	//	var hola = 0;
 };
 
 /**
@@ -15029,7 +16654,7 @@ var VBOKeysNation = function(bufferSizes, minSize)
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 	// buffer sizes are in bytes.
-	this.vboKeysStoreMap = new Map();
+	this.vboKeysStoreMap = {};
 	this.bufferSizes = bufferSizes;
 	this.minSize = minSize;
 	this.maxSize = bufferSizes[bufferSizes.length-1];
@@ -15040,7 +16665,7 @@ var VBOKeysNation = function(bufferSizes, minSize)
 	for (var i=0; i<sizesCount; i++)
 	{
 		vboKeysStore = new VBOKeysStore(bufferSizes[i]);
-		this.vboKeysStoreMap.set(bufferSizes[i], vboKeysStore);
+		this.vboKeysStoreMap[bufferSizes[i]] = vboKeysStore;
 
 		if (bufferSizes[i] > this.maxSize) { this.maxSize = bufferSizes[i]; }
 	}
@@ -15053,7 +16678,7 @@ var VBOKeysNation = function(bufferSizes, minSize)
 VBOKeysNation.prototype.getClassifiedBufferKey = function(gl, bufferSize, keyWorld, onlyReuse) 
 {
 	// 1rst find the vboKeyStore for this bufferSize.
-	var vboKeyStore = this.vboKeysStoreMap.get(bufferSize);
+	var vboKeyStore = this.vboKeysStoreMap[bufferSize];
 	
 	if (vboKeyStore)
 	{
@@ -15069,7 +16694,7 @@ VBOKeysNation.prototype.getClassifiedBufferKey = function(gl, bufferSize, keyWor
 VBOKeysNation.prototype.storeClassifiedBufferKey = function(bufferKey, bufferSize) 
 {
 	// 1rst find the vboKeyStore for this bufferSize.
-	var vboKeyStore = this.vboKeysStoreMap.get(bufferSize);
+	var vboKeyStore = this.vboKeysStoreMap[bufferSize];
 	if (vboKeyStore)
 	{
 		vboKeyStore.storeBufferKey(bufferKey);
@@ -15904,1614 +17529,6 @@ VisibleObjectsController.prototype.clear = function()
 'use strict';
 
 /**
- * mago3djs API
- * 
- * @alias API
- * @class API
- * 
- * @param {any} apiName api이름
- */
-function API(apiName)
-{
-	if (!(this instanceof API)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// api 이름
-	this.apiName = apiName;
-	
-	// project id
-	this.projectId = null;
-	this.projectDataFolder = null;
-	// objectIds
-	this.objectIds = null;
-	// data_key
-	this.dataKey = null;
-	// issueId
-	this.issueId = null;
-	// issueType
-	this.issueType = null;
-	// drawType 이미지를 그리는 유형 0 : DB, 1 : 이슈등록
-	this.drawType = 0;
-
-	// 위도
-	this.latitude = 0;
-	// 경도
-	this.longitude = 0;
-	// 높이
-	this.elevation = 0;
-	// heading
-	this.heading = 0;
-	// pitch
-	this.pitch = 0;
-	// roll
-	this.roll = 0;
-	// duration
-	this.duration = 0;
-
-	// 속성
-	this.property = null;
-	// 색깔
-	this.color = 0;
-	// structs = MSP, outfitting = MOP
-	this.blockType = null;
-	// outfitting 표시/비표시
-	this.showOutFitting = false;
-	// label 표시/비표시
-	this.showLabelInfo = true;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// frustum culling 가시 거리(M단위)
-	this.frustumFarDistance = 0;
-	// move mode 
-	this.objectMoveMode = CODE.moveMode.NONE;
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.nearGeoIssueListEnable = false;
-	// occlusion culling
-	this.occlusionCullingEnable = false;
-	//
-	this.insertIssueState = 0;
-	
-	// LOD1
-	this.lod0DistInMeters = null;
-	this.lod1DistInMeters = null;
-	this.lod2DistInMeters = null;
-	this.lod3DistInMeters = null;
-	this.lod4DistInMeters = null;
-	this.lod5DistInMeters = null;
-	
-	// Lighting
-	this.ambientReflectionCoef = null;
-	this.diffuseReflectionCoef = null;
-	this.specularReflectionCoef = null;
-	this.ambientColor = null;
-	this.specularColor = null;
-	
-	this.ssaoRadius = null;
-	//
-	this.FPVMode = false;
-};
-
-API.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-API.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-API.prototype.getAPIName = function() 
-{
-	return this.apiName;
-};
-
-API.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-API.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-API.prototype.getProjectDataFolder = function() 
-{
-	return this.projectDataFolder;
-};
-API.prototype.setProjectDataFolder = function(projectDataFolder) 
-{
-	this.projectDataFolder = projectDataFolder;
-};
-
-API.prototype.getObjectIds = function() 
-{
-	return this.objectIds;
-};
-API.prototype.setObjectIds = function(objectIds) 
-{
-	this.objectIds = objectIds;
-};
-
-API.prototype.getIssueId = function() 
-{
-	return this.issueId;
-};
-API.prototype.setIssueId = function(issueId) 
-{
-	this.issueId = issueId;
-};
-API.prototype.getIssueType = function() 
-{
-	return this.issueType;
-};
-API.prototype.setIssueType = function(issueType) 
-{
-	this.issueId = issueType;
-};
-
-API.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-API.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-API.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-API.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-API.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-API.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-API.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-API.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-API.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-API.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-API.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-API.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-API.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-API.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-API.prototype.getProperty = function() 
-{
-	return this.property;
-};
-API.prototype.setProperty = function(property) 
-{
-	this.property = property;
-};
-
-API.prototype.getColor = function() 
-{
-	return this.color;
-};
-API.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-API.prototype.getBlockType = function() 
-{
-	return this.blockType;
-};
-API.prototype.setBlockType = function(blockType) 
-{
-	this.blockType = blockType;
-};
-
-API.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-API.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-
-
-API.prototype.getShowLabelInfo = function() 
-{
-	return this.showLabelInfo;
-};
-API.prototype.setShowLabelInfo = function(showLabelInfo) 
-{
-	this.showLabelInfo = showLabelInfo;
-};
-API.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-API.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-API.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-API.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-API.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-API.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-API.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-API.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-
-API.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-API.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-API.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-API.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-API.prototype.getOcclusionCullingEnable = function() 
-{
-	return this.occlusionCullingEnable;
-};
-API.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
-{
-	this.occlusionCullingEnable = occlusionCullingEnable;
-};
-API.prototype.getNearGeoIssueListEnable = function() 
-{
-	return this.nearGeoIssueListEnable;
-};
-API.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
-{
-	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
-};
-
-API.prototype.getInsertIssueState = function() 
-{
-	return this.insertIssueState;
-};
-API.prototype.setInsertIssueState = function(insertIssueState) 
-{
-	this.insertIssueState = insertIssueState;
-};
-
-API.prototype.getDrawType = function() 
-{
-	return this.drawType;
-};
-API.prototype.setDrawType = function(drawType) 
-{
-	this.drawType = drawType;
-};
-
-API.prototype.getLod0DistInMeters = function() 
-{
-	return this.lod0DistInMeters;
-};
-API.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
-{
-	this.lod0DistInMeters = lod0DistInMeters;
-};
-API.prototype.getLod1DistInMeters = function() 
-{
-	return this.lod1DistInMeters;
-};
-API.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
-{
-	this.lod1DistInMeters = lod1DistInMeters;
-};
-API.prototype.getLod2DistInMeters = function() 
-{
-	return this.lod2DistInMeters;
-};
-API.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
-{
-	this.lod2DistInMeters = lod2DistInMeters;
-};
-API.prototype.getLod3DistInMeters = function() 
-{
-	return this.lod3DistInMeters;
-};
-API.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
-{
-	this.lod3DistInMeters = lod3DistInMeters;
-};
-API.prototype.getLod4DistInMeters = function() 
-{
-	return this.lod4DistInMeters;
-};
-API.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
-{
-	this.lod4DistInMeters = lod4DistInMeters;
-};
-API.prototype.getLod5DistInMeters = function() 
-{
-	return this.lod5DistInMeters;
-};
-API.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
-{
-	this.lod5DistInMeters = lod5DistInMeters;
-};
-
-API.prototype.getAmbientReflectionCoef = function() 
-{
-	return this.ambientReflectionCoef;
-};
-API.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
-{
-	this.ambientReflectionCoef = ambientReflectionCoef;
-};
-API.prototype.getDiffuseReflectionCoef = function() 
-{
-	return this.diffuseReflectionCoef;
-};
-API.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
-{
-	this.diffuseReflectionCoef = diffuseReflectionCoef;
-};
-API.prototype.getSpecularReflectionCoef = function() 
-{
-	return this.specularReflectionCoef;
-};
-API.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
-{
-	this.specularReflectionCoef = specularReflectionCoef;
-};
-API.prototype.getAmbientColor = function() 
-{
-	return this.ambientColor;
-};
-API.prototype.setAmbientColor = function(ambientColor) 
-{
-	this.ambientColor = ambientColor;
-};
-API.prototype.getSpecularColor = function() 
-{
-	return this.specularColor;
-};
-API.prototype.setSpecularColor = function(specularColor) 
-{
-	this.specularColor = specularColor;
-};
-API.prototype.getSsaoRadius = function() 
-{
-	return this.ssaoRadius;
-};
-API.prototype.setSsaoRadius = function(ssaoRadius) 
-{
-	this.ssaoRadius = ssaoRadius;
-};
-API.prototype.getFPVMode = function()
-{
-	return this.FPVMode;
-};
-API.prototype.setFPVMode = function(value)
-{
-	this.FPVMode = value;
-};
-
-API.prototype.getDuration = function()
-{
-	return this.duration;
-};
-API.prototype.setDuration = function(duration)
-{
-	this.duration = duration;
-};
-'use strict';
-
-/**
- * api 처리 결과를 담당하는 callback function
- * @param functionName policy json의 geo_callback_apiresult 속성값
- * @param apiName 호출한 api 이름
- * @param result 결과값
- */
-function apiResultCallback(functionName, apiName, result) 
-{
-	window[functionName](apiName, result);
-}
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- * @param heading
- * @param pitch
- * @param roll
- * @param
- */
-function selectedObjectCallback(functionName, data_key, objectId, latitude, longitude, elevation, heading, pitch, roll) 
-{
-	window[functionName](data_key, objectId, latitude, longitude, elevation, heading, pitch, roll);
-}
-
-/**
- * 선택한 object 정보를 화면에 표시
- * @param functionName
- * @param data_key
- * @param objectId
- * @param latitude
- * @param longitude
- * @param elevation
- */
-function insertIssueCallback(functionName, data_key, objectId, latitude, longitude, elevation) 
-{
-	window[functionName](data_key, objectId, latitude, longitude, elevation);
-}
-
-/**
- * mouse click 위치 정보를 화면에 표시
- * @param functionName
- * @param position
- */
-function clickPositionCallback(functionName, position) 
-{
-	window[functionName](position);
-}
-
-'use strict';
-
-/**
- * 사용자가 변경한 moving, color, rotation 등 이력 정보를 위한 domain
- * @class Policy
- */
-var ChangeHistory = function() 
-{
-	if (!(this instanceof ChangeHistory)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	this.moveHistory = false;
-	this.colorHistory = false;
-	this.rotationHistory = false;
-	
-	// move mode. ALL : 0 , OBJECT : 1, NONE : 2
-	this.objectMoveMode = null;
-	
-	// project id
-	this.projectId = null;
-	// project data folder
-	this.projectDataFolder = null;
-	// data_key
-	this.dataKey = null;	
-	// objectId
-	this.objectId = null;
-	// objectIndexOrder
-	this.objectIndexOrder = 0;
-	
-	// referenceObject aditional movement.
-	this.refObjectAditionalMove;
-	this.refObjectAditionalMoveRelToBuilding;
-	
-	// 위도
-	this.latitude = 0.0;
-	// 경도
-	this.longitude = 0.0;
-	// 높이
-	this.elevation = 0.0;
-	// heading
-	this.heading = 0.0;
-	// pitch
-	this.pitch = 0.0;
-	// roll
-	this.roll = 0.0;
-	// duration
-	this.duration = 0;
-	// 색깔
-	this.color = 0;
-	// color rgb
-	this.rgbColor = [];
-	// 속성
-	this.property = null;
-	this.propertyKey = null;
-	this.propertyValue = null;
-};
-
-ChangeHistory.prototype.getReferenceObjectAditionalMovement = function() 
-{
-	if (this.refObjectAditionalMove === undefined)
-	{ this.refObjectAditionalMove = new Point3D(); }
-	
-	return this.refObjectAditionalMove;
-};
-
-ChangeHistory.prototype.getReferenceObjectAditionalMovementRelToBuilding = function() 
-{
-	if (this.refObjectAditionalMoveRelToBuilding === undefined)
-	{ this.refObjectAditionalMoveRelToBuilding = new Point3D(); }
-	
-	return this.refObjectAditionalMoveRelToBuilding;
-};
-
-ChangeHistory.prototype.getProjectId = function() 
-{
-	return this.projectId;
-};
-ChangeHistory.prototype.setProjectId = function(projectId) 
-{
-	this.projectId = projectId;
-};
-
-ChangeHistory.prototype.getProjectDataFolder = function() 
-{
-	return this.projectDataFolder;
-};
-ChangeHistory.prototype.setProjectDataFolder = function(projectDataFolder) 
-{
-	this.projectDataFolder = projectDataFolder;
-};
-
-ChangeHistory.prototype.getDataKey = function() 
-{
-	return this.dataKey;
-};
-ChangeHistory.prototype.setDataKey = function(dataKey) 
-{
-	this.dataKey = dataKey;
-};
-
-ChangeHistory.prototype.getObjectId = function() 
-{
-	return this.objectId;
-};
-ChangeHistory.prototype.setObjectId = function(objectId) 
-{
-	this.objectId = objectId;
-};
-
-ChangeHistory.prototype.getObjectIndexOrder = function() 
-{
-	return this.objectIndexOrder;
-};
-ChangeHistory.prototype.setObjectIndexOrder = function(objectIndexOrder) 
-{
-	this.objectIndexOrder = objectIndexOrder;
-};
-
-ChangeHistory.prototype.getLatitude = function() 
-{
-	return this.latitude;
-};
-ChangeHistory.prototype.setLatitude = function(latitude) 
-{
-	this.latitude = latitude;
-};
-
-ChangeHistory.prototype.getLongitude = function() 
-{
-	return this.longitude;
-};
-ChangeHistory.prototype.setLongitude = function(longitude) 
-{
-	this.longitude = longitude;
-};
-
-ChangeHistory.prototype.getElevation = function() 
-{
-	return this.elevation;
-};
-ChangeHistory.prototype.setElevation = function(elevation) 
-{
-	this.elevation = elevation;
-};
-
-ChangeHistory.prototype.getHeading = function() 
-{
-	return this.heading;
-};
-ChangeHistory.prototype.setHeading = function(heading) 
-{
-	this.heading = heading;
-};
-
-ChangeHistory.prototype.getPitch = function() 
-{
-	return this.pitch;
-};
-ChangeHistory.prototype.setPitch = function(pitch) 
-{
-	this.pitch = pitch;
-};
-
-ChangeHistory.prototype.getRoll = function() 
-{
-	return this.roll;
-};
-ChangeHistory.prototype.setRoll = function(roll) 
-{
-	this.roll = roll;
-};
-
-ChangeHistory.prototype.getColor = function() 
-{
-	return this.color;
-};
-ChangeHistory.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-ChangeHistory.prototype.getRgbColor = function() 
-{
-	return this.rgbColor;
-};
-ChangeHistory.prototype.setRgbColor = function(rgbColor) 
-{
-	this.rgbColor = rgbColor;
-};
-
-ChangeHistory.prototype.getProperty = function() 
-{
-	return this.property;
-};
-ChangeHistory.prototype.setProperty = function(property) 
-{
-	this.property = property;
-};
-ChangeHistory.prototype.getPropertyKey = function() 
-{
-	return this.propertyKey;
-};
-ChangeHistory.prototype.setPropertyKey = function(propertyKey) 
-{
-	this.propertyKey = propertyKey;
-};
-ChangeHistory.prototype.getPropertyValue = function() 
-{
-	return this.propertyValue;
-};
-ChangeHistory.prototype.setPropertyValue = function(propertyValue) 
-{
-	this.propertyValue = propertyValue;
-};
-
-ChangeHistory.prototype.getDuration = function()
-{
-	return this.duration;
-};
-ChangeHistory.prototype.setDuration = function(duration)
-{
-	this.duration = duration;
-};
-
-ChangeHistory.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-ChangeHistory.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-"use strict";
-
-var CODE = {};
-
-// magoManager가 다 로딩 되지 않은 상태에서 화면으로 부터 호출 되는 것을 막기 위해
-CODE.magoManagerState = {
-	"INIT"   	: 0,
-	"STARTED"	: 1,
-	"READY"   : 2
-};
-
-//0 = no started to load. 1 = started loading. 2 = finished loading. 3 = parse started. 4 = parse finished.***
-CODE.fileLoadState = {
-	"READY"            : 0,
-	"LOADING_STARTED"  : 1,
-	"LOADING_FINISHED" : 2,
-	"PARSE_STARTED"    : 3,
-	"PARSE_FINISHED"   : 4
-};
-
-CODE.moveMode = {
-	"ALL"    : "0",
-	"OBJECT" : "1",
-	"NONE"   : "2"
-};
-
-CODE.PROJECT_ID_PREFIX = "projectId_";
-CODE.PROJECT_DATA_FOLDER_PREFIX = "projectDataFolder_";
-
-'use strict';
-
-/**
- * 상수 설정
- * @class Constant
- */
-var Constant = {};
-
-Constant.CESIUM = "cesium";
-Constant.WORLDWIND = "worldwind";
-Constant.OBJECT_INDEX_FILE = "/objectIndexFile.ihe";
-Constant.CACHE_VERSION = "?cache_version=";
-Constant.SIMPLE_BUILDING_TEXTURE3x3_BMP = "/SimpleBuildingTexture3x3.bmp";
-Constant.RESULT_XDO2F4D = "/Result_xdo2f4d/Images/";
-Constant.RESULT_XDO2F4D_TERRAINTILES = "/Result_xdo2f4d/F4D_TerrainTiles/";
-Constant.RESULT_XDO2F4D_TERRAINTILEFILE_TXT = "/Result_xdo2f4d/f4dTerranTileFile.txt";
-
-Constant.INTERSECTION_OUTSIDE = 0;
-Constant.INTERSECTION_INTERSECT= 1;
-Constant.INTERSECTION_INSIDE = 2;
-
-'use strict';
-
-/**
- * mago3D 전체 환경 설정을 관리
- * @class MagoConfig
- */
-var MagoConfig = {};
-
-MagoConfig.getPolicy = function() 
-{
-	return this.serverPolicy;
-};
-
-MagoConfig.getData = function(key) 
-{
-	return this.dataMap.get(key);
-};
-
-MagoConfig.isDataExist = function(key) 
-{
-	return this.dataMap.has(key);
-};
-
-MagoConfig.deleteData = function(key) 
-{
-	return this.dataMap.delete(key);
-};
-
-/**
- * data 를 map에 저장
- * @param key map에 저장될 key
- * @param value map에 저장될 value
- */
-MagoConfig.setData = function(key, value) 
-{
-	if (!this.isDataExist(key)) 
-	{
-		this.dataMap.set(key, value);
-	}
-};
-
-/**
- * F4D Converter 실행 결과물이 저장된 project data folder 명을 획득
- * @param projectDataFolder data folder
- */
-MagoConfig.getProjectDataFolder = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataMap.get(key);
-};
-
-/**
- * project map에 data folder명의 존재 유무를 검사
- * @param projectDataFolder
- */
-MagoConfig.isProjectDataFolderExist = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataMap.has(key);
-};
-
-/**
- * project data folder명을 map에서 삭제
- * @param projectDataFolder
- */
-MagoConfig.deleteProjectDataFolder = function(projectDataFolder) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	return this.dataMap.delete(key);
-};
-
-/**
- * project data folder명을 map에서 삭제
- * @param projectDataFolder map에 저장될 key
- * @param value map에 저장될 value
- */
-MagoConfig.setProjectDataFolder = function(projectDataFolder, value) 
-{
-	var key = CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataFolder;
-	if (!this.isProjectDataFolderExist(key)) 
-	{
-		this.dataMap.set(key, value);
-	}
-};
-
-/**
- * 환경설정 초기화
- * @param serverPolicy mago3d policy(json)
- * @param projectIdArray data 정보를 map 저장할 key name
- * @param projectDataArray data 정보(json)
- */
-MagoConfig.init = function(serverPolicy, projectIdArray, projectDataArray) 
-{
-	this.dataMap = new Map();
-	
-	this.selectHistoryMap = new Map();
-	this.movingHistoryMap = new Map();
-	this.colorHistoryMap = new Map();
-	this.locationAndRotationHistoryMap = new Map();
-	
-	this.serverPolicy = serverPolicy;
-	if (projectIdArray !== null && projectIdArray.length > 0) 
-	{
-		for (var i=0; i<projectIdArray.length; i++) 
-		{
-			if (!this.isDataExist(CODE.PROJECT_ID_PREFIX + projectIdArray[i])) 
-			{
-				this.setData(CODE.PROJECT_ID_PREFIX + projectIdArray[i], projectDataArray[i]);
-				this.setProjectDataFolder(CODE.PROJECT_DATA_FOLDER_PREFIX + projectDataArray[i].data_key, projectDataArray[i].data_key);
-			}
-		}
-	}
-};
-
-/**
- * 모든 데이터를 삭제함
- */
-MagoConfig.clearAllData = function() 
-{
-	this.dataMap.clear();
-};
-
-/**
- * 모든 선택 히스토리 삭제
- */
-MagoConfig.clearSelectHistory = function() 
-{
-	this.selectHistoryMap.clear();
-};
-
-/**
- * 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getAllSelectHistory = function()
-{
-	return this.selectHistoryMap;
-};
-
-/**
- * project 별 해당 키에 해당하는 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getSelectHistoryObjects = function(projectId, dataKey)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.selectHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	return dataKeyMap;
-};
-
-/**
- * object 선택 내용 이력을 취득
- */
-MagoConfig.getSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.selectHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyMap.get(objectIndexOrder);
-};
-
-/**
- * object 선택 내용을 저장
- */
-MagoConfig.saveSelectHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.selectHistoryMap.get(projectId);
-	if (projectIdMap === undefined) 
-	{
-		projectIdMap = new Map();
-		this.selectHistoryMap.set(projectId, projectIdMap);
-	}
-	
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) 
-	{
-		dataKeyMap = new Map();
-		projectIdMap.set(dataKey, dataKeyMap);
-	}
-	
-	// objectIndexOrder 를 저장
-	dataKeyMap.set(objectIndexOrder, changeHistory);
-};
-
-/**
- * object 선택 내용을 삭제
- */
-MagoConfig.deleteSelectHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.selectHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyMap.delete(objectIndexOrder);
-};
-
-/**
- * 모든 이동 히스토리 삭제
- */
-MagoConfig.clearMovingHistory = function() 
-{
-	this.movingHistoryMap.clear();
-};
-
-/**
- * 모든 object 선택 내용 이력을 취득
- */
-MagoConfig.getAllMovingHistory = function()
-{
-	return this.movingHistoryMap;
-};
-
-/**
- * project별 입력키 값과 일치하는 object 이동 내용 이력을 취득
- */
-MagoConfig.getMovingHistoryObjects = function(projectId, dataKey)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.movingHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	return dataKeyMap;
-};
-
-/**
- * object 이동 내용 이력을 취득
- */
-MagoConfig.getMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.movingHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyMap.get(objectIndexOrder);
-};
-
-/**
- * object 이동 내용을 저장
- */
-MagoConfig.saveMovingHistory = function(projectId, dataKey, objectIndexOrder, changeHistory) 
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.movingHistoryMap.get(projectId);
-	if (projectIdMap === undefined) 
-	{
-		projectIdMap = new Map();
-		this.movingHistoryMap.set(projectId, projectIdMap);
-	}
-	
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) 
-	{
-		dataKeyMap = new Map();
-		projectIdMap.set(dataKey, dataKeyMap);
-	}
-	
-	// objectIndexOrder 를 저장
-	dataKeyMap.set(objectIndexOrder, changeHistory);
-};
-
-/**
- * object 이동 내용을 삭제
- */
-MagoConfig.deleteMovingHistoryObject = function(projectId, dataKey, objectIndexOrder)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.movingHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyMap.delete(objectIndexOrder);
-};
-
-/**
- * 모든 색깔 변경 이력을 획득
- */
-MagoConfig.getAllColorHistory = function() 
-{
-	return this.colorHistoryMap;
-};
-
-/**
- * 모든 색깔변경 히스토리 삭제
- */
-MagoConfig.clearColorHistory = function() 
-{
-	this.colorHistoryMap.clear();
-};
-
-/**
- * project별 키에 해당하는 모든 색깔 변경 이력을 획득
- */
-MagoConfig.getColorHistorys = function(projectId, dataKey)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.colorHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	return dataKeyMap;
-};
-
-/**
- * 색깝 변경 이력을 획득
- */
-MagoConfig.getColorHistory = function(projectId, dataKey, objectId)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.colorHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) { return undefined; }
-	// objectId 를 저장
-	return dataKeyMap.get(objectId);
-};
-
-/**
- * 색깝 변경 내용을 저장
- */
-MagoConfig.saveColorHistory = function(projectId, dataKey, objectId, changeHistory) 
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.colorHistoryMap.get(projectId);
-	if (projectIdMap === undefined) 
-	{
-		projectIdMap = new Map();
-		this.colorHistoryMap.set(projectId, projectIdMap);
-	}
-	
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) 
-	{
-		dataKeyMap = new Map();
-		projectIdMap.set(dataKey, dataKeyMap);
-	}
-
-	if (objectId === null || objectId === "") 
-	{
-		dataKeyMap.set(dataKey, changeHistory);
-	}
-	else 
-	{
-		dataKeyMap.set(objectId, changeHistory);
-	}
-};
-
-/**
- * 색깔 변경 이력을 삭제
- */
-MagoConfig.deleteColorHistory = function(projectId, dataKey, objectId)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.colorHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) { return undefined; }
-	// objectIndexOrder 를 저장
-	return dataKeyMap.delete(objectId);
-};
-
-/**
- * 모든 색깔변경 히스토리 삭제
- */
-MagoConfig.clearColorHistory = function() 
-{
-	this.colorHistoryMap.clear();
-};
-
-/**
- * 모든 location and rotation 변경 이력을 획득
- */
-MagoConfig.getAllLocationAndRotationHistory = function() 
-{
-	return this.locationAndRotationHistoryMap;
-};
-
-/**
- * 프로젝트별 해당 키 값을 갖는 모든 location and rotation 이력을 획득
- */
-MagoConfig.getLocationAndRotationHistorys = function(projectId, dataKey)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.locationAndRotationHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	return dataKeyMap;
-};
-
-/**
- * location and rotation 이력을 획득
- */
-MagoConfig.getLocationAndRotationHistory = function(projectId, dataKey)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.locationAndRotationHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	
-	return dataKeyMap;
-};
-
-/**
- * location and rotation 내용을 저장
- */
-MagoConfig.saveLocationAndRotationHistory = function(projectId, dataKey, changeHistory) 
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.locationAndRotationHistoryMap.get(projectId);
-	if (projectIdMap === undefined) 
-	{
-		projectIdMap = new Map();
-		this.locationAndRotationHistoryMap.set(projectId, projectIdMap);
-	}
-	
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.get(dataKey);
-	if (dataKeyMap === undefined) 
-	{
-		dataKeyMap = new Map();
-	}
-
-	dataKeyMap.set(dataKey, changeHistory);
-};
-
-/**
- * location and rotation 이력을 삭제
- */
-MagoConfig.deleteLocationAndRotationHistory = function(projectId, dataKey)
-{
-	// projectId 별 map을 검사
-	var projectIdMap = this.locationAndRotationHistoryMap.get(projectId);
-	if (projectIdMap === undefined) { return undefined; }
-	// dataKey 별 map을 검사
-	var dataKeyMap = projectIdMap.delete(dataKey);
-};
-
-/**
- * 모든 location and rotation 히스토리 삭제
- */
-MagoConfig.clearLocationAndRotationHistory = function() 
-{
-	this.locationAndRotationHistoryMap.clear();
-};
-	
-/**
- * TODO 이건 나중에 활요. 사용하지 않음
- * check 되지 않은 데이터들을 삭제함
- * @param keyMap 비교할 맵
- */
-MagoConfig.clearUnSelectedData = function(keyMap) 
-{
-	for (var key of this.dataMap.keys()) 
-	{
-		if (!keyMap.has(key)) 
-		{
-			// data folder path가 존재하면....
-			if (key.indexOf(CODE.PROJECT_DATA_FOLDER_PREFIX) >= 0) 
-			{
-				// 지우는 처리가 있어야 함
-			}
-			this.dataMap.delete(key);
-		}
-	}
-};
-
-'use strict';
-
-/**
- * Policy
- * @class Policy
- */
-var Policy = function() 
-{
-	if (!(this instanceof Policy)) 
-	{
-		throw new Error(Messages.CONSTRUCT_ERROR);
-	}
-
-	// mago3d 활성화/비활성화 여부
-	this.magoEnable = true;
-
-	// outfitting 표시 여부
-	this.showOutFitting = false;
-	// label 표시/비표시
-	this.showLabelInfo = false;
-	// boundingBox 표시/비표시
-	this.showBoundingBox = false;
-	// 그림자 표시/비표시
-	this.showShadow = false;
-	// squared far frustum 거리
-	this.frustumFarSquaredDistance = 5000000;
-	// far frustum
-	this.frustumFarDistance = 2300;
-
-	// highlighting
-	this.highLightedBuildings = [];
-	// color
-	this.colorBuildings = [];
-	// color
-	this.color = [];
-	// show/hide
-	this.hideBuildings = [];
-	// move mode
-	this.objectMoveMode = CODE.moveMode.NONE;
-	// 이슈 등록 표시
-	this.issueInsertEnable = false;
-	// object 정보 표시
-	this.objectInfoViewEnable = false;
-	// 이슈 목록 표시
-	this.nearGeoIssueListEnable = false;
-	// occlusion culling
-	this.occlusionCullingEnable = false;
-	
-	// 이미지 경로
-	this.imagePath = "";
-	
-	// provisional.***
-	this.colorChangedObjectId;
-	
-	// LOD1
-	this.lod0DistInMeters = 15;
-	this.lod1DistInMeters = 50;
-	this.lod2DistInMeters = 90;
-	this.lod3DistInMeters = 200;
-	this.lod4DistInMeters = 1000;
-	this.lod5DistInMeters = 50000;
-	
-	// Lighting
-	this.ambientReflectionCoef = 0.45; // 0.2.
-	this.diffuseReflectionCoef = 0.75; // 1.0
-	this.specularReflectionCoef = 0.6; // 0.7
-	this.ambientColor = null;
-	this.specularColor = new Float32Array([0.6, 0.6, 0.6]);
-	
-	this.ssaoRadius = 0.15;
-};
-
-Policy.prototype.getMagoEnable = function() 
-{
-	return this.magoEnable;
-};
-Policy.prototype.setMagoEnable = function(magoEnable) 
-{
-	this.magoEnable = magoEnable;
-};
-
-Policy.prototype.getShowOutFitting = function() 
-{
-	return this.showOutFitting;
-};
-Policy.prototype.setShowOutFitting = function(showOutFitting) 
-{
-	this.showOutFitting = showOutFitting;
-};
-Policy.prototype.getShowLabelInfo = function() 
-{
-	return this.showLabelInfo;
-};
-Policy.prototype.setShowLabelInfo = function(showLabelInfo) 
-{
-	this.showLabelInfo = showLabelInfo;
-};
-Policy.prototype.getShowBoundingBox = function() 
-{
-	return this.showBoundingBox;
-};
-Policy.prototype.setShowBoundingBox = function(showBoundingBox) 
-{
-	this.showBoundingBox = showBoundingBox;
-};
-
-Policy.prototype.getShowShadow = function() 
-{
-	return this.showShadow;
-};
-Policy.prototype.setShowShadow = function(showShadow) 
-{
-	this.showShadow = showShadow;
-};
-
-Policy.prototype.getFrustumFarSquaredDistance = function() 
-{
-	return this.frustumFarSquaredDistance;
-};
-Policy.prototype.setFrustumFarSquaredDistance = function(frustumFarSquaredDistance) 
-{
-	this.frustumFarSquaredDistance = frustumFarSquaredDistance;
-};
-
-Policy.prototype.getFrustumFarDistance = function() 
-{
-	return this.frustumFarDistance;
-};
-Policy.prototype.setFrustumFarDistance = function(frustumFarDistance) 
-{
-	this.frustumFarDistance = frustumFarDistance;
-};
-
-Policy.prototype.getHighLightedBuildings = function() 
-{
-	return this.highLightedBuildings;
-};
-Policy.prototype.setHighLightedBuildings = function(highLightedBuildings) 
-{
-	this.highLightedBuildings = highLightedBuildings;
-};
-
-Policy.prototype.getColorBuildings = function() 
-{
-	return this.colorBuildings;
-};
-Policy.prototype.setColorBuildings = function(colorBuildings) 
-{
-	this.colorBuildings = colorBuildings;
-};
-
-Policy.prototype.getColor = function() 
-{
-	return this.color;
-};
-Policy.prototype.setColor = function(color) 
-{
-	this.color = color;
-};
-
-Policy.prototype.getHideBuildings = function() 
-{
-	return this.hideBuildings;
-};
-Policy.prototype.setHideBuildings = function(hideBuildings) 
-{
-	this.hideBuildings = hideBuildings;
-};
-
-Policy.prototype.getObjectMoveMode = function() 
-{
-	return this.objectMoveMode;
-};
-Policy.prototype.setObjectMoveMode = function(objectMoveMode) 
-{
-	this.objectMoveMode = objectMoveMode;
-};
-
-Policy.prototype.getIssueInsertEnable = function() 
-{
-	return this.issueInsertEnable;
-};
-Policy.prototype.setIssueInsertEnable = function(issueInsertEnable) 
-{
-	this.issueInsertEnable = issueInsertEnable;
-};
-Policy.prototype.getObjectInfoViewEnable = function() 
-{
-	return this.objectInfoViewEnable;
-};
-Policy.prototype.setObjectInfoViewEnable = function(objectInfoViewEnable) 
-{
-	this.objectInfoViewEnable = objectInfoViewEnable;
-};
-Policy.prototype.getOcclusionCullingEnable = function() 
-{
-	return this.occlusionCullingEnable;
-};
-Policy.prototype.setOcclusionCullingEnable = function(occlusionCullingEnable) 
-{
-	this.occlusionCullingEnable = occlusionCullingEnable;
-};
-Policy.prototype.getNearGeoIssueListEnable = function() 
-{
-	return this.nearGeoIssueListEnable;
-};
-Policy.prototype.setNearGeoIssueListEnable = function(nearGeoIssueListEnable) 
-{
-	this.nearGeoIssueListEnable = nearGeoIssueListEnable;
-};
-
-Policy.prototype.getImagePath = function() 
-{
-	return this.imagePath;
-};
-Policy.prototype.setImagePath = function(imagePath) 
-{
-	this.imagePath = imagePath;
-};
-
-Policy.prototype.getLod0DistInMeters = function() 
-{
-	return this.lod0DistInMeters;
-};
-Policy.prototype.setLod0DistInMeters = function(lod0DistInMeters) 
-{
-	this.lod0DistInMeters = lod0DistInMeters;
-};
-Policy.prototype.getLod1DistInMeters = function() 
-{
-	return this.lod1DistInMeters;
-};
-Policy.prototype.setLod1DistInMeters = function(lod1DistInMeters) 
-{
-	this.lod1DistInMeters = lod1DistInMeters;
-};
-Policy.prototype.getLod2DistInMeters = function() 
-{
-	return this.lod2DistInMeters;
-};
-Policy.prototype.setLod2DistInMeters = function(lod2DistInMeters) 
-{
-	this.lod2DistInMeters = lod2DistInMeters;
-};
-Policy.prototype.getLod3DistInMeters = function() 
-{
-	return this.lod3DistInMeters;
-};
-Policy.prototype.setLod3DistInMeters = function(lod3DistInMeters) 
-{
-	this.lod3DistInMeters = lod3DistInMeters;
-};
-Policy.prototype.getLod4DistInMeters = function() 
-{
-	return this.lod4DistInMeters;
-};
-Policy.prototype.setLod4DistInMeters = function(lod4DistInMeters) 
-{
-	this.lod4DistInMeters = lod4DistInMeters;
-};
-Policy.prototype.getLod5DistInMeters = function() 
-{
-	return this.lod5DistInMeters;
-};
-Policy.prototype.setLod5DistInMeters = function(lod5DistInMeters) 
-{
-	this.lod5DistInMeters = lod5DistInMeters;
-};
-Policy.prototype.getAmbientReflectionCoef = function() 
-{
-	return this.ambientReflectionCoef;
-};
-Policy.prototype.setAmbientReflectionCoef = function(ambientReflectionCoef) 
-{
-	this.ambientReflectionCoef = ambientReflectionCoef;
-};
-Policy.prototype.getDiffuseReflectionCoef = function() 
-{
-	return this.diffuseReflectionCoef;
-};
-Policy.prototype.setDiffuseReflectionCoef = function(diffuseReflectionCoef) 
-{
-	this.diffuseReflectionCoef = diffuseReflectionCoef;
-};
-Policy.prototype.getSpecularReflectionCoef = function() 
-{
-	return this.specularReflectionCoef;
-};
-Policy.prototype.setSpecularReflectionCoef = function(specularReflectionCoef) 
-{
-	this.specularReflectionCoef = specularReflectionCoef;
-};
-Policy.prototype.getAmbientColor = function() 
-{
-	return this.ambientColor;
-};
-Policy.prototype.setAmbientColor = function(ambientColor) 
-{
-	this.ambientColor = ambientColor;
-};
-Policy.prototype.getSpecularColor = function() 
-{
-	return this.specularColor;
-};
-Policy.prototype.setSpecularColor = function(specularColor) 
-{
-	this.specularColor = specularColor;
-};
-Policy.prototype.getSsaoRadius = function() 
-{
-	return this.ssaoRadius;
-};
-Policy.prototype.setSsaoRadius = function(ssaoRadius) 
-{
-	this.ssaoRadius = ssaoRadius;
-};
-'use strict';
-
-/**
  * 버퍼 안의 데이터를 어떻게 읽어야 할지 키가 되는 객체
  * 
  * @alias Accessor
@@ -17886,7 +17903,10 @@ BlocksList.prototype.parseBlocksListVersioned = function(arrayBuffer, readWriter
 		if (existLego)
 		{
 			if (block.lego === undefined)
-			{ block.lego = new Lego(); }
+			{ 
+				// TODO : this is no used. delete this.***
+				block.lego = new Lego(); 
+			}
 			
 			bytesReaded = this.parseBlockVersioned(arrayBuffer, bytesReaded, block.lego, readWriter, magoManager) ;
 		}
@@ -18147,7 +18167,7 @@ var HierarchyManager = function()
 
 	// lowest nodes array. initial array to create tiles global distribution.
 	this.nodesArray = [];
-	this.projectsMap = new Map();
+	this.projectsMap = {};
 };
 
 /**
@@ -18157,12 +18177,11 @@ var HierarchyManager = function()
  */
 HierarchyManager.prototype.deleteNodes = function(gl, vboMemoryManager) 
 {
-	for (var value of this.projectsMap.values()) 
-	{
-		value.clear();
-	}
-	
-	this.projectsMap.clear();
+	//for (var value of this.projectsMap.values()) 
+	//{
+	//	value.clear();
+	//}
+	this.projectsMap = {};
 	
 	var nodesCount = this.nodesArray.length;
 	for (var i=0; i<nodesCount; i++)
@@ -18190,8 +18209,10 @@ HierarchyManager.prototype.getNodeByDataName = function(projectId, dataName, dat
 	
 	var resultNode;
 	
-	for (var value of nodesMap.values()) 
+	//for (var value of nodesMap.values()) 
+	for(var key in nodesMap)
 	{
+		var value = nodesMap[key];
 		if (value.data[dataName] === dataNameValue)
 		{
 			resultNode = value;
@@ -18234,7 +18255,7 @@ HierarchyManager.prototype.getRootNodes = function(resultRootNodesArray)
  */
 HierarchyManager.prototype.existProject = function(projectId) 
 {
-	return this.projectsMap.has(projectId);
+	return this.projectsMap.hasOwnProperty(projectId);
 };
 
 /**
@@ -18245,11 +18266,11 @@ HierarchyManager.prototype.existProject = function(projectId)
 HierarchyManager.prototype.getNodesMap = function(projectId) 
 {
 	// 1rst, check if exist.
-	var nodesMap = this.projectsMap.get(projectId);
+	var nodesMap = this.projectsMap[projectId];
 	if (nodesMap === undefined)
 	{
-		nodesMap = new Map();
-		this.projectsMap.set(projectId, nodesMap);
+		nodesMap = {};
+		this.projectsMap[projectId] = nodesMap;
 	}
 	return nodesMap;
 };
@@ -18267,7 +18288,7 @@ HierarchyManager.prototype.newNode = function(id, projectId)
 	var node = new Node();
 	node.data = {"nodeId": id};
 	this.nodesArray.push(node);
-	nodesMap.set(id, node);
+	nodesMap[id] = node;
 	return node;
 };
 
@@ -18293,6 +18314,7 @@ var Lego = function()
 	this.selColor4;
 	this.texture;
 	this.textureName;
+	this.legoKey;
 };
 
 /**
@@ -18480,86 +18502,23 @@ Lego.prototype.parseLegoData = function(buffer, gl, magoManager)
 'use strict';
 
 /**
- * 어떤 일을 하고 있습니까?
- * @class LodBuilding
+ * F4D LodBuildingData 클래스
+ * 
+ * @alias LodBuildingData
+ * @class LodBuildingData
  */
-var LodBuilding = function() 
+var LodBuildingData = function() 
 {
-	if (!(this instanceof LodBuilding)) 
+	if (!(this instanceof LodBuildingData)) 
 	{
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
-	// this class is for use for LOD2 and LOD3 buildings.***
-	// provisionally use this class, but in the future use "NeoSimpleBuilding".***
-	this.dataArraybuffer; // binary data.***
-	this.vbo_vicks_container = new VBOVertexIdxCacheKeysContainer();
-	this.fileLoadState = CODE.fileLoadState.READY;
+
+	this.lod;
+	this.isModelRef;
+	this.geometryFileName;
+	this.textureFileName;
 };
-
-LodBuilding.prototype.parseArrayBuffer = function(gl, readWriter) 
-{
-	if (this.fileLoadState === CODE.fileLoadState.LOADING_FINISHED)// file loaded.***
-	{
-		this.fileLoadState = CODE.fileLoadState.PARSE_STARTED;
-		var bytesReaded = 0;
-
-		// 1rst, read bbox.***
-		var bbox = new BoundingBox();
-		bbox.minX = new Float32Array(this.dataArraybuffer.slice(bytesReaded, bytesReaded+4)); bytesReaded += 4;
-		bbox.minY = new Float32Array(this.dataArraybuffer.slice(bytesReaded, bytesReaded+4)); bytesReaded += 4;
-		bbox.minZ = new Float32Array(this.dataArraybuffer.slice(bytesReaded, bytesReaded+4)); bytesReaded += 4;
-
-		bbox.maxX = new Float32Array(this.dataArraybuffer.slice(bytesReaded, bytesReaded+4)); bytesReaded += 4;
-		bbox.maxY = new Float32Array(this.dataArraybuffer.slice(bytesReaded, bytesReaded+4)); bytesReaded += 4;
-		bbox.maxZ = new Float32Array(this.dataArraybuffer.slice(bytesReaded, bytesReaded+4)); bytesReaded += 4;
-
-		var vboViCacheKey = this.vbo_vicks_container.newVBOVertexIdxCacheKey();
-
-		// 1) Positions.************************************************************************************************
-		var vertexCount = readWriter.readUInt32(this.dataArraybuffer, bytesReaded, bytesReaded + 4); bytesReaded += 4;
-		var verticesFloatValuesCount = vertexCount * 3;
-		var startBuff = bytesReaded;
-		var endBuff = bytesReaded + 4 * verticesFloatValuesCount;
-		vboViCacheKey.posVboDataArray = new Float32Array(this.dataArraybuffer.slice(startBuff, endBuff));
-		bytesReaded = bytesReaded + 4 * verticesFloatValuesCount; // updating data.***
-
-		vboViCacheKey.vertexCount = vertexCount;
-
-		// 2) Normals.*****************************************************************************************************
-		var hasNormals = readWriter.readUInt8(this.dataArraybuffer, bytesReaded, bytesReaded + 1); bytesReaded += 1;
-		if (hasNormals) 
-		{
-			vertexCount = readWriter.readUInt32(this.dataArraybuffer, bytesReaded, bytesReaded + 4); bytesReaded += 4;
-			var normalsByteValuesCount = vertexCount * 3;
-			var startBuff = bytesReaded;
-			var endBuff = bytesReaded + 1 * normalsByteValuesCount;
-			vboViCacheKey.norVboDataArray = new Int8Array(this.dataArraybuffer.slice(startBuff, endBuff));
-			bytesReaded = bytesReaded + 1 * normalsByteValuesCount; // updating data.***
-		}
-
-		// 3) Colors.*******************************************************************************************************
-		var hasColors = readWriter.readUInt8(this.dataArraybuffer, bytesReaded, bytesReaded+1); bytesReaded += 1;
-		if (hasColors) 
-		{
-			vertexCount = readWriter.readUInt32(this.dataArraybuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
-			var colorsByteValuesCount = vertexCount * 4;
-			var startBuff = bytesReaded;
-			var endBuff = bytesReaded + 1 * colorsByteValuesCount;
-			vboViCacheKey.colVboDataArray = new Uint8Array(this.dataArraybuffer.slice(startBuff, endBuff));
-			bytesReaded = bytesReaded + 1 * colorsByteValuesCount; // updating data.***
-		}
-
-		// 4) TexCoord.****************************************************************************************************
-		var hasTexCoord = readWriter.readUInt8(this.dataArraybuffer, bytesReaded, bytesReaded+1); bytesReaded += 1;
-		if (hasTexCoord) 
-		{
-			;// TODO:
-		}
-
-		this.fileLoadState = CODE.fileLoadState.PARSE_FINISHED;
-	}	
-};
-
 'use strict';
 
 /**
@@ -18881,11 +18840,10 @@ var NeoBuilding = function()
 	// The simple building.***********************************************
 	this.simpleBuilding3x3Texture; // old version.***
 	
-	// In version 001, there are 5 lods.***
-	// actually oldMeshes are lego object.***
-	this.availableLodMeshesArray;
-	this.availableLodTexturesArray;
-	this.lodMeshesArray; // here stores lod3mesh, lod4mesh and lod5mesh.***
+	// In version 001, there are 6 lods.***
+	this.lodMeshesMap;
+	this.lodBuildingDatasArray;
+	
 	
 	// Render settings.***************************************************
 	// provisionally put this here.
@@ -18912,7 +18870,7 @@ NeoBuilding.prototype.getReferenceObjectsArrayByObjectId = function(objectId)
 	if (this.motherNeoReferencesMap === undefined)
 	{ return undefined; }
 
-	var refObject = this.motherNeoReferencesMap.get(objectId);
+	var refObject = this.motherNeoReferencesMap[objectId];
 	return refObject;
 };
 
@@ -18930,15 +18888,15 @@ NeoBuilding.prototype.putReferenceObject = function(refObject, refObjectIdx)
 	
 	// Additionally, make a objects map.
 	if (this.motherNeoReferencesMap === undefined)
-	{ this.motherNeoReferencesMap = new Map(); }
+	{ this.motherNeoReferencesMap = {}; }
 	
-	var objectsArray = this.motherNeoReferencesMap.get(refObject.objectId);
+	var objectsArray = this.motherNeoReferencesMap[refObject.objectId];
 	if (objectsArray === undefined)
 	{ objectsArray = []; }
 	
 	objectsArray.push(refObject);
 	
-	this.motherNeoReferencesMap.set(refObject.objectId, objectsArray);
+	this.motherNeoReferencesMap[refObject.objectId] = objectsArray;
 };
 
 /**
@@ -18969,7 +18927,7 @@ NeoBuilding.prototype.deleteObjectsModelReferences = function(gl, vboMemoryManag
 	// 1rst, clear this.motherNeoReferencesMap.
 	if (this.motherNeoReferencesMap)
 	{ 
-		this.motherNeoReferencesMap.clear(); 
+		this.motherNeoReferencesMap = {}; 
 		this.motherNeoReferencesMap = undefined;
 	}
 	
@@ -19034,20 +18992,16 @@ NeoBuilding.prototype.deleteObjects = function(gl, vboMemoryManager)
 	this.texturesLoaded = undefined;
 	
 	// delete lod3, lod4, lod5.***
-	if (this.lodMeshesArray)
+	if(this.lodMeshesMap !== undefined)
 	{
-		var lodMeshesCount = this.lodMeshesArray.length;
-		for (var i=0; i<lodMeshesCount; i++)
+		for(var key in this.lodMeshesMap)
 		{
-			if (this.lodMeshesArray[i])
-			{
-				this.lodMeshesArray[i].deleteObjects(gl, vboMemoryManager);
-				this.lodMeshesArray[i] = undefined;
-			}
+			var legoSkin = this.lodMeshesMap[key];
+			legoSkin.deleteObjects(gl, vboMemoryManager)
+			legoSkin = undefined;
 		}
-		this.lodMeshesArray.length = 0;
+		this.lodMeshesMap = undefined;
 	}
-	this.lodMeshesArray = undefined;
 };
 
 /**
@@ -19215,16 +19169,98 @@ NeoBuilding.prototype.getHeaderVersion = function()
 	return this.metaData.version;
 };
 
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param lod 변수
+ */
+NeoBuilding.prototype.getLodBuildingData = function(lod) 
+{
+	var resultLodBuildingData = undefined;
+	var find = false;
+	
+	if(this.lodBuildingDatasArray === undefined)
+		return;
+	
+	var lodBuildingDatasCount = this.lodBuildingDatasArray.length;
+	var i = 0;
+	while(!find && i<lodBuildingDatasCount)
+	{
+		if(this.lodBuildingDatasArray[i].lod === lod)
+		{
+			find = true;
+			resultLodBuildingData = this.lodBuildingDatasArray[i];
+		}
+		i++;
+	}
+	return resultLodBuildingData;
+};
+
+/**
+ * 어떤 일을 하고 있습니까?
+ * @param neoReference 변수
+ */
+NeoBuilding.prototype.getCurrentLodString = function() 
+{
+	var currentLodString = undefined;
+	var lodBuildingData = this.getLodBuildingData(this.currentLod);
+	currentLodString = lodBuildingData.geometryFileName;
+	return currentLodString;
+};
+
 /**
  * 어떤 일을 하고 있습니까?
  * @param neoReference 변수
  */
 NeoBuilding.prototype.getCurrentSkin = function() 
 {
-	if (this.lodMeshesArray === undefined)
+	if (this.lodMeshesMap === undefined)
 	{ return undefined; }
 	
 	var skinLego;
+	if (this.currentLod === 3)
+	{
+		skinLego = this.lodMeshesMap["lod3"];
+		
+		if (skinLego === undefined || !skinLego.isReadyToRender())
+		{
+			skinLego = this.lodMeshesMap["lod4"];
+			if (skinLego === undefined || !skinLego.isReadyToRender())
+			{
+				skinLego = this.lodMeshesMap["lod5"];
+			}
+		}
+		
+	}
+	else if (this.currentLod === 4)
+	{
+		skinLego = this.lodMeshesMap["lod4"];
+		
+		if (skinLego === undefined || !skinLego.isReadyToRender())
+		{
+			skinLego = this.lodMeshesMap["lod5"];
+			if (skinLego === undefined || !skinLego.isReadyToRender())
+			{
+				skinLego = this.lodMeshesMap["lod3"];
+			}
+		}
+		
+	}
+	else if (this.currentLod === 5)
+	{
+		skinLego = this.lodMeshesMap["lod5"];
+		
+		if (skinLego === undefined || !skinLego.isReadyToRender())
+		{
+			skinLego = this.lodMeshesMap["lod4"];
+			if (skinLego === undefined || !skinLego.isReadyToRender())
+			{
+				skinLego = this.lodMeshesMap["lod3"];
+			}
+		}
+		
+	}
+	/*
 	if (this.currentLod === 3)
 	{
 		skinLego = this.lodMeshesArray[0];
@@ -19261,7 +19297,7 @@ NeoBuilding.prototype.getCurrentSkin = function()
 			}
 		}
 	}
-	
+	*/
 	return skinLego;
 };
 
@@ -20820,6 +20856,8 @@ var Octree = function(octreeOwner)
 	this.octree_owner;
 	this.octree_level = 0;
 	this.octree_number_name = 0;
+	this.neoBuildingOwnerId;
+	this.octreeKey;
 	this.distToCamera;
 	this.triPolyhedronsCount = 0; // no calculated. Readed when parsing.***
 	this.fileLoadState = CODE.fileLoadState.READY;
@@ -21014,6 +21052,8 @@ Octree.prototype.makeTree = function(treeDepth)
 		{
 			var subOctree = this.new_subOctree();
 			subOctree.octree_number_name = this.octree_number_name * 10 + (i+1);
+			subOctree.neoBuildingOwnerId = this.neoBuildingOwnerId;
+			subOctree.octreeKey = this.neoBuildingOwnerId + "_" + subOctree.octree_number_name;
 		}
 
 		this.setSizesSubBoxes();
@@ -22043,6 +22083,8 @@ Octree.prototype.parseAsimetricVersion = function(arrayBuffer, readerWriter, byt
 	{
 		var subOctree = this.new_subOctree();
 		subOctree.octree_number_name = this.octree_number_name * 10 + (i+1);
+		subOctree.neoBuildingOwnerId = this.neoBuildingOwnerId;
+		subOctree.octreeKey = this.neoBuildingOwnerId + "_" + subOctree.octree_number_name;
 	}
 
 	// now, set size of subOctrees.***
@@ -22072,11 +22114,10 @@ var ParseQueue = function()
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 
-	this.octreesLod0ReferencesToParseMap = new Map();
-	this.octreesLod0ModelsToParseMap = new Map();
-	this.octreesLod2LegosToParseMap = new Map();
-	this.skinLegosToParseMap = new Map();
-	//this.neoBuildingsHeaderToParseArray = new Map(); // no used yet.
+	this.octreesLod0ReferencesToParseMap = {};
+	this.octreesLod0ModelsToParseMap = {};
+	this.octreesLod2LegosToParseMap = {};
+	this.skinLegosToParseMap = {};
 };
 
 ParseQueue.prototype.parseOctreesLod0References = function(gl, visibleObjControlerOctrees, magoManager, maxParsesCount)
@@ -22095,7 +22136,8 @@ ParseQueue.prototype.parseOctreesLod0References = function(gl, visibleObjControl
 	if (maxParsesCount === undefined)
 	{ maxParsesCount = 20; }
 	
-	if (this.octreesLod0ReferencesToParseMap.size > 0)
+	var octreesCount = Object.keys(this.octreesLod0ReferencesToParseMap).length;
+	if (octreesCount > 0)
 	{
 		// 1rst parse the currently closest lowestOctrees to camera.
 		var octreesLod0Count = visibleObjControlerOctrees.currentVisibles0.length;
@@ -22122,11 +22164,13 @@ ParseQueue.prototype.parseOctreesLod0References = function(gl, visibleObjControl
 		// if no parsed any octree, then parse some octrees of the queue.
 		if (octreesParsedCount === 0)
 		{
-			var octreesArray = Array.from(this.octreesLod0ReferencesToParseMap.keys());
-			for (var i=0; i<octreesArray.length; i++)
+			//var octreesArray = Array.from(this.octreesLod0ReferencesToParseMap.keys());
+			//var octreesArray = Object.keys(this.octreesLod0ReferencesToParseMap);
+			///for (var i=0; i<octreesArray.length; i++)
+			for(var key in this.octreesLod0ReferencesToParseMap)
 			{
-				lowestOctree = octreesArray[i];
-				this.octreesLod0ReferencesToParseMap.delete(lowestOctree);
+				lowestOctree = this.octreesLod0ReferencesToParseMap[key];
+				delete this.octreesLod0ReferencesToParseMap[key];
 				this.parseOctreesLod0References(gl, lowestOctree, magoManager);
 
 				octreesParsedCount++;
@@ -22144,9 +22188,9 @@ ParseQueue.prototype.parseOctreesLod0References = function(gl, visibleObjControl
 ParseQueue.prototype.parseOctreesLod0References = function(gl, lowestOctree, magoManager)
 {
 	var parsed = false;
-	
-	if (this.octreesLod0ReferencesToParseMap.delete(lowestOctree))
+	if(this.octreesLod0ReferencesToParseMap.hasOwnProperty(lowestOctree.octreeKey))
 	{
+		delete this.octreesLod0ReferencesToParseMap[lowestOctree.octreeKey];
 		if (lowestOctree.neoReferencesMotherAndIndices === undefined)
 		{ return false; }
 		
@@ -22207,12 +22251,13 @@ ParseQueue.prototype.putOctreeLod0ReferencesToParse = function(octree, aValue)
 	if (aValue === undefined)
 	{ aValue = 0; }
 	
-	this.octreesLod0ReferencesToParseMap.set(octree, aValue);
+	///this.octreesLod0ReferencesToParseMap.set(octree, aValue);
+	this.octreesLod0ReferencesToParseMap[octree.octreeKey] = octree;
 };
 
 ParseQueue.prototype.eraseOctreeLod0ReferencesToParse = function(octree)
 {
-	this.octreesLod0ReferencesToParseMap.delete(octree);
+	delete this.octreesLod0ReferencesToParseMap[octree.octreeKey];
 };
 
 ParseQueue.prototype.putOctreeLod0ModelsToParse = function(octree, aValue)
@@ -22221,12 +22266,12 @@ ParseQueue.prototype.putOctreeLod0ModelsToParse = function(octree, aValue)
 	if (aValue === undefined)
 	{ aValue = 0; }
 	
-	this.octreesLod0ModelsToParseMap.set(octree, aValue);
+	this.octreesLod0ModelsToParseMap[octree.octreeKey] = octree;
 };
 
 ParseQueue.prototype.eraseOctreeLod0ModelsToParse = function(octree)
 {
-	this.octreesLod0ModelsToParseMap.delete(octree);
+	delete this.octreesLod0ModelsToParseMap[octree.octreeKey];
 };
 
 ParseQueue.prototype.putOctreeLod2LegosToParse = function(octree, aValue)
@@ -22235,12 +22280,12 @@ ParseQueue.prototype.putOctreeLod2LegosToParse = function(octree, aValue)
 	if (aValue === undefined)
 	{ aValue = 0; }
 	
-	this.octreesLod2LegosToParseMap.set(octree, aValue);
+	this.octreesLod2LegosToParseMap[octree.octreeKey] = octree;
 };
 
 ParseQueue.prototype.eraseOctreeLod2LegosToParse = function(octree)
 {
-	this.octreesLod2LegosToParseMap.delete(octree);
+	delete this.octreesLod2LegosToParseMap[octree.octreeKey];
 };
 
 ParseQueue.prototype.putSkinLegosToParse = function(skinLego, aValue)
@@ -22249,19 +22294,19 @@ ParseQueue.prototype.putSkinLegosToParse = function(skinLego, aValue)
 	if (aValue === undefined)
 	{ aValue = 0; }
 	
-	this.skinLegosToParseMap.set(skinLego, aValue);
+	this.skinLegosToParseMap[skinLego.legoKey] = skinLego;
 };
 
 ParseQueue.prototype.eraseSkinLegosToParse = function(skinLego)
 {
-	this.skinLegosToParseMap.delete(skinLego);
+	delete this.skinLegosToParseMap[skinLego.legoKey];
 };
 
 ParseQueue.prototype.clearAll = function()
 {
-	this.octreesLod0ReferencesToParseMap.clear();
-	this.octreesLod0ModelsToParseMap.clear();
-	this.octreesLod2LegosToParseMap.clear();
+	this.octreesLod0ReferencesToParseMap = {};
+	this.octreesLod0ModelsToParseMap = {};
+	this.octreesLod2LegosToParseMap = {};
 	
 };
 
@@ -22306,9 +22351,9 @@ var ProcessQueue = function()
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 
-	this.nodesToDeleteMap = new Map();
-	this.nodesToDeleteModelReferencesMap = new Map();
-	this.nodesToDeleteLessThanLod3Map = new Map();
+	this.nodesToDeleteMap = {};
+	this.nodesToDeleteModelReferencesMap = {};
+	this.nodesToDeleteLessThanLod3Map = {};
 };
 
 ProcessQueue.prototype.putNodeToDeleteLessThanLod3 = function(node, aValue)
@@ -22316,14 +22361,29 @@ ProcessQueue.prototype.putNodeToDeleteLessThanLod3 = function(node, aValue)
 	// provisionally "aValue" can be anything.
 	if (aValue === undefined)
 	{ aValue = 0; }
+
+	if(node.data === undefined || node.data.neoBuilding === undefined)
+		return;
 	
-	this.nodesToDeleteLessThanLod3Map.set(node, aValue);
+	var key = node.data.neoBuilding.buildingId;
+	this.nodesToDeleteLessThanLod3Map[key] = node;
+	
+	//this.nodesToDeleteLessThanLod3Map.set(node, aValue);
 };
 
 ProcessQueue.prototype.eraseNodeToDeleteLessThanLod3 = function(node)
 {
 	// this erases the node from the "nodesToDeleteLessThanLod3Map".
-	return this.nodesToDeleteLessThanLod3Map.delete(node);
+	if(node.data === undefined || node.data.neoBuilding === undefined)
+		return;
+	
+	var key = node.data.neoBuilding.buildingId;
+	if(this.nodesToDeleteLessThanLod3Map.hasOwnProperty(key)) {
+		delete this.nodesToDeleteLessThanLod3Map[key];
+		return true;
+	}
+	return false;
+	//return this.nodesToDeleteLessThanLod3Map.delete(node);
 };
 
 ProcessQueue.prototype.putNodeToDeleteModelReferences = function(node, aValue)
@@ -22332,14 +22392,28 @@ ProcessQueue.prototype.putNodeToDeleteModelReferences = function(node, aValue)
 	// provisionally "aValue" can be anything.
 	if (aValue === undefined)
 	{ aValue = 0; }
+
+	if(node.data === undefined || node.data.neoBuilding === undefined)
+		return;
 	
-	this.nodesToDeleteModelReferencesMap.set(node, aValue);
+	var key = node.data.neoBuilding.buildingId;
+	this.nodesToDeleteModelReferencesMap[key] = node;
+	//this.nodesToDeleteModelReferencesMap.set(node, aValue);
 };
 
 ProcessQueue.prototype.eraseNodeToDeleteModelReferences = function(node)
 {
 	// this erases the node from the "nodesToDeleteModelReferencesMap".
-	return this.nodesToDeleteModelReferencesMap.delete(node);
+	if(node.data === undefined || node.data.neoBuilding === undefined)
+		return;
+	
+	var key = node.data.neoBuilding.buildingId;
+	if(this.nodesToDeleteModelReferencesMap.hasOwnProperty(key)) {
+		delete this.nodesToDeleteModelReferencesMap[key];
+		return true;
+	}
+	return false;
+	//return this.nodesToDeleteModelReferencesMap.delete(node);
 };
 
 ProcessQueue.prototype.putNodeToDelete = function(node, aValue)
@@ -22348,8 +22422,12 @@ ProcessQueue.prototype.putNodeToDelete = function(node, aValue)
 	// provisionally "aValue" can be anything.
 	if (aValue === undefined)
 	{ aValue = 0; }
+
+	if(node.data === undefined || node.data.neoBuilding === undefined)
+		return;
 	
-	this.nodesToDeleteMap.set(node, aValue);
+	var key = node.data.neoBuilding.buildingId;
+	this.nodesToDeleteMap[key] = node;
 };
 
 ProcessQueue.prototype.putNodesArrayToDelete = function(nodesToDeleteArray, aValue)
@@ -22372,13 +22450,18 @@ ProcessQueue.prototype.putNodesArrayToDelete = function(nodesToDeleteArray, aVal
 ProcessQueue.prototype.eraseNodeToDelete = function(node)
 {
 	// this erases the node from the "nodesToDeleteMap".
-	return this.nodesToDeleteMap.delete(node);
+	var key = node.data.neoBuilding.buildingId;
+	if(this.nodesToDeleteMap.hasOwnProperty(key)) {
+		delete this.nodesToDeleteMap[key];
+		return true;
+	}
+	return false;
 };
 
 ProcessQueue.prototype.clearAll = function()
 {
-	this.nodesToDeleteMap.clear();
-	this.nodesToDeleteModelReferencesMap.clear();
+	this.nodesToDeleteMap = {};
+	this.nodesToDeleteModelReferencesMap = {};
 };
 
 
@@ -23355,7 +23438,9 @@ ReaderWriter.prototype.getNeoHeader = function(gl, fileName, neoBuilding, reader
 			neoBuilding.octree.setBoxSize(neoBuilding.metaData.oct_min_x, neoBuilding.metaData.oct_max_x,
 				neoBuilding.metaData.oct_min_y, neoBuilding.metaData.oct_max_y,
 				neoBuilding.metaData.oct_min_z, neoBuilding.metaData.oct_max_z);
-
+			
+			neoBuilding.octree.neoBuildingOwnerId = neoBuilding.buildingId;
+			neoBuilding.octree.octreeKey = neoBuilding.buildingId + "_" + neoBuilding.octree.octree_number_name;
 			neoBuilding.octree.makeTree(3);
 			neoBuilding.octree.setSizesSubBoxes();
 
@@ -23442,12 +23527,14 @@ function Utf8ArrayToStr(array) {
 				neoBuilding.metaData = new MetaData();
 			}
 			var bytesReaded = neoBuilding.metaData.parseFileHeaderAsimetricVersion(arrayBuffer, readerWriter);
-
-			if(neoBuilding.buildingId === "k11_0163")
+			
+			if(neoBuilding.buildingId === "Tile_173078_LD_010_017_L22")
 				var hola = 0;
 			
 			// Now, make the neoBuilding's octree.***
 			if (neoBuilding.octree === undefined) { neoBuilding.octree = new Octree(undefined); }
+			neoBuilding.octree.neoBuildingOwnerId = neoBuilding.buildingId;
+			neoBuilding.octree.octreeKey = neoBuilding.buildingId + "_" + neoBuilding.octree.octree_number_name;
 
 			// now, parse octreeAsimetric.***
 			bytesReaded = neoBuilding.octree.parseAsimetricVersion(arrayBuffer, readerWriter, bytesReaded, neoBuilding);
@@ -23479,9 +23566,6 @@ function Utf8ArrayToStr(array) {
 					{
 						textureTypeName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)));bytesReaded += 1; // for example "diffuse".***
 					}
-					
-					if (i === 165)
-						var hola = 0;
 
 					var texture_fileName_Legth = readerWriter.readUInt32(arrayBuffer, bytesReaded, bytesReaded+4); bytesReaded += 4;
 					var charArray = new Uint8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ texture_fileName_Legth)); bytesReaded += texture_fileName_Legth;
@@ -23503,58 +23587,90 @@ function Utf8ArrayToStr(array) {
 				
 				// read geometry type data.***
 				var lod;
-				var geometryLodsCount = (new Uint8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
-				if(geometryLodsCount !== undefined)
+				var nameLength;
+				var lodBuildingDatasCount = (new Uint8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
+				if(lodBuildingDatasCount !== undefined)
 				{
-					if(neoBuilding.availableLodMeshesArray === undefined)
-						neoBuilding.availableLodMeshesArray = [];
+					if(neoBuilding.lodBuildingDatasArray === undefined)
+						neoBuilding.lodBuildingDatasArray = [];
 					
-					neoBuilding.availableLodMeshesArray.length = 0;
+					neoBuilding.lodBuildingDatasArray.length = 0;
 					
-					for(var i =0; i<geometryLodsCount; i++)
+					for(var i =0; i<lodBuildingDatasCount; i++)
 					{
-						lod = (new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
-						neoBuilding.availableLodMeshesArray.push(lod);
+						var lodBuildingData = new LodBuildingData();
+						lodBuildingData.lod = (new Uint8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
+						lodBuildingData.isModelRef = (new Uint8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
+						
+						if(!lodBuildingData.isModelRef)
+						{
+							nameLength = (new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
+							lodBuildingData.geometryFileName = "";
+							for (var j=0; j<nameLength; j++) 
+							{
+								lodBuildingData.geometryFileName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)));bytesReaded += 1; 
+							}
+							
+							nameLength = (new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
+							lodBuildingData.textureFileName = "";
+							for (var j=0; j<nameLength; j++) 
+							{
+								lodBuildingData.textureFileName += String.fromCharCode(new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)));bytesReaded += 1; 
+							}
+						}
+						neoBuilding.lodBuildingDatasArray.push(lodBuildingData);
 					}
-					
-					var textureLodsCount = (new Uint8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
-					if(textureLodsCount === undefined)
-						var hola = 0;
-					
-					if(neoBuilding.availableLodTexturesArray === undefined)
-						neoBuilding.availableLodTexturesArray = [];
-					
-					neoBuilding.availableLodTexturesArray.length = 0;
-					
-					for(var i =0; i<textureLodsCount; i++)
-					{
-						lod = (new Int8Array(arrayBuffer.slice(bytesReaded, bytesReaded+ 1)))[0];bytesReaded += 1;
-						neoBuilding.availableLodTexturesArray.push(lod);
-					}
+
 				}
 				else{
 					// is the old version, so make the available arrays.***
-					if(neoBuilding.availableLodMeshesArray === undefined)
-						neoBuilding.availableLodMeshesArray = [];
+					if(neoBuilding.lodBuildingDatasArray === undefined)
+						neoBuilding.lodBuildingDatasArray = [];
 					
-					neoBuilding.availableLodMeshesArray.length = 0;
+					neoBuilding.lodBuildingDatasArray.length = 0;
+
+					var lodBuildingData = new LodBuildingData();
+					lodBuildingData.lod = 0;
+					lodBuildingData.isModelRef = true;
+					lodBuildingData.geometryFileName = undefined;
+					lodBuildingData.textureFileName = undefined;
+					neoBuilding.lodBuildingDatasArray.push(lodBuildingData);
 					
-					neoBuilding.availableLodMeshesArray.push(0);
-					neoBuilding.availableLodMeshesArray.push(2);
-					neoBuilding.availableLodMeshesArray.push(3);
-					neoBuilding.availableLodMeshesArray.push(4);
-					neoBuilding.availableLodMeshesArray.push(5);
+					var lodBuildingData = new LodBuildingData();
+					lodBuildingData.lod = 1;
+					lodBuildingData.isModelRef = true;
+					lodBuildingData.geometryFileName = undefined;
+					lodBuildingData.textureFileName = undefined;
+					neoBuilding.lodBuildingDatasArray.push(lodBuildingData);
 					
-					if(neoBuilding.availableLodTexturesArray === undefined)
-						neoBuilding.availableLodTexturesArray = [];
+					var lodBuildingData = new LodBuildingData();
+					lodBuildingData.lod = 2;
+					lodBuildingData.isModelRef = true;
+					lodBuildingData.geometryFileName = undefined;
+					lodBuildingData.textureFileName = undefined;
+					neoBuilding.lodBuildingDatasArray.push(lodBuildingData);
 					
-					neoBuilding.availableLodTexturesArray.length = 0;
+					var lodBuildingData = new LodBuildingData();
+					lodBuildingData.lod = 3;
+					lodBuildingData.isModelRef = false;
+					lodBuildingData.geometryFileName = "lod3";
+					lodBuildingData.textureFileName = "mosaicTextureLod3.png";
+					neoBuilding.lodBuildingDatasArray.push(lodBuildingData);
 					
-					neoBuilding.availableLodTexturesArray.push(2);
-					neoBuilding.availableLodTexturesArray.push(3);
-					neoBuilding.availableLodTexturesArray.push(4);
-					neoBuilding.availableLodTexturesArray.push(5);
-					neoBuilding.availableLodTexturesArray.push(6);
+					var lodBuildingData = new LodBuildingData();
+					lodBuildingData.lod = 4;
+					lodBuildingData.isModelRef = false;
+					lodBuildingData.geometryFileName = "lod4";
+					lodBuildingData.textureFileName = "mosaicTextureLod4.png";
+					neoBuilding.lodBuildingDatasArray.push(lodBuildingData);
+					
+					var lodBuildingData = new LodBuildingData();
+					lodBuildingData.lod = 5;
+					lodBuildingData.isModelRef = false;
+					lodBuildingData.geometryFileName = "lod5";
+					lodBuildingData.textureFileName = "mosaicTextureLod5.png";
+					neoBuilding.lodBuildingDatasArray.push(lodBuildingData);
+					
 				}
 			}
 
@@ -34028,9 +34144,6 @@ Renderer.prototype.renderNodes = function(gl, visibleNodesArray, magoManager, st
 		geoLocDataManager = rootNode.data.geoLocDataManager;
 		neoBuilding = node.data.neoBuilding;
 		
-		if (neoBuilding.buildingId === "PCv2_RVT2018")
-		{ var hola = 0; }
-		
 		if (neoBuilding.currentVisibleOctreesControler === undefined)
 		{ continue; }
 	
@@ -34054,9 +34167,6 @@ Renderer.prototype.renderNodes = function(gl, visibleNodesArray, magoManager, st
 		}
 		else if (ssao_idx === 1)
 		{
-			if (neoBuilding.buildingId === "PCv2_RVT2018")
-			{ var hola = 0; }
-		
 			if (neoBuilding.texturesLoaded && neoBuilding.texturesLoaded.length>0)
 			{
 				renderTexture = true;
@@ -34159,10 +34269,8 @@ Renderer.prototype.renderNeoBuildingsLOD2AsimetricVersion = function(gl, visible
 			{
 				lowestOctree.lego = new Lego();
 				lowestOctree.lego.fileLoadState = CODE.fileLoadState.READY;
+				lowestOctree.lego.legoKey = lowestOctree.octreeKey + "_lego";
 			}
-
-			if (lowestOctree.lego === undefined && lowestOctree.lego.dataArrayBuffer === undefined) 
-			{ continue; }
 
 			if (neoBuilding === undefined)
 			{ continue; }
@@ -34199,11 +34307,11 @@ Renderer.prototype.renderNeoBuildingsLOD2AsimetricVersion = function(gl, visible
 				}
 				else 
 				{
-					gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1.texId);
-					//continue;
-					gl.uniform1i(standardShader.hasTexture_loc, false);
-					gl.disableVertexAttribArray(standardShader.texCoord2_loc);
-					renderTexture = false;
+					//gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1.texId);
+					continue;
+					//gl.uniform1i(standardShader.hasTexture_loc, false);
+					//gl.disableVertexAttribArray(standardShader.texCoord2_loc);
+					//renderTexture = false;
 				}
 			}
 
@@ -34240,15 +34348,6 @@ Renderer.prototype.renderNeoBuildingsLowLOD = function(gl, visibleNodesArray, ma
 		geoLocDataManager = rootNode.data.geoLocDataManager;
 		neoBuilding = node.data.neoBuilding;
 		if (neoBuilding === undefined)
-		{ continue; }
-	
-		if (neoBuilding.buildingId ==="BAR POOL ROOM")
-		{ var hola = 0; }
-	
-		if (neoBuilding.buildingId ==="k11_0163")
-		{ var hola = 0; }
-	
-		if (neoBuilding.lodMeshesArray === undefined)
 		{ continue; }
 		
 		skinLego = neoBuilding.getCurrentSkin();
@@ -34302,9 +34401,16 @@ Renderer.prototype.renderNeoBuildingsLowLOD = function(gl, visibleNodesArray, ma
 			}
 			else 
 			{
-				gl.uniform1i(standardShader.hasTexture_loc, false);
-				gl.disableVertexAttribArray(standardShader.texCoord2_loc);
-				renderTexture = false;
+				if(magoManager.textureAux_1x1 !== undefined)
+				{
+					gl.enableVertexAttribArray(standardShader.texCoord2_loc);
+					//gl.activeTexture(gl.TEXTURE2); 
+					gl.uniform1i(standardShader.hasTexture_loc, true);
+					gl.bindTexture(gl.TEXTURE_2D, magoManager.textureAux_1x1);
+					//gl.uniform1i(standardShader.hasTexture_loc, false);
+					//gl.disableVertexAttribArray(standardShader.texCoord2_loc);
+					//renderTexture = false;
+				}
 			}
 		}
 
@@ -35693,10 +35799,10 @@ var SelectionCandidates = function()
 		throw new Error(Messages.CONSTRUCT_ERROR);
 	}
 
-	this.referencesMap = new Map();
-	this.octreesMap = new Map();
-	this.buildingsMap = new Map();
-	this.nodesMap = new Map();
+	this.referencesMap = {};
+	this.octreesMap = {};
+	this.buildingsMap = {};
+	this.nodesMap = {};
 	
 	this.currentReferenceSelected;
 	this.currentOctreeSelected;
@@ -35714,22 +35820,22 @@ SelectionCandidates.prototype.setCandidates = function(idxKey, reference, octree
 {
 	if (reference)
 	{
-		this.referencesMap.set(idxKey, reference);
+		this.referencesMap[idxKey] = reference;
 	}
 	
 	if (octree)
 	{
-		this.octreesMap.set(idxKey, octree);
+		this.octreesMap[idxKey] = octree;
 	}
 	
 	if (building)
 	{
-		this.buildingsMap.set(idxKey, building);
+		this.buildingsMap[idxKey] = building;
 	}
 	
 	if (node)
 	{
-		this.nodesMap.set(idxKey, node);
+		this.nodesMap[idxKey] = node;
 	}
 };
 
@@ -35741,10 +35847,10 @@ SelectionCandidates.prototype.setCandidates = function(idxKey, reference, octree
  */
 SelectionCandidates.prototype.clearCandidates = function()
 {
-	this.referencesMap.clear();
-	this.octreesMap.clear();
-	this.buildingsMap.clear();
-	this.nodesMap.clear();
+	this.referencesMap = {};
+	this.octreesMap = {};
+	this.buildingsMap = {};
+	this.nodesMap = {};
 };
 
 /**
@@ -35755,10 +35861,10 @@ SelectionCandidates.prototype.clearCandidates = function()
  */
 SelectionCandidates.prototype.selectObjects = function(idxKey)
 {
-	this.currentReferenceSelected = this.referencesMap.get(idxKey);
-	this.currentOctreeSelected = this.octreesMap.get(idxKey);
-	this.currentBuildingSelected = this.buildingsMap.get(idxKey);
-	this.currentNodeSelected = this.nodesMap.get(idxKey);
+	this.currentReferenceSelected = this.referencesMap[idxKey];
+	this.currentOctreeSelected = this.octreesMap[idxKey];
+	this.currentBuildingSelected = this.buildingsMap[idxKey];
+	this.currentNodeSelected = this.nodesMap[idxKey];
 };
 
 /**

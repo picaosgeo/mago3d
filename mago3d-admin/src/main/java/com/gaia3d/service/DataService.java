@@ -3,6 +3,7 @@ package com.gaia3d.service;
 import java.util.List;
 
 import com.gaia3d.domain.DataInfo;
+import com.gaia3d.domain.DataInfoAttribute;
 
 /**
  * Data 관리
@@ -61,6 +62,13 @@ public interface DataService {
 	DataInfo getData(Long data_id);
 	
 	/**
+	 * Project Data 정보 취득
+	 * @param project_id
+	 * @return
+	 */
+	DataInfo getDataByProjectId(Long project_id);
+	
+	/**
 	 * 표시 순서
 	 * @param dvataInfo
 	 * @return
@@ -80,6 +88,13 @@ public interface DataService {
 	 * @return
 	 */
 	int insertData(DataInfo dataInfo);
+	
+	/**
+	 * Data 속성 등록
+	 * @param dataInfoAttribute
+	 * @return
+	 */
+	int insertDataAttribute(DataInfoAttribute dataInfoAttribute);
 	
 	/**
 	 * Data 그룹에 Data 등록

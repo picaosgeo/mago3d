@@ -17,8 +17,6 @@ import lombok.ToString;
 @ToString
 public class DataInfo {
 	
-	public static final String DATA_NAME = "data_name";
-	
 	// Data 상태가 사용중
 	public static final String STATUS_USE = "0";
 	// Data 상태가 중지(관리자)
@@ -102,7 +100,7 @@ public class DataInfo {
 	private BigDecimal pitch;
 	// roll
 	private BigDecimal roll;
-	// 속성
+	// Data Control 속성
 	private String attributes;
 	// data 상태. 0:사용중, 1:사용중지(관리자), 2:기타
 	private String status;

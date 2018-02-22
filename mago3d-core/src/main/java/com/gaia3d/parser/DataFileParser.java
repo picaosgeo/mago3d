@@ -14,8 +14,7 @@ public interface DataFileParser {
 	 * parse
 	 * @param project_id
 	 * @param fileInfo
-	 * @param userId
 	 * @return
 	 */
-	Map<String, Object> parse(Long project_id, FileInfo fileInfo,  String userId);
+	Map<String, Object> parse(Long project_id, FileInfo fileInfo);
 }
